@@ -16,6 +16,8 @@ Video2Text 專案的 agent 與 human 對話記錄，涵蓋專案初始化、框�
 | 07 | [`07_2026_06_07_agent_test-video-spec.md`](./07_2026_06_07_agent_test-video-spec.md) | Agent | 06-07 | 測試影片 `2026_05_11-19_18_26.mkv` 規格分析（57.7 分、60 FPS、207K 幀） |
 | 08 | [`08_2026_06_08_agent_gemma4-vllm-inference-fixes.md`](./08_2026_06_08_agent_gemma4-vllm-inference-fixes.md) | Agent | 06-08 | 修復 flashinfer 崩潰（`enforce_eager=True`）、修正影片路徑，推論成功 |
 | 09 | [`09_2026_06_08_agent_system-info-gathering.md`](./09_2026_06_08_agent_system-info-gathering.md) | Agent | 06-08 | 系統環境稽核（雙卡 GPU、框架版本、磁碟空間警報） |
+| 10 | [`10_2026_06_09_agent_vllm-launch-and-healthcheck.md`](./10_2026_06_09_agent_vllm-launch-and-healthcheck.md) | Agent | 06-09 | 建立啟動腳本 `launch_Gemma4-12b.sh` 與健康檢查 `block_me_with_file.sh`，修復 flashinfer 崩潰 |
+| 11 | [`11_2026_06_09_agent_fix-vllm-attention-backend-crash.md`](./11_2026_06_09_agent_fix-vllm-attention-backend-crash.md) | Agent | 06-09 | 修正 `--attention-backend` 參數值（`VLLM_ATTENTION_BACKEND` 不受支援 → `TRITON_ATTN`），API 測試 200 OK |
 
 ## 關鍵決策時間軸
 
@@ -27,6 +29,8 @@ Video2Text 專案的 agent 與 human 對話記錄，涵蓋專案初始化、框�
 06-07  [驗證]   測試影片規格、frame extraction
 06-08  [修復]   flashinfer 崩潰 → enforce_eager → 推論成功 ✅
 06-08  [稽核]   系統環境全盤檢查
+06-09  [工具]   建立啟動腳本與健康檢查 shell script
+06-09  [修復]   `--attention-backend TRITON_ATTN` 取代環境變數，API 測試 200 OK
 ```
 
 ## 參考路徑
@@ -41,4 +45,4 @@ Video2Text 專案的 agent 與 human 對話記錄，涵蓋專案初始化、框�
 
 ---
 
-撰寫日期：2026-06-08
+更新日期：2026-06-09

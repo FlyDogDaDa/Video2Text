@@ -36,7 +36,7 @@ Video2Text 專案的 agent 與 human 對話記錄，涵蓋專案初始化、框�
 | 專案根目錄 | `../` |
 | pyproject.toml | `../pyproject.toml` |
 | 資料模型 | `../src/models.py` |
-| 推論腳本 | `../try_video.py` |
+| 推論腳本 | `08_2026_06_08_references_gemma4-vllm-inference-fixes/try_video.py` |
 | 主程式 | `../main.py` |
 
 ---

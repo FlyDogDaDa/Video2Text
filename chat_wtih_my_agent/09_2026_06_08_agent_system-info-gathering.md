@@ -74,4 +74,4 @@ tags: [system-info, gpu, environment-audit]
 
 - [08_2026_06_08_agent_gemma4-vllm-inference-fixes.md](./08_2026_06_08_agent_gemma4-vllm-inference-fixes.md) — 上一次推論修復記錄
 - [pyproject.toml](../../pyproject.toml) — 依賴版本定義
-- [try_video.py](../../try_video.py) — 當前可用推論腳本
+- [try_video.py](08_2026_06_08_references_gemma4-vllm-inference-fixes/try_video.py) — 當前可用推論腳本

@@ -35,6 +35,8 @@ Video2Text 專案的 agent 與 human 對話記錄，涵蓋專案初始化、框�
 06-09  [修復]   `--attention-backend TRITON_ATTN` 取代環境變數，API 測試 200 OK
 06-09  [調查]   vLLM 音訊/影片預設行為分析
 06-10  [實作]   `src/utils/slice.py` 切片工具（視窗、seek-buffer、range read、快取）
+06-10  [重構]   `src/utils/slice.py` → PyAV 單一後端 + `IOCacheVideo` + `container.py` + `audio.py`
+06-10  [精簡]   刪除 `SliceSource`、`SliceResult`、`create_slices`；`IOCacheVideo` 支援 `Path` + 自動偵測格式
 ```
 
 ## 參考路徑

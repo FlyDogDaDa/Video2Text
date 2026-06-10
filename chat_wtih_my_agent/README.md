@@ -18,6 +18,8 @@ Video2Text 專案的 agent 與 human 對話記錄，涵蓋專案初始化、框�
 | 09 | [`09_2026_06_08_agent_system-info-gathering.md`](./09_2026_06_08_agent_system-info-gathering.md) | Agent | 06-08 | 系統環境稽核（雙卡 GPU、框架版本、磁碟空間警報） |
 | 10 | [`10_2026_06_09_agent_vllm-launch-and-healthcheck.md`](./10_2026_06_09_agent_vllm-launch-and-healthcheck.md) | Agent | 06-09 | 建立啟動腳本 `launch_Gemma4-12b.sh` 與健康檢查 `block_me_with_file.sh`，修復 flashinfer 崩潰 |
 | 11 | [`11_2026_06_09_agent_fix-vllm-attention-backend-crash.md`](./11_2026_06_09_agent_fix-vllm-attention-backend-crash.md) | Agent | 06-09 | 修正 `--attention-backend` 參數值（`VLLM_ATTENTION_BACKEND` 不受支援 → `TRITON_ATTN`），API 測試 200 OK |
+| 18 | [`18_vllm_audio_extraction_logic.md`](./18_vllm_audio_extraction_logic.md) | Human | 06-09 | vLLM 音訊/影片預設行為調查（幀 32 固定上限、音訊 30s 限制、無自動切分） |
+| 00 | [`00_2026_06_10_agent_slice-utils-implementation.md`](./00_2026_06_10_agent_slice-utils-implementation.md) | Agent | 06-10 | 實作 `src/utils/slice.py` 切片工具（視窗 30s + 2s 重疊、seek-buffering 幀提取、soundfile range read 音訊、記憶體快取） |
 
 ## 關鍵決策時間軸
 
@@ -31,6 +33,8 @@ Video2Text 專案的 agent 與 human 對話記錄，涵蓋專案初始化、框�
 06-08  [稽核]   系統環境全盤檢查
 06-09  [工具]   建立啟動腳本與健康檢查 shell script
 06-09  [修復]   `--attention-backend TRITON_ATTN` 取代環境變數，API 測試 200 OK
+06-09  [調查]   vLLM 音訊/影片預設行為分析
+06-10  [實作]   `src/utils/slice.py` 切片工具（視窗、seek-buffer、range read、快取）
 ```
 
 ## 參考路徑
@@ -45,4 +49,4 @@ Video2Text 專案的 agent 與 human 對話記錄，涵蓋專案初始化、框�
 
 ---
 
-更新日期：2026-06-09
+更新日期：2026-06-10

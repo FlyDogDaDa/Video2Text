@@ -1,32 +1,60 @@
-"""
-Slice utilities — audio extraction, video frame sampling, window slicing.
+"""IOCacheVideo — PyAV video container wrapper with optional in-memory cache.
 
-This module implements the slice-level audio/video extraction logic that
-vLLM's built-in helpers do **not** provide for per-slice windows:
+This is the **core** of the video-slicing toolkit.  It wraps ``av.open()`` and
+exposes both the raw PyAV object (for power users) and convenient slice-level
+helpers for extracting frames and audio at arbitrary time ranges.
 
-  - vLLM ``fetch_video()`` samples a full video into 32 frames with no
-    slice-aware time-range support.
-  - vLLM's audio loading reads the **entire** audio file with no splitting
-    for clips longer than the 30-second model limit.
+Design principles
+-----------------
+1. **PyAV is the backend** — all I/O goes through ``av``.
+2. **Optional in-memory cache** — set ``cached=True`` to load the file into
+   ``io.BytesIO`` before opening; seek performance improves for repeated
+   random access.
+3. **Direct AV exposure** — ``container``, ``video_stream``, and
+   ``audio_streams`` properties let callers drop down to PyAV at any time.
 
-Here we provide a ``SliceStore`` that manages slice generation, optional
-in-memory caching, and slice-aware audio/frame extraction compatible with
-Gemma-4's constraints (16 kHz mono audio ≤30 s, 1 fps video ≤32 frames).
+Usage
+-----
+Basic usage::
+
+    from src.utils.slice import IOCacheVideo, SliceParams, SliceSource
+
+    with IOCacheVideo("video.mp4") as video:
+        frames = video.get_frames(0, 30)
+        audio = video.get_audio(0, 30)
+
+Cached mode (faster random access)::
+
+    with IOCacheVideo("video.mp4", cached=True) as video:
+        ...
+
+Power user — raw PyAV::
+
+    with IOCacheVideo("video.mp4") as video:
+        video.container.seek(300 * int(video.video_stream.time_base),
+                             stream=video.video_stream)
+        for frame in video.container.decode(video.video_stream):
+            process(frame)
 """
 
 from __future__ import annotations
 
+import io
 import logging
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, ClassVar, Final
+from typing import TYPE_CHECKING, Final
 
+import av
 import numpy as np
 import numpy.typing as npt
 from scipy.signal import resample as _resample
 
+from src.utils.audio import normalize_audio
+from src.utils.container import load_bytes
+
 if TYPE_CHECKING:
-    from typing import Any as Cv2VideoCapture
+    pass  # no cv2 or av needed for type hints
 
 logger = logging.getLogger(__name__)
 
@@ -38,6 +66,7 @@ _AUDIO_SAMPLE_RATE: Final[int] = 16_000
 _AUDIO_MAX_SAMPLES: Final[int] = _AUDIO_SAMPLE_RATE * 30  # 30 s @ 16kHz
 _VIDEO_MAX_FRAMES: Final[int] = 32
 _DEFAULT_FPS: Final[float] = 1.0  # 1 frame per second
+
 
 # ---------------------------------------------------------------------------
 # Data classes
@@ -77,308 +106,247 @@ class SliceParams:
         return min(frames, _VIDEO_MAX_FRAMES)
 
 
-@dataclass(frozen=True)
-class SliceSource:
-    """One slice's extracted media ready for vLLM multimodal input."""
-
-    time_range: tuple[float, float]  # (start, end) in seconds
-    frames: npt.NDArray | None = None  # [num_frames, H, W, 3] uint8 RGB
-    audio_clips: list[np.ndarray] = field(default_factory=list)
-
-
-@dataclass
-class SliceResult:
-    """Result object produced by ``create_slices`` for each window."""
-
-    time_range: tuple[float, float]
-    frames: npt.NDArray | None
-    audio_clips: list[np.ndarray]
-    # Placeholder — caller fills in the LLM response later.
-    llm_output: dict | None = None
-
-    @classmethod
-    def from_source(
-        cls, src: SliceSource, *, llm_output: dict | None = None
-    ) -> SliceResult:
-        return cls(
-            time_range=src.time_range,
-            frames=src.frames,
-            audio_clips=src.audio_clips,
-            llm_output=llm_output,
-        )
-
-
 # ---------------------------------------------------------------------------
-# Video info (OpenCV — optional dependency)
-# ---------------------------------------------------------------------------
-
-_cv2: Any = None
-_HAS_CV2 = False
-
-try:
-    import cv2 as _cv2  # noqa: PLC-0414 (module-level optional import)
-
-    _HAS_CV2 = True
-except ImportError:
-    pass
-
-
-def load_video_info(path: str) -> VideoInfo:
-    """Return ``VideoInfo`` for *path* without loading any frames into memory."""
-    if not _HAS_CV2:
-        raise ImportError("OpenCV (cv2) is required for video metadata extraction.")
-
-    cap = _cv2.VideoCapture(path)
-    if not cap.isOpened():
-        raise ValueError(f"Cannot open video: {path}")
-
-    total_frames = int(cap.get(_cv2.CAP_PROP_FRAME_COUNT))
-    fps = cap.get(_cv2.CAP_PROP_FPS)
-    width = int(cap.get(_cv2.CAP_PROP_FRAME_WIDTH))
-    height = int(cap.get(_cv2.CAP_PROP_FRAME_HEIGHT))
-
-    # Duration: prefer the value derived from total_frames / fps when both are valid
-    if fps > 0 and total_frames > 0:
-        duration = total_frames / fps
-    else:
-        duration = cap.get(_cv2.CAP_PROP_DURATION) / 1000.0  # cv2 returns ms
-
-    cap.release()
-
-    return VideoInfo(
-        duration=duration,
-        fps=fps,
-        width=width,
-        height=height,
-        total_frames=total_frames,
-        path=str(path),
-    )
-
-
-# ---------------------------------------------------------------------------
-# Frame extraction — reusable VideoReader (single handle, seek buffer)
+# IOCacheVideo — the single core class
 # ---------------------------------------------------------------------------
 
 
-class VideoReader:
-    """Single-handle OpenCV video reader with seek-buffering.
-
-    Keeps one ``cv2.VideoCapture`` open and caches the last seek position.
-    Consecutive reads that are near the previous seek point only do forward
-    frame grabs instead of re-seeking from frame 0.
-
-    This is essential for slice-based extraction on long videos: without it
-    each slice would open/close the file and seek from the beginning.
-    """
-
-    SEEK_THRESHOLD_FRAMES: ClassVar[int] = 300  # re-seek if gap > this many frames
-
-    def __init__(self, path: str) -> None:
-        self.path = path
-        self._cap: "Cv2VideoCapture" = _cv2.VideoCapture(path)  # type: ignore[arg-type]
-        if not self._cap.isOpened():
-            raise ValueError(f"Cannot open video: {path}")
-        self._fps: float = self._cap.get(_cv2.CAP_PROP_FPS) or _DEFAULT_FPS
-        self._total_frames: int = int(self._cap.get(_cv2.CAP_PROP_FRAME_COUNT))
-        self._width: int = int(self._cap.get(_cv2.CAP_PROP_FRAME_WIDTH))
-        self._height: int = int(self._cap.get(_cv2.CAP_PROP_FRAME_HEIGHT))
-        self._last_frame: int = -1  # frame number we last grabbed from
-
-    # -- public -----------------------------------------------------------
-
-    @property
-    def fps(self) -> float:
-        return self._fps
-
-    @property
-    def total_frames(self) -> int:
-        return self._total_frames
-
-    def read_frames(
-        self,
-        start: float,
-        end: float,
-        max_frames: int = _VIDEO_MAX_FRAMES,
-    ) -> np.ndarray:
-        """Grab frames at ~1 fps in [start, end) using the seek-buffer."""
-        start_frame = max(0, int(start * self._fps))
-        end_frame = min(self._total_frames, int(end * self._fps))
-
-        if end_frame <= start_frame:
-            return np.empty((0, self._height, self._width, 3), dtype=np.uint8)
-
-        # Decide whether to seek or grab forward
-        if abs(start_frame - self._last_frame) > self.SEEK_THRESHOLD_FRAMES:
-            _ = self._cap.set(_cv2.CAP_PROP_POS_FRAMES, start_frame)
-
-        # Grab forward
-        num_indices = min(int(end - start), max_frames)
-        indices = np.linspace(start_frame, end_frame - 1, num_indices, dtype=int)
-        indices = np.unique(np.clip(indices, start_frame, end_frame - 1))
-        idx_set = set(indices.tolist())
-
-        frames_list: list[np.ndarray] = []
-        for frame_no in range(self._last_frame + 1, end_frame + 1):
-            ok = self._cap.grab()
-            if not ok:
-                continue
-            if frame_no in idx_set:
-                ret, frame = self._cap.retrieve()
-                if ret and frame is not None:
-                    frames_list.append(_cv2.cvtColor(frame, _cv2.COLOR_BGR2RGB))
-            self._last_frame = frame_no
-            if frame_no >= end_frame:
-                break
-
-        if not frames_list:
-            return np.empty((0, self._height, self._width, 3), dtype=np.uint8)
-
-        return np.stack(frames_list)
-
-    def release(self) -> None:
-        self._cap.release()
-
-    def __del__(self) -> None:
-        self.release()
-
-
-def extract_frames_slice(
-    path: str,
-    start: float,
-    end: float,
-    max_frames: int = _VIDEO_MAX_FRAMES,
-) -> np.ndarray:
-    """Extract frames at ~1 fps within [start, end) — single-use helper.
-
-    Creates a temporary ``VideoReader``, reads the slice, then closes it.
-    For batch slicing use ``SliceStore`` directly (it reuses one reader).
-    """
-    if start >= end:
-        return np.empty((0, 0, 0, 3), dtype=np.uint8)
-
-    reader = VideoReader(path)
-    try:
-        return reader.read_frames(start, end, max_frames)
-    finally:
-        reader.release()
-
-
-# ---------------------------------------------------------------------------
-# Audio/video backends (optional dependencies)
-# ---------------------------------------------------------------------------
-
-_sf: Any = None
-_HAS_SF = False
-
-try:
-    import soundfile as _sf  # noqa: PLC-0414
-
-    _HAS_SF = True
-except ImportError:
-    pass
-
-_av: Any = None
-_HAS_AV = False
-
-try:
-    import av as _av  # noqa: PLC-0414
-
-    _HAS_AV = True
-except ImportError:
-    pass
-
-
-def _normalize_audio(data: np.ndarray) -> np.ndarray:
-    """Mono-mix (mean) and normalise to [-1, 1].
-
-    Mirrors ``vllm.multimodal.audio.normalize_audio`` + ``normalize_audio``
-    from ``multimodal_infer.py`` for consistency.
-    """
-    if data.ndim > 1:
-        data = data.mean(axis=1)
-    peak = float(np.abs(data).max())
-    if peak > 0:
-        data = data / peak
-    return data
-
-
-def extract_audio_slice(
-    path: str,
-    start: float,
-    end: float,
-    max_clip_duration: float = 30.0,
-    audio_streams: list[int] | None = None,
-) -> list[np.ndarray]:
-    """Extract audio within [start, end), 16 kHz mono, clipped to ≤30 s.
-
-    Uses PyAV to open the video container, **decode every selected audio stream**
-    in the [start, end) window, sum them (with zero-padding), resample to
-    16 kHz mono, and peak-normalise to prevent clipping.
+class IOCacheVideo:
+    """PyAV container wrapper with optional in-memory cache.
 
     Parameters
     ----------
-    path:
-        Path to the video/audio file.
-    start, end:
-        Time range in seconds (inclusive start, exclusive end).
-    max_clip_duration:
-        Maximum clip length in seconds.  Splits audio longer than this.
-    audio_streams:
-        Which audio streams to mix.  ``None`` means **all** streams.
-        Pass a list of indices, e.g. ``[0, 2]``, to mix specific tracks.
+    source:
+        File path (``str``) or a seekable ``io.BytesIO`` object.
+    cached:
+        When ``source`` is a path, load the file into ``BytesIO`` first.
+        Improves seek performance for repeated random access at the cost
+        of loading the full file into memory.
 
-    Returns
-    -------
-    A list of 1-D ``np.ndarray`` of dtype ``float32``.
-    If the total duration exceeds ``max_clip_duration`` it is split
-    into multiple clips of at most ``max_clip_duration`` seconds each.
+    Attributes
+    ----------
+    container : av.Container
+        The underlying PyAV container — use directly for advanced operations.
+    video_stream : av.VideoStream
+        The first video stream in the container.
+    audio_streams : list[av.AudioStream]
+        All audio streams in the container.
     """
-    if not _HAS_AV:
-        raise ImportError("av (PyAV) is required for audio extraction from video.")
 
-    if start >= end:
-        return []
+    def __init__(
+        self, source: Path | str | io.BytesIO, *, cached: bool = False
+    ) -> None:
+        # Determine container source
+        if isinstance(source, (str, Path)):
+            if cached:
+                # Load full file into BytesIO for faster seek
+                self._container = av.open(load_bytes(source))
+            else:
+                self._container = av.open(source)
+            self._path = str(source)
+        else:
+            self._container = av.open(source)
+            self._path = "<bytesio>"
+        self._cached = cached
 
-    with _av.open(path) as container:
-        # Select which audio streams to decode
-        all_streams = list(container.streams.audio)
-        if not all_streams:
+        # Cache stream references
+        self._video_stream = self._container.streams.video[0]
+        self._audio_streams = list(self._container.streams.audio)
+
+        # Precompute useful metadata from PyAV
+        self._video_tb = float(self._video_stream.time_base)
+        self._video_fps = (
+            float(self._video_stream.base_rate)
+            if hasattr(self._video_stream, "base_rate")
+            else self._video_stream.average_rate
+        )
+        self._video_duration = (
+            float(self._video_stream.duration * self._video_tb)
+            if self._video_stream.duration
+            else 0.0
+        )
+        self._video_width = self._video_stream.width
+        self._video_height = self._video_stream.height
+
+        # Duration from container if stream duration unavailable
+        if not self._video_duration:
+            self._video_duration = float(
+                self._container.duration / 1_000_000
+            )  # container duration in microseconds
+
+    # -- public properties (direct AV exposure) ---------------------------
+
+    @property
+    def container(self):
+        """The underlying ``av.Container`` object."""
+        return self._container
+
+    @property
+    def video_stream(self):
+        """The first video stream."""
+        return self._video_stream
+
+    @property
+    def audio_streams(self):
+        """All audio streams."""
+        return self._audio_streams
+
+    @property
+    def info(self) -> VideoInfo:
+        """Video metadata as ``VideoInfo``."""
+        return VideoInfo(
+            duration=self._video_duration,
+            fps=self._video_fps or _DEFAULT_FPS,
+            width=self._video_width,
+            height=self._video_height,
+            total_frames=int(self._video_duration * (self._video_fps or _DEFAULT_FPS)),
+            path=self._path,
+        )
+
+    @property
+    def duration(self) -> float:
+        """Video duration in seconds."""
+        return self._video_duration
+
+    # -- frame extraction -------------------------------------------------
+
+    def get_frames(
+        self,
+        start: float,
+        end: float,
+        sample_fps: float = _DEFAULT_FPS,
+        max_frames: int = _VIDEO_MAX_FRAMES,
+    ) -> npt.NDArray:
+        """Extract frames in ``[start, end)`` as ``[N, H, W, 3]`` uint8 RGB.
+
+        Parameters
+        ----------
+        start, end:
+            Time range in seconds.
+        sample_fps:
+            Target frame sampling rate.  Default 1 fps.
+        max_frames:
+            Maximum number of frames to return.  Capped by Gemma-4 limit.
+
+        Returns
+        -------
+        ``np.ndarray`` of shape ``[N, H, W, 3]`` or empty array if range is invalid.
+        """
+        if start >= end or start < 0:
+            return np.empty(
+                (0, self._video_height, self._video_width, 3), dtype=np.uint8
+            )
+
+        # Calculate frame indices
+        start_time = start
+        end_time = min(end, self._video_duration)
+        num_samples = int((end_time - start_time) * sample_fps)
+        num_samples = min(num_samples, max_frames)
+
+        if num_samples <= 0:
+            return np.empty(
+                (0, self._video_height, self._video_width, 3), dtype=np.uint8
+            )
+
+        # Seek to start position (stream-level timebase)
+        seek_pts = int(start_time / self._video_tb)
+        self._container.seek(seek_pts, stream=self._video_stream)
+
+        # Collect frames
+        frames_list: list[np.ndarray] = []
+        target_times = np.linspace(start_time, end_time - 1e-6, num_samples)
+        target_idx = 0
+
+        for frame in self._container.decode(self._video_stream):
+            frame_time = frame.pts * frame.time_base
+            if frame_time < start_time:
+                continue
+            if frame_time >= end_time:
+                break
+
+            # Check if we should sample this frame
+            if target_idx < num_samples and frame_time >= target_times[target_idx]:
+                # Convert to RGB (PyAV outputs YUV)
+                rgb_frame = frame.to_rgb().to_ndarray()  # [H, W, 3] uint8
+                frames_list.append(rgb_frame)
+                target_idx += 1
+
+            if len(frames_list) >= max_frames:
+                break
+
+        if not frames_list:
+            return np.empty(
+                (0, self._video_height, self._video_width, 3), dtype=np.uint8
+            )
+
+        return np.stack(frames_list)
+
+    # -- audio extraction -------------------------------------------------
+
+    def get_audio(
+        self,
+        start: float,
+        end: float,
+        max_clip_duration: float = 30.0,
+        audio_streams: list[int] | None = None,
+    ) -> list[np.ndarray]:
+        """Extract audio in ``[start, end)`` as 16 kHz mono clips.
+
+        Parameters
+        ----------
+        start, end:
+            Time range in seconds.
+        max_clip_duration:
+            Maximum clip length in seconds.  Audio longer than this is split.
+        audio_streams:
+            Which audio streams to mix.  ``None`` means **all** streams.
+
+        Returns
+        -------
+        A list of 1-D ``np.ndarray`` of dtype ``float32``, each ≤30 s.
+        """
+        if start >= end or not self._audio_streams:
             return []
 
+        # Select streams
         selected_indices = (
             audio_streams
             if audio_streams is not None
-            else list(range(len(all_streams)))
+            else list(range(len(self._audio_streams)))
         )
         streams_to_decode = [
-            all_streams[i] for i in selected_indices if i < len(all_streams)
+            self._audio_streams[i]
+            for i in selected_indices
+            if i < len(self._audio_streams)
         ]
         if not streams_to_decode:
             return []
 
-        # Decode each selected stream independently
+        # Seek to start position (stream-level timebase)
+        seek_pts = int(start / streams_to_decode[0].time_base)
+        self._container.seek(seek_pts, stream=streams_to_decode[0])
+
+        # Decode each selected stream
         all_tracks: list[np.ndarray] = []
         for stream in streams_to_decode:
             frames_list: list[np.ndarray] = []
-            for frame in container.decode(stream):
+            for frame in self._container.decode(stream):
                 if frame.pts is None:
                     continue
-                # Convert PTS from stream timebase to seconds
-                frame_time = frame.pts * frame.time_base / _av.time_base
+                frame_time = float(frame.pts * frame.time_base)
                 if frame_time >= end:
                     break
                 if frame_time >= start:
-                    # frame.to_ndarray(): shape (num_samples, channels) float32
                     frames_list.append(frame.to_ndarray().astype(np.float32))
 
             if not frames_list:
                 continue
 
-            # Mono-mix per frame, then concatenate along sample axis
-            mono = [arr.mean(axis=1) for arr in frames_list]  # each: (num_samples,)
+            # Mono-mix per frame, then concatenate
+            mono = [arr.mean(axis=1) for arr in frames_list]
             track = np.concatenate(mono)
 
-            # Resample to 16 kHz if the stream's native rate differs
+            # Resample to 16 kHz if needed
             if int(stream.sample_rate) != _AUDIO_SAMPLE_RATE:
                 n_out = int(len(track) * _AUDIO_SAMPLE_RATE / int(stream.sample_rate))
                 track = _resample(track, n_out, axis=0)
@@ -394,298 +362,31 @@ def extract_audio_slice(
         for t in all_tracks:
             summed[: len(t)] += t
 
-        # Peak-normalise to [-1, 1] to prevent clipping when mixing multiple tracks
-        summed = _normalize_audio(summed)
+        # Peak-normalise
+        summed = normalize_audio(summed)
 
-    # If within limit, return as-is
-    if len(summed) <= _AUDIO_SAMPLE_RATE * max_clip_duration:
-        return [summed]
+        # Split if longer than max_clip_duration
+        if len(summed) <= _AUDIO_SAMPLE_RATE * max_clip_duration:
+            return [summed]
 
-    # Split into ≤30 s chunks.
-    chunk_samples = int(_AUDIO_SAMPLE_RATE * max_clip_duration)
-    chunks: list[np.ndarray] = []
-    for i in range(0, len(summed), chunk_samples):
-        chunks.append(summed[i : i + chunk_samples])
-    return chunks
+        chunk_samples = int(_AUDIO_SAMPLE_RATE * max_clip_duration)
+        chunks: list[np.ndarray] = []
+        for i in range(0, len(summed), chunk_samples):
+            chunks.append(summed[i : i + chunk_samples])
+        return chunks
 
+    # -- lifecycle --------------------------------------------------------
 
-# ---------------------------------------------------------------------------
-# In-memory caching + batch slicing
-# ---------------------------------------------------------------------------
+    def close(self) -> None:
+        """Close the underlying PyAV container."""
+        self._container.close()
 
-
-class SliceStore:
-    """Manages optional in-memory caching of video data.
-
-    For videos up to ~10 min at 1 fps the full frame stack fits in memory.
-    Audio at 16 kHz mono uses ~64 KB/s.  A 1-hour file ≈ 230 MB.
-
-    The ``VideoReader`` handle is kept alive across slices so consecutive
-    slices grab forward instead of re-seeking — critical for 1-hour videos
-    with 70+ slices.
-
-    Usage (recommended — context manager):
-
-    .. code-block:: python
-
-        with SliceStore(path, cache_audio=True) as store:
-            for src in store.iter_slices():
-                frames = src.frames
-                for clip in src.audio_clips:
-                    ...
-
-    Usage (manual open/close):
-
-    .. code-block:: python
-
-        store = SliceStore(path)
-        store.open()
-        try:
-            src = store.extract_slice(0, 30)
-        finally:
-            store.close()
-    """
-
-    def __init__(
-        self,
-        path: str,
-        *,
-        cache_frames: bool = False,
-        cache_audio: bool = False,
-    ) -> None:
-        self.path = path
-        self.info: VideoInfo | None = None
-        self._cached_frames: npt.NDArray | None = None
-        self._cached_audio: npt.NDArray | None = None
-        self._cache_frames = cache_frames
-        self._cache_audio = cache_audio
-        self._video_reader: VideoReader | None = None
-
-    # -- helpers -----------------------------------------------------------
-
-    def _ensure_info(self) -> VideoInfo:
-        if self.info is None:
-            self.info = load_video_info(self.path)
-        return self.info
-
-    def _ensure_frames(self) -> npt.NDArray:
-        """Load ALL frames into memory (expensive — use only with cache_frames=True)."""
-        if self._cached_frames is not None:
-            return self._cached_frames
-
-        info = self._ensure_info()
-        cap = _cv2.VideoCapture(self.path)  # type: ignore[arg-type]
-        frames: list[np.ndarray] = []
-        while True:
-            ok = cap.grab()
-            if not ok:
-                break
-            ret, frame = cap.retrieve()
-            if ret and frame is not None:
-                frames.append(_cv2.cvtColor(frame, _cv2.COLOR_BGR2RGB))
-        cap.release()
-
-        if not frames:
-            self._cached_frames = np.empty(
-                (0, info.height, info.width, 3), dtype=np.uint8
-            )
-        else:
-            self._cached_frames = np.stack(frames)
-        return self._cached_frames
-
-    def _ensure_audio(self) -> np.ndarray:
-        """Load full audio into memory (cache_audio=True)."""
-        if self._cached_audio is not None:
-            return self._cached_audio
-
-        data, _ = _sf.read(self.path, samplerate=_AUDIO_SAMPLE_RATE, dtype="float32")
-        if data.ndim > 1:
-            data = data.mean(axis=1)
-        self._cached_audio = _normalize_audio(data)
-        return self._cached_audio
-
-    # -- lifecycle -------------------------------------------------------
-
-    def open(self) -> "SliceStore":
-        """Open the ``VideoReader`` for batch slice extraction."""
-        self._video_reader = VideoReader(self.path)
+    def __enter__(self) -> "IOCacheVideo":
         return self
-
-    def __enter__(self) -> "SliceStore":
-        return self.open()
 
     def __exit__(self, *exc: object) -> None:
         self.close()
 
-    def close(self) -> None:
-        """Release the ``VideoReader``."""
-        if self._video_reader is not None:
-            self._video_reader.release()
-            self._video_reader = None
-
-    # -- public API ------------------------------------------------------
-
-    @property
-    def has_cached_frames(self) -> bool:
-        return self._cached_frames is not None
-
-    @property
-    def has_cached_audio(self) -> bool:
-        return self._cached_audio is not None
-
-    @property
-    def audio_size_mb(self) -> float:
-        """Estimated audio size in MB if cached."""
-        if self._cached_audio is not None:
-            return self._cached_audio.nbytes / (1024 * 1024)
-        info = self._ensure_info()
-        return info.duration * _AUDIO_SAMPLE_RATE * 4 / (1024 * 1024)
-
-    def extract_slice(
-        self,
-        start: float,
-        end: float,
-        max_frames: int = _VIDEO_MAX_FRAMES,
-        max_clip_duration: float = 30.0,
-        audio_streams: list[int] | None = None,
-    ) -> SliceSource:
-        """Return a ``SliceSource`` for the time range [start, end)."""
-        # Ensure caches
-        if self._cache_frames and self._cached_frames is None:
-            self._ensure_frames()
-        if self._cache_audio and self._cached_audio is None:
-            self._ensure_audio()
-
-        # Frames — use the shared VideoReader or the cached buffer
-        frames: npt.NDArray | None = None
-        if self._cache_frames and self._cached_frames is not None:
-            info = self._ensure_info()
-            fps = max(info.fps, 1.0)
-            start_frame = int(start * fps)
-            end_frame = int(end * fps)
-            if start_frame < self._cached_frames.shape[0]:
-                chunk = self._cached_frames[start_frame:end_frame]
-                if len(chunk) > 0:
-                    num_frames = min(len(chunk), max_frames)
-                    if num_frames > 0:
-                        step = max(len(chunk) // num_frames, 1)
-                        indices = list(range(0, len(chunk), step))[:max_frames]
-                        frames = self._cached_frames[indices]
-                    else:
-                        frames = chunk[:max_frames]
-        elif self._video_reader is not None:
-            # Reuses the shared reader with seek-buffering
-            frames = self._video_reader.read_frames(start, end, max_frames)
-        else:
-            # Fallback: single-use reader (opens/closes per slice)
-            frames = extract_frames_slice(self.path, start, end, max_frames)
-
-        # Audio
-        audio_clips: list[np.ndarray] = []
-        if self._cache_audio and self._cached_audio is not None:
-            data = self._cached_audio
-            start_sample = int(start * _AUDIO_SAMPLE_RATE)
-            end_sample = int(end * _AUDIO_SAMPLE_RATE)
-            chunk = data[start_sample:end_sample]
-            if len(chunk) > 0:
-                chunk_samples = int(_AUDIO_SAMPLE_RATE * max_clip_duration)
-                for i in range(0, len(chunk), chunk_samples):
-                    audio_clips.append(chunk[i : i + chunk_samples])
-        else:
-            audio_clips = extract_audio_slice(
-                self.path, start, end, max_clip_duration=max_clip_duration
-            )
-
-        return SliceSource(
-            time_range=(start, end),
-            frames=frames,
-            audio_clips=audio_clips,
-        )
-
-    def iter_slices(
-        self,
-        params: SliceParams | None = None,
-    ) -> list[SliceSource]:
-        """Iterate over all slices from 0 to video end.
-
-        Requires ``open()`` to have been called (or used as context manager).
-        """
-        if self._video_reader is None:
-            raise RuntimeError(
-                "Call store.open() or use `with SliceStore(...)` before iter_slices()."
-            )
-        if params is None:
-            params = SliceParams()
-
-        info = self._ensure_info()
-        slices: list[SliceSource] = []
-        t = 0.0
-        while t < info.duration:
-            end = min(t + params.window_seconds, info.duration)
-            if end - t < 0.5:
-                break
-            src = self.extract_slice(t, end, max_frames=params.max_frames)
-            slices.append(src)
-            t += params.step_seconds
-        return slices
-
     def __repr__(self) -> str:
-        flags = []
-        if self._cache_frames:
-            flags.append(
-                "frames=CACHED" if self.has_cached_frames else "frames=not loaded"
-            )
-        else:
-            flags.append("frames=OFF")
-        if self._cache_audio:
-            flags.append(f"audio=CACHED ({self.audio_size_mb:.1f} MB)")
-        else:
-            flags.append("audio=OFF")
-        return f"SliceStore({Path(self.path).name} [{', '.join(flags)}])"
-
-    # -- memory management -------------------------------------------------
-
-    def free(self) -> None:
-        """Release cached data to free memory."""
-        self._cached_frames = None
-        self._cached_audio = None
-
-
-# ---------------------------------------------------------------------------
-# Slice creation helpers
-# ---------------------------------------------------------------------------
-
-
-def create_slices(
-    video_path: str,
-    params: SliceParams | None = None,
-    cache_frames: bool = False,
-    cache_audio: bool = False,
-) -> list[SliceSource]:
-    """Split a video into slices according to *params* and extract media.
-
-    Parameters
-    ----------
-    video_path:
-        Path to the video file (also used as the audio source).
-    params:
-        Window sizing.  Defaults to 30 s window, 2 s overlap.
-    cache_frames:
-        Load **all** video frames into memory before slicing.  Useful when
-        the video is ≤ ~10 minutes so seeking repeatedly would be slower
-        than a single decode.  For 1-hour videos this is **not** recommended.
-    cache_audio:
-        Load the full audio waveform into memory before slicing.
-        For a 1-hour file at 16 kHz mono this is ~230 MB.
-
-    Returns
-    -------
-    A list of ``SliceSource`` objects, each containing extracted frames
-    and audio clip(s) for that slice's time range.
-    """
-    info = load_video_info(video_path)
-    store = SliceStore(video_path, cache_frames=cache_frames, cache_audio=cache_audio)
-
-    # Use context manager: opens VideoReader, then auto-closes on exit
-    with store.open():
-        return store.iter_slices(params)
+        cached = " <cached>" if self._cached else ""
+        return f"IOCacheVideo({self._path!r}, {len(self._audio_streams)} audio streams{cached})"

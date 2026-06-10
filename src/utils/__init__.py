@@ -1,27 +1,17 @@
-"""Video2Text slice utilities — audio extraction, video frame sampling, window slicing."""
+"""Video2Text slice utilities — PyAV-based video/audio slicing."""
 
+from src.utils.audio import normalize_audio
+from src.utils.container import load_bytes
 from src.utils.slice import (
+    IOCacheVideo,
     SliceParams,
-    SliceResult,
-    SliceSource,
-    SliceStore,
     VideoInfo,
-    VideoReader,
-    create_slices,
-    extract_audio_slice,
-    extract_frames_slice,
-    load_video_info,
 )
 
 __all__ = [
+    "IOCacheVideo",
     "SliceParams",
-    "SliceResult",
-    "SliceSource",
-    "SliceStore",
     "VideoInfo",
-    "VideoReader",
-    "create_slices",
-    "extract_audio_slice",
-    "extract_frames_slice",
-    "load_video_info",
+    "load_bytes",
+    "normalize_audio",
 ]

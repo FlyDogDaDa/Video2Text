@@ -125,6 +125,7 @@ Video2Text 專案的 agent 與 human 對話記錄，涵蓋專案初始化、vLLM
 06-11  [實驗]   delayed guided decoding 失敗：thinking mode 被 guided JSON 擋住（29）
 06-11  [實作]   extract_structured() 兩階段 thinking 參數（30）
 06-11  [策略]   Server API 模式取代離線推理（31）→ 定海神針
+[06-11] 推理三變體實作與驗證（33）→ 4a/4b/4c 全部並行通過
 ```
 
 ## 當前可用功能總覽

@@ -11,6 +11,7 @@ set -a; source .env; set +a
 # --limit-mm-per-prompt disables multimodal profiling to avoid
 # GEMMA4_KV_SLOTS / num_soft_tokens 屬性錯誤
 vllm serve "google/gemma-4-12B-it-qat-w4a16-ct" \
+  --enforce-eager \
   --quantization compressed-tensors \
   --reasoning-parser gemma4 \
   --tool-call-parser gemma4 \
@@ -23,8 +24,13 @@ vllm serve "google/gemma-4-12B-it-qat-w4a16-ct" \
   --port "${PORT:-8746}" \
   --trust-remote-code \
   --enable-prefix-caching \
-  --enable-chunked-prefill \
   --async-scheduling \
-  --max-num-seqs 16 \
-  --enforce-eager \
-  --limit-mm-per-prompt '{"image": 4, "audio": 1, "video": 1}'
+  --max-num-seqs 64 \
+  --structured-outputs-config.enable_in_reasoning=True \
+  --structured-outputs-config.reasoning_parser=gemma4 \
+  --limit-mm-per-prompt '{"image": 32, "audio": 1}' \
+  --hf-overrides '{"vision_config": {"num_soft_tokens": 1120}}' \
+  --mm-processor-kwargs '{"max_soft_tokens": 1120}'
+
+# 圖片 token 預算 70/140/280/560/1120
+# 我拿掉了 --enable-chunked-prefill 是因為在多模態模式下 chunk 在平行環境下極易引發 Placeholder 數量計算錯誤

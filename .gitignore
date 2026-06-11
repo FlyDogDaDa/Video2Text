@@ -229,3 +229,6 @@ ffmpeg
 2026_05_11-19_18_26.mp4
 2026_05_11-19_18_26_louder4x.mp4
 short_test.mp4
+
+# Agent references directory (may contain sensitive data)
+chat_wtih_my_agent/31_2026_06_11_human_strategy-vllm-server-api-pattern/references/

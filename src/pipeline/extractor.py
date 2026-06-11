@@ -54,6 +54,8 @@ def extract_structured(
     *,
     params: SliceParams | None = None,
     sampling_params: SamplingParams | None = None,
+    thinking: bool = False,
+    thinking_max_tokens: int = 512,
 ) -> list[dict]:
     """Extract structured ``SliceResult`` for every slice of a video.
 
@@ -78,6 +80,14 @@ def extract_structured(
         temperature=0.1, max_tokens=512, seed=42 is used.
         Pass a ``StructuredOutputsParams``-backed one if you need
         custom temperature / top_p etc.
+    thinking:
+        When ``True`` the extractor runs a **two-stage** pipeline:
+        stage 1 generates freeform reasoning, stage 2 generates
+        guided JSON using the reasoning as additional context.
+        ``False`` (default) uses a single pass with structured output only.
+    thinking_max_tokens:
+        Maximum tokens for the reasoning stage.  Only used when
+        ``thinking=True``.  Defaults to ``512``.
 
     Returns
     -------
@@ -146,12 +156,12 @@ def extract_structured(
                 },
             ]
 
-            # Apply chat template (enable thinking for Gemma-4)
+            # Build single-pass prompt (thinking off — guided JSON from token 1)
             prompt = processor.apply_chat_template(
                 messages,
                 tokenize=False,
                 add_generation_prompt=True,
-                chat_template_kwargs={"enable_thinking": True},
+                chat_template_kwargs={"enable_thinking": False},
             )
 
             # Prepare multimodal data
@@ -161,13 +171,78 @@ def extract_structured(
             if inp.audio_clips:
                 multi_modal_data["audio"] = [inp.audio_clips[0]]
 
-            # vLLM offline v1 API: {"prompt": ..., "multi_modal_data": ...}
-            inputs = {
-                "prompt": prompt,
-                "multi_modal_data": multi_modal_data if multi_modal_data else None,
-            }
+            if thinking:
+                # ---- Two-stage: freeform reasoning → guided JSON ----
 
-            outputs = llm.generate(inputs, sampling_params=sampling_params)
+                # Stage 1: freeform reasoning (no structured-output mask)
+                thinking_sp = SamplingParams(
+                    temperature=0.7,
+                    max_tokens=thinking_max_tokens,
+                    seed=42,
+                )
+                thinking_prompt = processor.apply_chat_template(
+                    messages,
+                    tokenize=False,
+                    add_generation_prompt=True,
+                    chat_template_kwargs={"enable_thinking": True},
+                )
+                thinking_inputs = {
+                    "prompt": thinking_prompt,
+                    "multi_modal_data": multi_modal_data if multi_modal_data else None,
+                }
+                thinking_outputs = llm.generate(
+                    thinking_inputs, sampling_params=thinking_sp
+                )
+                thinking_text = thinking_outputs[0].outputs[0].text.strip()
+                logger.debug("Stage-1 thinking: %s...", thinking_text[:120])
+
+                # Stage 2: guided JSON, using reasoning as additional context
+                stage2_messages = [
+                    {"role": "system", "content": _SYSTEM_PROMPT},
+                    {
+                        "role": "user",
+                        "content": [
+                            {"type": "text", "text": slice_desc},
+                            *[{"type": "image"} for _ in range(n_frames)],
+                        ],
+                    },
+                    {"role": "assistant", "content": thinking_text},
+                    {
+                        "role": "user",
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": (
+                                    f"Based on the reasoning above, output ONLY the "
+                                    f"JSON object matching the schema."
+                                ),
+                            }
+                        ],
+                    },
+                ]
+                stage2_prompt = processor.apply_chat_template(
+                    stage2_messages,
+                    tokenize=False,
+                    add_generation_prompt=True,
+                    chat_template_kwargs={"enable_thinking": False},
+                )
+                stage2_inputs = {
+                    "prompt": stage2_prompt,
+                    "multi_modal_data": multi_modal_data if multi_modal_data else None,
+                }
+                outputs = llm.generate(stage2_inputs, sampling_params=sampling_params)
+            else:
+                # Single-pass: structured output only
+                outputs = llm.generate(
+                    {
+                        "prompt": prompt,
+                        "multi_modal_data": multi_modal_data
+                        if multi_modal_data
+                        else None,
+                    },
+                    sampling_params=sampling_params,
+                )
+
             raw_text = outputs[0].outputs[0].text.strip()
 
             # Split reasoning → JSON using Gemma-4 utility
@@ -177,10 +252,16 @@ def extract_structured(
             result = SliceResult.model_validate_json(parsed.text)
             result_dict = result.model_dump(mode="json", exclude_none=True)
             results.append(result_dict)
-            print(
-                f" \u2705 Extracted | "
-                f"reasoning={len(parsed.reasoning) if parsed.reasoning else 0} chars"
-            )
+            if thinking:
+                print(
+                    f" \u2705 Extracted (two-stage) | "
+                    f"reasoning={len(parsed.reasoning) if parsed.reasoning else 0} chars"
+                )
+            else:
+                print(
+                    f" \u2705 Extracted | "
+                    f"reasoning={len(parsed.reasoning) if parsed.reasoning else 0} chars"
+                )
 
         except Exception as e:
             print(f"\n   \u26a0 vLLM error: {e}")

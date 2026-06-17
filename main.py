@@ -225,32 +225,91 @@ async def run_workflow_transcribe_audio_track(
     track_index: int,
     save_path: Path,
 ):
-    """對單一音軌：整軌讀取 → 整軌 VAD 一次 → 送 ASR。"""
+    """對單一音軌：VAD 查快取 → 只讀說話區間音軌 → 送 ASR。
+
+    有 VAD 快取時，不對整軌跑 get_audio，而是對每個 segment 獨立讀取。
+    """
     if is_cached(save_path):
-        return
-
-    # 讀完整條音軌（一次）
-    track = video.get_audio(
-        0,
-        video.duration,
-        max_clip_duration=video.duration,
-        audio_streams=[track_index],
-    )[0]
-
-    # 跳過完全靜音的軌
-    if not np.any(track):
         return
 
     # 整軌跑 VAD（先查快取）
     speech_segments = load_vad_cache(video, track_index)
+
+    # 沒快取才讀整軌來算 VAD
     if not speech_segments:
-        speech_segments = _extract_speech_segments_chunked(track)
-        if speech_segments:
-            save_vad_cache(video, track_index, speech_segments)
+        CHUNK_SECONDS = 900  # 15 分鐘/chunk，控制記憶體用量
+        need_chunked = video.duration > 1200  # 20 分鐘閾值
+
+        if need_chunked:
+            speech_segments = []
+            boundary: float | None = None
+            num_chunks = int(np.ceil(video.duration / CHUNK_SECONDS))
+
+            for chunk_idx in range(num_chunks):
+                chunk_start = chunk_idx * CHUNK_SECONDS
+                chunk_end = min((chunk_idx + 1) * CHUNK_SECONDS, video.duration)
+
+                # 用上一個 chunk [-2] end 作為起始點，避免切斷語音
+                if boundary is not None and chunk_idx > 0:
+                    if chunk_start < boundary:
+                        chunk_start = boundary
+                    if chunk_start >= chunk_end:
+                        boundary = None
+                        continue
+
+                track_chunk = video.get_audio(
+                    chunk_start,
+                    chunk_end,
+                    max_clip_duration=chunk_end - chunk_start,
+                    audio_streams=[track_index],
+                )
+
+                if not track_chunk or not np.any(track_chunk[0]):
+                    boundary = None
+                    continue
+
+                segments = _extract_speech_segments_chunked(
+                    track_chunk[0], chunk_seconds=CHUNK_SECONDS
+                )
+
+                # 將 timestamps 轉換為絕對影片時間
+                offset = chunk_start
+                for s in segments:
+                    s["start"] += offset
+                    s["end"] += offset
+
+                # 過濾掉 boundary 之前的段落（避免重複）
+                if boundary is not None and len(speech_segments) >= 2:
+                    seg_boundary = speech_segments[-2]["end"]
+                    segments = [s for s in segments if s["start"] >= seg_boundary]
+
+                speech_segments.extend(segments)
+
+                # 更新 boundary 為全域列表的 [-2] end，供下一 chunk 使用
+                if len(speech_segments) >= 2:
+                    boundary = speech_segments[-2]["end"]
+                else:
+                    boundary = None
         else:
+            track = video.get_audio(
+                0,
+                video.duration,
+                max_clip_duration=video.duration,
+                audio_streams=[track_index],
+            )[0]
+
+            # 跳過完全靜音的軌
+            if not np.any(track):
+                return
+
+            speech_segments = _extract_speech_segments_chunked(track)
+
+        if not speech_segments:
             return  # 無人聲，不寫任何 JSONL
 
-    # 對每個說話區間送 ASR
+        save_vad_cache(video, track_index, speech_segments)
+
+    # 對每個說話區間送 ASR（只讀該區間音軌）
     tasks = []
     with tqdm(
         total=len(speech_segments),
@@ -260,9 +319,14 @@ async def run_workflow_transcribe_audio_track(
         for seg in speech_segments:
             start_s = seg["start"]
             end_s = seg["end"]
-            start_sample = int(start_s * SAMPLING_RATE)
-            end_sample = int(end_s * SAMPLING_RATE)
-            chunk = track[start_sample:end_sample]
+
+            # 只讀該說話區間的音軌，不讀整軌
+            track_chunk = video.get_audio(
+                start_s,
+                end_s,
+                max_clip_duration=end_s - start_s,
+                audio_streams=[track_index],
+            )[0]
 
             tasks.append(
                 wrap_task(
@@ -272,7 +336,7 @@ async def run_workflow_transcribe_audio_track(
                         end=end_s,
                         model_name=asr_name,
                         client=asr_client,
-                        sound=chunk,
+                        sound=track_chunk,
                         prompt="忽略背景雜訊與無聲段落 以空格分割 僅轉錄說話內容 轉錄下列這段音訊的逐字稿",
                     ),
                     pbar,
@@ -513,7 +577,7 @@ async def run_workflow_transcribe_video(
         return {"at": {"start": start, "end": end}, "result": result}
 
     tasks = []
-    slices_indices = create_slices_indices(0, video.duration, window=20, step=10)
+    slices_indices = create_slices_indices(0, video.duration, window=20, step=20)
     with tqdm(total=len(slices_indices), desc="切圖", position=3) as pbar:
         for start, end in slices_indices:
             contents = [
@@ -1061,12 +1125,12 @@ async def main_async():
     parser.add_argument("--asr-name", default=None, help="ASR 模型名稱")
     parser.add_argument("--llm-name", default=None, help="LLM 模型名稱")
     parser.add_argument("--asr-batch", type=int, default=64, help="ASR 并发數量")
-    parser.add_argument("--llm-batch", type=int, default=16, help="LLM 并发數量")
+    parser.add_argument("--llm-batch", type=int, default=32, help="LLM 并发數量")
     parser.add_argument(
         "--max-workers", type=int, default=2, help="批次掃描最大并行檔案數"
     )
     parser.add_argument(
-        "--vad-workers", type=int, default=8, help="VAD 平行處理數量 (預設: 16)"
+        "--vad-workers", type=int, default=1, help="VAD 平行處理數量 (預設: 16)"
     )
 
     args = parser.parse_args()

@@ -528,6 +528,10 @@ def _extract_speech_segments_chunked(
 def vad_process_one(video_path: str, track_index: int) -> int:
     """單一音軌的 VAD 處理函式（供 ProcessPoolExecutor 的 worker 呼叫）。
 
+    如果影片超過 20 分鐘，會分段處理以避免載入完整音軌時 OOM。
+    使用上一個 chunk 的倒數第二段 ([-2]) end 作為下一段的 boundary，
+    避免在語音中間切斷。
+
     回傳 segments 數量。
 
     Parameters
@@ -555,21 +559,84 @@ def vad_process_one(video_path: str, track_index: int) -> int:
         from src.utils.video import IOCacheVideo
 
         path = Path(video_path)
+        CHUNK_SECONDS = 900  # 15 分鐘/chunk，控制記憶體用量
 
         with IOCacheVideo(path, cached=True) as video:
-            track = video.get_audio(
-                0,
-                video.duration,
-                max_clip_duration=video.duration,
-                audio_streams=[track_index],
-            )[0]
-
-            if not np.any(track):
+            if video.duration <= 0:
                 return 0
 
-            segments = _extract_speech_segments_chunked(track)
-            save_vad_cache(path, track_index, segments)
-            return len(segments)
+            need_chunked = video.duration > 1200  # 20 分鐘閾值
+            all_segments: list[dict[str, float]] = []
+
+            if need_chunked:
+                num_chunks = int(np.ceil(video.duration / CHUNK_SECONDS))
+                boundary: float | None = None
+
+                for chunk_idx in range(num_chunks):
+                    chunk_start = chunk_idx * CHUNK_SECONDS
+                    chunk_end = min((chunk_idx + 1) * CHUNK_SECONDS, video.duration)
+
+                    # 用上一個 chunk [-2] end 作為起始點，避免切斷語音
+                    if boundary is not None and chunk_idx > 0:
+                        if chunk_start < boundary:
+                            chunk_start = boundary
+                        if chunk_start >= chunk_end:
+                            boundary = None
+                            continue
+
+                    track = video.get_audio(
+                        chunk_start,
+                        chunk_end,
+                        max_clip_duration=chunk_end - chunk_start,
+                        audio_streams=[track_index],
+                    )
+
+                    if not track or not np.any(track[0]):
+                        boundary = None
+                        continue
+
+                    segments = _extract_speech_segments_chunked(
+                        track[0], chunk_seconds=CHUNK_SECONDS
+                    )
+
+                    # 將 timestamps 轉換為絕對影片時間
+                    offset = chunk_start
+                    for s in segments:
+                        s["start"] += offset
+                        s["end"] += offset
+
+                    # 過濾掉 boundary 之前的段落（避免重複）
+                    if boundary is not None and len(all_segments) >= 2:
+                        seg_boundary = all_segments[-2]["end"]
+                        segments = [s for s in segments if s["start"] >= seg_boundary]
+
+                    all_segments.extend(segments)
+
+                    # 更新 boundary 為全域列表的 [-2] end，供下一 chunk 使用
+                    if len(all_segments) >= 2:
+                        boundary = all_segments[-2]["end"]
+                    else:
+                        boundary = None
+            else:
+                track = video.get_audio(
+                    0,
+                    video.duration,
+                    max_clip_duration=video.duration,
+                    audio_streams=[track_index],
+                )[0]
+
+                if not np.any(track):
+                    return 0
+
+                segments = _extract_speech_segments_chunked(track)
+                all_segments.extend(segments)
+
+            if not all_segments:
+                save_vad_cache(path, track_index, [])
+                return 0
+
+            save_vad_cache(path, track_index, all_segments)
+            return len(all_segments)
     except Exception as exc:
         logger.error(
             "%s track %d: %s\n%s", video_path, track_index, exc, traceback.format_exc()

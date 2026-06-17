@@ -8,7 +8,7 @@ import argparse
 import asyncio
 import base64
 import sys
-from concurrent.futures import as_completed
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from functools import cache, partial
 from io import BytesIO, StringIO
 from itertools import count as Counter
@@ -23,7 +23,18 @@ from silero_vad import get_speech_timestamps, load_silero_vad
 from silero_vad.utils_vad import OnnxWrapper as VAD_OnnxWrapper
 from tqdm.asyncio import tqdm
 
-from src.utils import IOCacheVideo, create_slices_indices, read_jsonl, write_jsonl
+from src.utils import (
+    IOCacheVideo,
+    collect_video_tracks,
+    create_slices_indices,
+    has_vad_cache,
+    load_vad_cache,
+    read_jsonl,
+    run_vad_preprocessing,
+    save_vad_cache,
+    write_jsonl,
+)
+from src.utils.vad_cache import load_all_vad_cache, vad_cache_path, vad_process_one
 
 load_dotenv()
 
@@ -94,6 +105,87 @@ def _extract_speech_segments(
     return speech_timestamps
 
 
+def _extract_speech_segments_chunked(
+    track: np.ndarray,
+    max_speech_duration_s: float = 20.0,
+    chunk_seconds: float = 300.0,
+) -> list[dict]:
+    """對長音軌分塊跑 VAD，再合併結果。
+
+    Silero VAD 是 RNN 模型，逐幀順序掃描，對 60 分鐘音軌（~57M 樣本）極慢。
+    分成 5 分鐘的區塊各自跑 VAD，可顯著加速。
+
+    Parameters
+    ----------
+    track: np.ndarray
+        1-D audio array at 16 kHz sampling rate.
+    max_speech_duration_s: float
+        Passed to ``get_speech_timestamps``.
+    chunk_seconds: float
+        Size of each processing chunk in seconds. Default 5 min.
+
+    Returns
+    -------
+    List of dicts with ``start`` and ``end`` keys (seconds).
+    """
+    sr = SAMPLING_RATE
+    total_seconds = len(track) / sr
+    if total_seconds <= 0:
+        return []
+
+    vad_model = load_vad_model()
+    all_segments: list[dict] = []
+
+    num_chunks = int(np.ceil(total_seconds / chunk_seconds))
+    for i in range(num_chunks):
+        offset_s = i * chunk_seconds
+        chunk_start_s = offset_s
+        chunk_end_s = min(offset_s + chunk_seconds, total_seconds)
+
+        start_sample = int(chunk_start_s * sr)
+        end_sample = int(chunk_end_s * sr)
+        chunk = track[start_sample:end_sample]
+
+        # Skip empty chunks
+        if not np.any(chunk):
+            continue
+
+        segments = get_speech_timestamps(
+            chunk,
+            vad_model,
+            sampling_rate=SAMPLING_RATE,
+            threshold=0.5,
+            min_speech_duration_ms=200,
+            min_silence_duration_ms=300,
+            speech_pad_ms=100,
+            max_speech_duration_s=max_speech_duration_s,
+            return_seconds=True,
+        )
+
+        # Shift timestamps to global time
+        for seg in segments:
+            seg["start"] = seg["start"] + chunk_start_s
+            seg["end"] = seg["end"] + chunk_start_s
+
+        all_segments.extend(segments)
+
+    # Merge overlapping / adjacent segments across chunk boundaries.
+    # VAD may split a single utterance at a chunk boundary.
+    if not all_segments:
+        return []
+
+    all_segments.sort(key=lambda s: s["start"])
+    merged: list[dict] = [dict(all_segments[0])]
+    for seg in all_segments[1:]:
+        prev = merged[-1]
+        if seg["start"] <= prev["end"] + 0.1:  # ≤100ms gap → merge
+            prev["end"] = max(prev["end"], seg["end"])
+        else:
+            merged.append(dict(seg))
+
+    return merged
+
+
 async def transcribe_audio(
     sem: asyncio.Semaphore,
     start: float,
@@ -149,10 +241,14 @@ async def run_workflow_transcribe_audio_track(
     if not np.any(track):
         return
 
-    # 整軌跑 VAD（一次 call）
-    speech_segments = _extract_speech_segments(track)
+    # 整軌跑 VAD（先查快取）
+    speech_segments = load_vad_cache(video, track_index)
     if not speech_segments:
-        return  # 無人聲，不寫任何 JSONL
+        speech_segments = _extract_speech_segments_chunked(track)
+        if speech_segments:
+            save_vad_cache(video, track_index, speech_segments)
+        else:
+            return  # 無人聲，不寫任何 JSONL
 
     # 對每個說話區間送 ASR
     tasks = []
@@ -848,6 +944,97 @@ async def _run_one_file_llm_wrapper(
         await run_single_file_llm(video_path, llm_name, llm_client, llm_batch_size)
 
 
+# ──────────────────────────── VAD 階段 ────────────────────────────
+
+
+def run_phase_vad(video_root: Path, workers: int) -> None:
+    """平行掃完整個目錄，對所有音軌跑 VAD 並快取結果。
+
+    每部影片只開一次 IOCacheVideo，跑完所有軌道再 close。
+    已快取的影片只讀 JSON 檔，不 open 影片。
+    """
+    from concurrent.futures import as_completed
+
+    video_paths = _collect_video_paths(video_root)
+    if not video_paths:
+        tqdm.write(f"[VAD] 在 {video_root} 找不到任何 .mp4 / .mkv 檔案")
+        return
+
+    from src.utils.video import IOCacheVideo
+
+    work_items: list[tuple[Path, int]] = []
+    cached_count = 0
+
+    for video_path in video_paths:
+        cache_path = vad_cache_path(video_path)
+
+        # 快取已存在 → 只讀 JSON 就知道軌道數
+        if cache_path.exists():
+            all_cache = load_all_vad_cache(video_path)
+            cached_count += len(all_cache)
+            for track_idx in all_cache.keys():
+                tqdm.write(f"[VAD] {video_path.name} track {track_idx}: 已快取，跳過")
+            continue
+
+        # 無快取才 open 影片
+        try:
+            with IOCacheVideo(video_path, cached=True) as video:
+                for track_idx in range(len(video.audio_streams)):
+                    if not has_vad_cache(video_path, track_idx):
+                        work_items.append((video_path, track_idx))
+                    else:
+                        tqdm.write(
+                            f"[VAD] {video_path.name} track {track_idx}: 已快取，跳過"
+                        )
+        except Exception as exc:
+            tqdm.write(f"[VAD] 讀取 {video_path.name} 失敗: {exc}")
+
+    if not work_items:
+        tqdm.write(f"[VAD] 所有音軌已快取，無需處理")
+        return
+
+    total_tracks = len(work_items)
+    tqdm.write(f"[VAD] 共 {len(video_paths)} 個檔案、{total_tracks} 個音軌要處理")
+    tqdm.write(f"[VAD] 平行數: {workers}")
+
+    processed_count = 0
+    start_time = __import__("time").monotonic()
+
+    with ProcessPoolExecutor(max_workers=workers) as executor:
+        futures = {
+            executor.submit(vad_process_one, str(vp), ti): (vp, ti)
+            for vp, ti in work_items
+        }
+
+        with tqdm(total=total_tracks, desc="[VAD] 總進度") as pbar:
+            for future in as_completed(futures):
+                vpath, track_idx = futures[future]
+                try:
+                    seg_count = future.result()
+                    if seg_count is not None and seg_count > 0:
+                        processed_count += 1
+                        tqdm.write(
+                            f"[VAD] {vpath.name} track {track_idx}: {seg_count} segments"
+                        )
+                    else:
+                        cached_count += 1
+                        tqdm.write(
+                            f"[VAD] {vpath.name} track {track_idx}: 靜音，快取空"
+                        )
+                except Exception as exc:
+                    tqdm.write(f"[VAD] {vpath.name} track {track_idx}: ERROR - {exc}")
+                    import traceback
+
+                    traceback.print_exc()
+                finally:
+                    pbar.update(1)
+
+    elapsed = __import__("time").monotonic() - start_time
+    tqdm.write(
+        f"[VAD] 完成！處理 {processed_count} 個音軌，靜音 {cached_count} 個，共用 {elapsed:.1f}s"
+    )
+
+
 # ──────────────────────────── CLI 入口 ────────────────────────────
 
 
@@ -855,9 +1042,9 @@ async def main_async():
     parser = argparse.ArgumentParser(description="Video2Text 兩階段處理")
     parser.add_argument(
         "--phase",
-        choices=["asr", "llm"],
+        choices=["vad", "asr", "llm"],
         default=None,
-        help="執行階段：asr (Phase 1) / llm (Phase 2)",
+        help="執行階段：vad (預跑 VAD) / asr (Phase 1) / llm (Phase 2)",
     )
     parser.add_argument(
         "--dir",
@@ -878,6 +1065,9 @@ async def main_async():
     parser.add_argument(
         "--max-workers", type=int, default=2, help="批次掃描最大并行檔案數"
     )
+    parser.add_argument(
+        "--vad-workers", type=int, default=8, help="VAD 平行處理數量 (預設: 16)"
+    )
 
     args = parser.parse_args()
 
@@ -887,6 +1077,7 @@ async def main_async():
     asr_batch = args.asr_batch
     llm_batch = args.llm_batch
     max_workers = args.max_workers
+    vad_workers = args.vad_workers
 
     asr_client = AsyncOpenAI(
         api_key="EMPTY",
@@ -897,14 +1088,58 @@ async def main_async():
         base_url="http://localhost:65500/v1",
     )
 
-    # 快速測試：單一檔案完整跑完
+    # 快速測試：單一檔案
     if args.file:
         tqdm.write(f"快速測試: {args.file}")
+
+        if args.phase == "vad":
+            # 單一檔案 VAD 測試
+            from src.utils.vad_cache import vad_cache_path
+
+            try:
+                with IOCacheVideo(args.file, cached=False) as video:
+                    for track_idx in range(len(video.audio_streams)):
+                        if vad_cache_path(args.file).is_file():
+                            tqdm.write(
+                                f"[{args.file.name}] track {track_idx}: 已快取，跳過"
+                            )
+                            continue
+
+                        seg_count = vad_process_one(str(args.file), track_idx)
+                        if seg_count > 0:
+                            tqdm.write(
+                                f"[{args.file.name}] track {track_idx}: {seg_count} segments"
+                            )
+                        else:
+                            tqdm.write(
+                                f"[{args.file.name}] track {track_idx}: 靜音，快取空"
+                            )
+            except Exception as exc:
+                tqdm.write(f"[{args.file.name}] VAD 處理失敗: {exc}")
+                import traceback
+
+                traceback.print_exc()
+            return
+
+        if args.phase == "asr":
+            await run_single_file_asr(args.file, asr_name, asr_client, asr_batch)
+            return
+
+        if args.phase == "llm":
+            await run_single_file_llm(args.file, llm_name, llm_client, llm_batch)
+            return
+
+        # 預設行為：完整跑完
+        tqdm.write("未指定 --phase，完整跑完 ASR + LLM")
         await run_single_file_asr(args.file, asr_name, asr_client, asr_batch)
         await run_single_file_llm(args.file, llm_name, llm_client, llm_batch)
         return
 
     # 明確指定階段
+    if args.phase == "vad":
+        run_phase_vad(video_dir, vad_workers)
+        return
+
     if args.phase == "asr":
         await scan_and_run_phase1(
             video_dir, asr_name, asr_client, asr_batch, max_workers

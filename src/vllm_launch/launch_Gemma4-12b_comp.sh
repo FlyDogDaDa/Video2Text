@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
+# --- [關鍵修復] 限制 FlashInfer / Ninja JIT 編譯時的執行緒，避免 GB10 統一記憶體 OOM ---
+export MAX_JOBS=16
+export NINJAFLAGS="-j8"
+export FLASHINFER_NVCC_THREADS=8
 
 # load .env for HF_TOKEN, etc.
 set -a; source .env; set +a
 
-# Gemma-4-12B vLLM Launch
-# Multimodal: enable image + video inputs
-# --limit-mm-per-prompt disables multimodal profiling to avoid
-# GEMMA4_KV_SLOTS / num_soft_tokens 屬性錯誤
 export CUDA_VISIBLE_DEVICES=1,0
 uv run vllm serve "google/gemma-4-12B-it-qat-w4a16-ct" \
   --enforce-eager \
@@ -24,7 +24,7 @@ uv run vllm serve "google/gemma-4-12B-it-qat-w4a16-ct" \
   --trust-remote-code \
   --enable-prefix-caching \
   --async-scheduling \
-  --max-num-seqs ˊ64 \
+  --max-num-seqs 64 \
   --structured-outputs-config.enable_in_reasoning=True \
   --structured-outputs-config.reasoning_parser=gemma4 \
   --limit-mm-per-prompt '{"image": 20, "audio": 0, "video": 0}' \

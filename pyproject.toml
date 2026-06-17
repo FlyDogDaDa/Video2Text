@@ -16,6 +16,8 @@ dependencies = [
     "torchaudio",
     "transformers",
     "vllm[audio]",
+    "scipy-stubs>=1.17.1.5",
+    "silero-vad>=6.2.1",
 ]
 
 [project.optional-dependencies]

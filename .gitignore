@@ -223,12 +223,20 @@ __marimo__/
 # Agent configuration
 .agents/
 
-# Media files
-ffmpeg
-2026_05_11-19_18_26.mkv
-2026_05_11-19_18_26.mp4
-2026_05_11-19_18_26_louder4x.mp4
+# Output directories
+runs/
+
+# Executables
+runtime/ffmpeg
+
+# Temporary / untracked files
+main copy.py
+*copy.py
+
+# Test media
+2026_03_17-20_27_48.mkv
 short_test.mp4
+temp.wav
 
 # Agent references directory (may contain sensitive data)
 chat_wtih_my_agent/31_2026_06_11_human_strategy-vllm-server-api-pattern/references/

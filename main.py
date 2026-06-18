@@ -410,13 +410,36 @@ async def run_workflow_audio_transcription_cleanup_chunked(
     llm_client: AsyncOpenAI,
     transcription_paths: list[Path],
     save_path: Path,
-    chunk_size: int = 30,
+    chunk_size: int = 20,
     sem: asyncio.Semaphore = None,
+    max_concurrency: int = 4,
 ):
     if is_cached(save_path):
         return
 
-    transcriptions = [list(read_jsonl(path)) for path in transcription_paths]
+    # 跳過不存在的軌道
+    skipped: list[int] = []
+    valid_paths: list[Path] = []
+    for i, p in enumerate(transcription_paths):
+        if not p.exists():
+            skipped.append(i)
+            continue
+        try:
+            if p.stat().st_size == 0:
+                skipped.append(i)
+            else:
+                valid_paths.append(p)
+        except OSError as e:
+            skipped.append(i)
+            tqdm.write(f"  跳過 track_{i} ({p.name}): {e}")
+            continue
+    if skipped:
+        tqdm.write(
+            f"  跳過 {len(skipped)} 個不存在的軌道: track_{skipped[0]}"
+            + (f", track_{skipped[-1]}" if len(skipped) > 1 else "")
+        )
+
+    transcriptions = [list(read_jsonl(path)) for path in valid_paths]
     results = dict()
     for i, transcription in enumerate(transcriptions, start=1):
         for item in transcription:
@@ -455,43 +478,60 @@ async def run_workflow_audio_transcription_cleanup_chunked(
         pbar.update(1)
         return cleaned.strip()
 
-    tasks = []
+    def _build_messages(
+        idx: int, total_items: int, valid_results: list, chunk_size: int
+    ):
+        """Build messages for the chunk at list index ``idx``."""
+        i = idx * chunk_size
+        chunk = valid_results[i : i + chunk_size]
+        current_chunk_idx = idx + 1
+        total_chunks = (total_items + chunk_size - 1) // chunk_size
+
+        prompt_buffer = StringIO()
+        for (start, end), tracks in chunk:
+            prompt_buffer.write(f"[{start:0.2f}s ~ {end:0.2f}s]\n")
+            prompt_buffer.write("\n".join(tracks))
+            prompt_buffer.write("\n\n")
+
+        return [
+            {
+                "role": "system",
+                "content": (
+                    "You are a helpful professional assistant.\n"
+                    "Your mission is to clean up the transcription.\n"
+                    "You simply reduce redundancy without adding summaries or merging sentences yourself; "
+                    "you present it as it is."
+                ),
+            },
+            {
+                "role": "user",
+                "content": (
+                    f"The following is a transcript of an automatic-speech-recognition "
+                    f"(Part {current_chunk_idx}/{total_chunks}):\n"
+                    f"```\n{prompt_buffer.getvalue()}```\n\n"
+                    "You reduce redundancy and provide clean subtitles.\n"
+                    "Include time, dialogue, and tracks."
+                ),
+            },
+        ]
+
+    total_chunks = (total_items + chunk_size - 1) // chunk_size
+
+    # Process chunks in bounded batches to avoid OOM.
+    # asyncio.gather(*tasks) creates ALL tasks at once, so every
+    # ``messages`` payload (captured by the closure) stays alive
+    # simultaneously — even though ``sem`` only allows a few to
+    # execute.  Batched processing releases each batch's memory
+    # before moving to the next one.
+    cleaned_parts = []
     with tqdm(total=total_items, desc="清理音訊逐字稿", position=2) as pbar:
-        for i in range(0, total_items, chunk_size):
-            chunk = valid_results[i : i + chunk_size]
-            current_chunk_idx = (i // chunk_size) + 1
-            total_chunks = (total_items + chunk_size - 1) // chunk_size
-
-            prompt_buffer = StringIO()
-            for (start, end), tracks in chunk:
-                prompt_buffer.write(f"[{start:0.2f}s ~ {end:0.2f}s]\n")
-                prompt_buffer.write("\n".join(tracks))
-                prompt_buffer.write("\n\n")
-
-            messages = [
-                {
-                    "role": "system",
-                    "content": (
-                        "You are a helpful professional assistant.\n"
-                        "Your mission is to clean up the transcription.\n"
-                        "You simply reduce redundancy without adding summaries or merging sentences yourself; "
-                        "you present it as it is."
-                    ),
-                },
-                {
-                    "role": "user",
-                    "content": (
-                        f"The following is a transcript of an automatic-speech-recognition "
-                        f"(Part {current_chunk_idx}/{total_chunks}):\n"
-                        f"```\n{prompt_buffer.getvalue()}```\n\n"
-                        "You reduce redundancy and provide clean subtitles.\n"
-                        "Include time, dialogue, and tracks."
-                    ),
-                },
-            ]
-            tasks.append(process_chunk(messages, current_chunk_idx, pbar))
-
-        cleaned_parts = await asyncio.gather(*tasks)
+        for batch_start in range(0, total_chunks, max_concurrency):
+            batch_end = min(batch_start + max_concurrency, total_chunks)
+            batch_tasks = []
+            for idx in range(batch_start, batch_end):
+                messages = _build_messages(idx, total_items, valid_results, chunk_size)
+                batch_tasks.append(process_chunk(messages, idx + 1, pbar))
+            cleaned_parts.extend(await asyncio.gather(*batch_tasks))
 
     cleaned_merged = "\n---\n".join(cleaned_parts)
 
@@ -555,11 +595,60 @@ async def run_workflow_transcribe_video(
     if save_path.exists():
         return
 
-    async def process_slice(messages, start, end):
+    def get_message(start, end):
+        # 只在真正要送請求時才解碼圖片
+        contents = [
+            {
+                "type": "text",
+                "text": (
+                    "The following is a transcript of automatic-speech-recognition "
+                    "as an audio reference:\n```\n"
+                    f"{audio_prompt}\n```\n\n"
+                    "The following are frames from the video that were skipped "
+                    "at {fps} FPS:"
+                ).format(fps=fps),
+            },
+        ]
+        messages = [
+            {
+                "role": "system",
+                "content": (
+                    "You are a helpful professional assistant. Your mission is "
+                    "to objectively describe what you see in an image. Provide "
+                    "a description of the content without guessing its meaning; "
+                    "present it as it is, including the time you saw the content, "
+                    "a clear description, and the connection between the images."
+                ),
+            },
+            {"role": "user", "content": contents},
+        ]
+
+        frames = video.get_frames(start, end, sample_fps=fps)
+        frame_timestamps = np.linspace(start, end, len(frames), endpoint=False)
+        for second, frame in zip(frame_timestamps, frames):
+            contents.append({"type": "text", "text": f"[{second:0.2f}s]"})
+            contents.append(
+                {
+                    "type": "image_url",
+                    "image_url": {"url": pil_to_b64_url(frame)},
+                }
+            )
+        contents.append(
+            {
+                "type": "text",
+                "text": (
+                    "\n\nDescribe what you see in each picture here, "
+                    "and which second you see it.\n\n"
+                ),
+            }
+        )
+        return messages
+
+    async def process_slice(start, end, audio_prompt):
         async with sem:
             response = await llm_client.chat.completions.create(
                 model=llm_name,
-                messages=messages,
+                messages=get_message(start, end),
                 max_tokens=12000,
                 temperature=1.0,
                 top_p=0.95,
@@ -568,65 +657,17 @@ async def run_workflow_transcribe_video(
                     "chat_template_kwargs": {"enable_thinking": True},
                 },
             )
-        result = response.choices[0].message.content
-        if result is None:
-            raise ValueError(
-                "response is None, Your thinking model might be stuck in a loop; "
-                "please try again."
-            )
-        return {"at": {"start": start, "end": end}, "result": result}
-
-    tasks = []
-    slices_indices = create_slices_indices(0, video.duration, window=20, step=20)
-    with tqdm(total=len(slices_indices), desc="切圖", position=3) as pbar:
-        for start, end in slices_indices:
-            contents = [
-                {
-                    "type": "text",
-                    "text": (
-                        "The following is a transcript of automatic-speech-recognition "
-                        "as an audio reference:\n```\n"
-                        f"{audio_prompt}\n```\n\n"
-                        "The following are frames from the video that were skipped "
-                        "at {fps} FPS:"
-                    ).format(fps=fps),
-                },
-            ]
-            messages = [
-                {
-                    "role": "system",
-                    "content": (
-                        "You are a helpful professional assistant. Your mission is "
-                        "to objectively describe what you see in an image. Provide "
-                        "a description of the content without guessing its meaning; "
-                        "present it as it is, including the time you saw the content, "
-                        "a clear description, and the connection between the images."
-                    ),
-                },
-                {"role": "user", "content": contents},
-            ]
-            frames = video.get_frames(start, end, sample_fps=fps)
-            frame_timestamps = np.linspace(start, end, len(frames), endpoint=False)
-            for second, frame in zip(frame_timestamps, frames):
-                contents.append({"type": "text", "text": f"[{second:0.2f}s]"})
-                contents.append(
-                    {
-                        "type": "image_url",
-                        "image_url": {"url": pil_to_b64_url(frame)},
-                    }
+            result = response.choices[0].message.content
+            if result is None:
+                raise ValueError(
+                    "response is None, Your thinking model might be stuck in a loop; "
+                    "please try again."
                 )
-            contents.append(
-                {
-                    "type": "text",
-                    "text": (
-                        "\n\nDescribe what you see in each picture here, "
-                        "and which second you see it.\n\n"
-                    ),
-                }
-            )
-            tasks.append(process_slice(messages, start, end))
-            pbar.update(1)
+            return {"at": {"start": start, "end": end}, "result": result}
 
+    slices_indices = create_slices_indices(0, video.duration, window=20, step=20)
+
+    tasks = [process_slice(start, end, audio_prompt) for start, end in slices_indices]
     with tqdm(total=len(tasks), desc="提取畫面", position=3) as pbar:
         results = await asyncio.gather(*[wrap_task(task, pbar) for task in tasks])
 
@@ -645,13 +686,13 @@ async def run_workflow_video_transcription_cleanup_chunked(
     save_path: Path,
     chunk_size: int = 40,
     sem: asyncio.Semaphore = None,
+    max_concurrency: int = 4,
 ):
     if is_cached(save_path):
         return
 
     transcription = list(read_jsonl(transcription_path))
     total_items = len(transcription)
-    cleaned_parts = []
 
     async def process_chunk(messages, pbar: tqdm):
         try:
@@ -676,49 +717,63 @@ async def run_workflow_video_transcription_cleanup_chunked(
                 "Response is None. "
                 "Your thinking model might be stuck in a loop; please try again."
             )
-
-        cleaned_parts.append(cleaned.strip())
         pbar.update(1)
+        return cleaned.strip()
 
-    tasks = []
+    def _build_video_messages(
+        i: int, total_items: int, transcription: list, chunk_size: int
+    ):
+        """Build messages for the chunk at list offset ``i``."""
+        chunk = transcription[i : i + chunk_size]
+        current_chunk_idx = (i // chunk_size) + 1
+        total_chunks = (total_items + chunk_size - 1) // chunk_size
+
+        prompt_buffer = StringIO()
+        for item in chunk:
+            start = item["at"]["start"]
+            end = item["at"]["end"]
+            prompt_buffer.write(f"[{start:0.2f}s ~ {end:0.2f}s] ")
+            prompt_buffer.write(item["result"].strip())
+            prompt_buffer.write("\n")
+
+        return [
+            {
+                "role": "system",
+                "content": (
+                    "You are a helpful professional assistant.\n"
+                    "Your mission is to clean up the transcription.\n"
+                    "You simply reduce redundancy without adding summaries "
+                    "or merging sentences yourself; you present it as it is."
+                ),
+            },
+            {
+                "role": "user",
+                "content": (
+                    f"The following is a visual transcript of video "
+                    f"(Part {current_chunk_idx}/{total_chunks}):\n"
+                    f"```\n{prompt_buffer.getvalue()}```\n\n"
+                    "You reduce redundancy and provide clean text.\n"
+                    "Include time, differences, and what viewers can see."
+                ),
+            },
+        ]
+
+    total_chunks = (total_items + chunk_size - 1) // chunk_size
+
+    # Process chunks in bounded batches to avoid OOM (same issue as
+    # audio cleanup: asyncio.gather(*tasks) keeps all ``messages`` alive).
+    cleaned_parts = []
     with tqdm(total=total_items, desc="清理影音逐字稿", position=3) as pbar:
-        for i in range(0, total_items, chunk_size):
-            chunk = transcription[i : i + chunk_size]
-            current_chunk_idx = (i // chunk_size) + 1
-            total_chunks = (total_items + chunk_size - 1) // chunk_size
-
-            prompt_buffer = StringIO()
-            for item in chunk:
-                start = item["at"]["start"]
-                end = item["at"]["end"]
-                prompt_buffer.write(f"[{start:0.2f}s ~ {end:0.2f}s] ")
-                prompt_buffer.write(item["result"].strip())
-                prompt_buffer.write("\n")
-
-            messages = [
-                {
-                    "role": "system",
-                    "content": (
-                        "You are a helpful professional assistant.\n"
-                        "Your mission is to clean up the transcription.\n"
-                        "You simply reduce redundancy without adding summaries "
-                        "or merging sentences yourself; you present it as it is."
-                    ),
-                },
-                {
-                    "role": "user",
-                    "content": (
-                        f"The following is a visual transcript of video "
-                        f"(Part {current_chunk_idx}/{total_chunks}):\n"
-                        f"```\n{prompt_buffer.getvalue()}```\n\n"
-                        "You reduce redundancy and provide clean text.\n"
-                        "Include time, differences, and what viewers can see."
-                    ),
-                },
-            ]
-            tasks.append(process_chunk(messages, pbar))
-
-        await asyncio.gather(*tasks)
+        for batch_start in range(0, total_chunks, max_concurrency):
+            batch_end = min(batch_start + max_concurrency, total_chunks)
+            batch_tasks = []
+            for batch_idx in range(batch_start, batch_end):
+                i = batch_idx * chunk_size
+                messages = _build_video_messages(
+                    i, total_items, transcription, chunk_size
+                )
+                batch_tasks.append(process_chunk(messages, pbar))
+            cleaned_parts.extend(await asyncio.gather(*batch_tasks))
 
     cleaned_merged = "\n---\n".join(cleaned_parts)
 
@@ -851,6 +906,7 @@ async def run_single_file_llm(
     summary_path = save_dir / "summary.md"
 
     llm_sem = asyncio.Semaphore(llm_batch_size)
+    transcribe_video_sem = asyncio.Semaphore(2)
 
     with IOCacheVideo(video_path, cached=True) as video:
         # ── 1. 音軌清理 ──────────────────────────────────────────
@@ -877,7 +933,7 @@ async def run_single_file_llm(
             tqdm.write(f"[{video_path.name}] ② 畫面提取...")
             audio_prompt = audio_transcription_cleaned_path.read_text()
             await run_workflow_transcribe_video(
-                sem=llm_sem,
+                sem=transcribe_video_sem,
                 video=video,
                 audio_prompt=audio_prompt,
                 llm_name=llm_name,
@@ -949,7 +1005,9 @@ async def scan_and_run_phase1(
         try:
             await f
         except Exception as e:
-            tqdm.write(f"Error: {e}")
+            import traceback
+
+            tqdm.write(f"Error: {e}\n{traceback.format_exc()}")
 
     tqdm.write("Phase 1 全部完成！現在可以手動切換 LLM 伺服器，然後執行 Phase 2。")
 
@@ -992,7 +1050,9 @@ async def scan_and_run_phase2(
         try:
             await f
         except Exception as e:
-            tqdm.write(f"Error: {e}")
+            import traceback
+
+            tqdm.write(f"Error: {e}\n{traceback.format_exc()}")
 
     tqdm.write("Phase 2 全部完成！")
 
@@ -1125,9 +1185,9 @@ async def main_async():
     parser.add_argument("--asr-name", default=None, help="ASR 模型名稱")
     parser.add_argument("--llm-name", default=None, help="LLM 模型名稱")
     parser.add_argument("--asr-batch", type=int, default=64, help="ASR 并发數量")
-    parser.add_argument("--llm-batch", type=int, default=32, help="LLM 并发數量")
+    parser.add_argument("--llm-batch", type=int, default=16, help="LLM 并发數量")
     parser.add_argument(
-        "--max-workers", type=int, default=2, help="批次掃描最大并行檔案數"
+        "--max-workers", type=int, default=1, help="批次掃描最大并行檔案數"
     )
     parser.add_argument(
         "--vad-workers", type=int, default=1, help="VAD 平行處理數量 (預設: 16)"

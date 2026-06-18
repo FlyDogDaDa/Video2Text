@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# 殺掉現有的vLLM
+pkill -9 -f "VLLM::Worker_TP[01]"
+
+
 
 # load .env for HF_TOKEN, etc.
 set -a; source .env; set +a
@@ -24,7 +28,7 @@ uv run vllm serve "google/gemma-4-12B-it-qat-w4a16-ct" \
   --trust-remote-code \
   --enable-prefix-caching \
   --async-scheduling \
-  --max-num-seqs 16 \
+  --max-num-seqs 20 \
   --structured-outputs-config.enable_in_reasoning=True \
   --structured-outputs-config.reasoning_parser=gemma4 \
   --limit-mm-per-prompt '{"image": 20, "audio": 0, "video": 0}' \

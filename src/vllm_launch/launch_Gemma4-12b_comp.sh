@@ -18,13 +18,13 @@ uv run vllm serve "google/gemma-4-12B-it-qat-w4a16-ct" \
   --attention-backend TRITON_ATTN \
   --max-model-len "${MAX_MODEL_LEN:-32768}" \
   --tensor-parallel-size "${TP_SIZE:-2}" \
-  --gpu-memory-utilization "${GPU_MEM_UTIL:-0.95}" \
+  --gpu-memory-utilization "${GPU_MEM_UTIL:-0.92}" \
   --host 0.0.0.0 \
   --port "${PORT:-65500}" \
   --trust-remote-code \
   --enable-prefix-caching \
   --async-scheduling \
-  --max-num-seqs 64 \
+  --max-num-seqs 21 \
   --structured-outputs-config.enable_in_reasoning=True \
   --structured-outputs-config.reasoning_parser=gemma4 \
   --limit-mm-per-prompt '{"image": 20, "audio": 0, "video": 0}' \

@@ -1230,7 +1230,9 @@ async def main_async():
             return
 
         if args.phase == "llm":
-            await run_single_file_llm(args.file, llm_name, llm_client, llm_batch)
+            await run_single_file_llm(
+                args.file, llm_name, llm_client, asyncio.Semaphore(llm_batch)
+            )
             return
 
         # 預設行為：完整跑完

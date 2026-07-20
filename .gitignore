@@ -238,5 +238,8 @@ main copy.py
 short_test.mp4
 temp.wav
 
+# Audio transcriptions
+audio_transcriptions.zip
+
 # Agent references directory (may contain sensitive data)
 chat_wtih_my_agent/31_2026_06_11_human_strategy-vllm-server-api-pattern/references/

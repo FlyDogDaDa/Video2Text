@@ -227,7 +227,7 @@ __marimo__/
 runs/
 
 # Executables
-runtime/ffmpeg
+runtime/
 
 # Temporary / untracked files
 main copy.py

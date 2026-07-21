@@ -129,7 +129,7 @@ Video2Text/
 │   │   └── audio.py
 │   └── vllm_launch/
 │       └── launch_Gemma4-12b.sh # vLLM server 啟動腳本
-└── chat_wtih_my_agent/          # 開發日誌與策略文件
+└── chat_with_my_agent/          # 開發日誌與策略文件
 ```
 
 ---
@@ -243,13 +243,13 @@ vllm serve google/gemma-4-12B-it-qat-w4a16-ct \
 ```bash
 # 測試多模態能力
 cd Video2Text
-uv run python chat_wtih_my_agent/31_2026_06_11_human_strategy-vllm-server-api-pattern/how_to_use_vllm_multimodal_via_openai_api.py
+uv run python chat_with_my_agent/31_2026_06_11_human_strategy-vllm-server-api-pattern/how_to_use_vllm_multimodal_via_openai_api.py
 
 # 測試 Function Calling
-uv run python chat_wtih_my_agent/31_2026_06_11_human_strategy-vllm-server-api-pattern/test_function_calling.py
+uv run python chat_with_my_agent/31_2026_06_11_human_strategy-vllm-server-api-pattern/test_function_calling.py
 
 # 測試兩階段策略（已驗證通過）
-uv run python chat_wtih_my_agent/31_2026_06_11_human_strategy-vllm-server-api-pattern/test_two_stage_output.py
+uv run python chat_with_my_agent/31_2026_06_11_human_strategy-vllm-server-api-pattern/test_two_stage_output.py
 ```
 
 ### 使用技巧

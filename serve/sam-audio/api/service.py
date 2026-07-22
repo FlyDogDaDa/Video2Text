@@ -10,10 +10,7 @@ from api.models import SeparateRequest, SeparateResponse
 class SamAudioService:
     """Wraps ``sam_audio_core.separate()``."""
 
-    # Default: use CPU to avoid GPU OOM
-    # User can change to cuda:0, cuda:1, cuda:2 in profiles
-    DEFAULT_DEVICE = "cpu"
-    DEFAULT_ALLOC_CONF = ""
+    DEFAULT_DEVICE = "cuda:0"
 
     def separate(self, req: SeparateRequest) -> SeparateResponse:
         """Execute speaker separation.
@@ -47,7 +44,6 @@ class SamAudioService:
             speaker_output=str(speaker_out) if speaker_out else None,
             residual_output=str(residual_out) if residual_out else None,
             device=self.DEFAULT_DEVICE,
-            alloc_conf=self.DEFAULT_ALLOC_CONF,
         )
 
         return SeparateResponse(

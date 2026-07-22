@@ -1,11 +1,24 @@
 """FastAPI application — endpoints for SAM-Audio service."""
 
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI, HTTPException
+from sam_audio_core import _ensure_model
 
 from api.models import HealthResponse, SeparateRequest, SeparateResponse
 from api.service import SamAudioService
 
-app = FastAPI(title="SAM-Audio Service", version="0.1.0")
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Pre-load model on startup."""
+    print("[sam_audio_server] Loading SAM-Audio model...")
+    _ensure_model(device=SamAudioService.DEFAULT_DEVICE)
+    print("[sam_audio_server] Model loaded successfully")
+    yield
+
+
+app = FastAPI(title="SAM-Audio Service", version="0.1.0", lifespan=lifespan)
 service = SamAudioService()
 
 

@@ -36,8 +36,6 @@ def _ensure_model(device: str = "cpu", alloc_conf: str = ""):
     )
     processor = SAMAudioProcessor.from_pretrained(
         "facebook/sam-audio-small",
-        proxies={},
-        resume_download=True,
     )
 
     # Use fp16 if on GPU to save memory; otherwise cpu

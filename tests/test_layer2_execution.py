@@ -57,6 +57,12 @@ class TestModuleImports:
 
         assert callable(generate_summary)
 
+    def test_sam_audio_import(self) -> None:
+        """SAM-Audio 分離模組可以順利匯入 separate_by_anchor 函數。"""
+        from modules.sam_audio import separate_by_anchor  # noqa: F401
+
+        assert callable(separate_by_anchor)
+
 
 class TestWorkflowCLI:
     """Test that the workflow CLI entry point works."""

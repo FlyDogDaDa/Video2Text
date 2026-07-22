@@ -78,6 +78,9 @@ target/
 # Jupyter Notebook
 .ipynb_checkpoints
 
+# Agent checkpoints
+.checkpoints/
+
 # IPython
 profile_default/
 ipython_config.py
@@ -240,4 +243,4 @@ temp.wav
 audio_transcriptions.zip
 
 # Agent references directory (may contain sensitive data)
-chat_wtih_my_agent/31_2026_06_11_human_strategy-vllm-server-api-pattern/references/
+chat_with_my_agent/31_2026_06_11_human_strategy-vllm-server-api-pattern/references/

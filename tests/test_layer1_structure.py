@@ -20,6 +20,7 @@ MODULES = [
     "video_desc",
     "clean",
     "summarize",
+    "sam_audio",
 ]
 
 EXPECTED_YAMLS = ["default.yaml", "research.yaml", "final.yaml"]
@@ -32,6 +33,7 @@ MAIN_FUNCTIONS = {
     "video_desc": "describe_frames",
     "clean": "reduce_redundancy",
     "summarize": "generate_summary",
+    "sam_audio": "separate_by_anchor",
 }
 
 

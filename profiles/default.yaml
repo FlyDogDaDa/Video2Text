@@ -1,3 +1,8 @@
+sam_audio:
+  model_name: "facebook/sam-audio-small"
+  device: "cuda:2"
+  alloc_conf: "max_split_size_mb:512"
+
 vad:
   threshold: 0.5
   min_silence_duration_ms: 300

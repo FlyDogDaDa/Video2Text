@@ -1,0 +1,52 @@
+[project]
+name = "quark-audio-service"
+version = "0.1.0"
+description = "QuarkAudio-UniSE target speaker extraction service"
+requires-python = ">=3.10"
+dependencies = [
+    "torch>=2.0",
+    "torchaudio>=2.0",
+    "pytorch-lightning>=2.0",
+    "transformers==4.46.1",
+    "soundfile>=0.12",
+    "omegaconf>=2.0",
+    "safetensors>=0.4",
+    "easydict>=1.13",
+    "einops>=0.7",
+    "descript-audio-codec>=1.0.0",
+    "librosa>=0.11.0",
+    "packaging>=23.0",
+    "einx>=0.4.3",
+    "setuptools>=77.0.3,<82",
+    "x-transformers>=2.24.1",
+    "vector-quantize-pytorch>=1.31.0",
+]
+
+[tool.setuptools.packages.find]
+include = ["quark_audio*"]
+
+[project.optional-dependencies]
+inference = [
+    "descript-audio-codec>=1.0",
+    "librosa>=0.10",
+]
+train = [
+    "asteroid>=0.7",
+    "pesq>=0.0.4",
+    "torch-pesq>=0.1",
+    "torch-stoi>=0.2",
+    "jiwer>=3.0",
+    "pystoi>=0.4",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.uv]
+conflicts = [
+    [
+        { extra = "inference" },
+        { extra = "train" },
+    ],
+]

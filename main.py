@@ -410,9 +410,8 @@ async def run_workflow_audio_transcription_cleanup_chunked(
     llm_client: AsyncOpenAI,
     transcription_paths: list[Path],
     save_path: Path,
+    sem: asyncio.Semaphore,
     chunk_size: int = 20,
-    sem: asyncio.Semaphore = None,
-    max_concurrency: int = 4,
 ):
     if is_cached(save_path):
         return
@@ -460,7 +459,7 @@ async def run_workflow_audio_transcription_cleanup_chunked(
             response = await llm_client.chat.completions.create(
                 model=llm_name,
                 messages=messages,
-                max_tokens=16000,
+                max_tokens=24576,
                 temperature=1.0,
                 top_p=0.95,
                 extra_body={
@@ -516,18 +515,12 @@ async def run_workflow_audio_transcription_cleanup_chunked(
 
     total_chunks = (total_items + chunk_size - 1) // chunk_size
 
-    # Process chunks in bounded batches to avoid OOM.
-    # asyncio.gather(*tasks) creates ALL tasks at once, so every
-    # ``messages`` payload (captured by the closure) stays alive
-    # simultaneously — even though ``sem`` only allows a few to
-    # execute.  Batched processing releases each batch's memory
-    # before moving to the next one.
+    # 移除原本效用不彰的雙重迴圈，直接使用單層迴圈建立任務
+    # 實際的併發限制完全由傳入的 sem (Semaphore) 管理
     tasks = []
-    for batch_start in range(0, total_chunks, max_concurrency):
-        batch_end = min(batch_start + max_concurrency, total_chunks)
-        for idx in range(batch_start, batch_end):
-            messages = _build_messages(idx, total_items, valid_results, chunk_size)
-            tasks.append(process_chunk(messages, idx + 1))
+    for idx in range(total_chunks):
+        messages = _build_messages(idx, total_items, valid_results, chunk_size)
+        tasks.append(process_chunk(messages, idx + 1))
 
     with tqdm(total=total_items, desc="清理音訊逐字稿", position=2) as pbar:
         cleaned_parts = await asyncio.gather(*[wrap_task(t, pbar) for t in tasks])
@@ -899,24 +892,23 @@ async def run_single_file_llm(
 
     transcribe_video_sem = asyncio.Semaphore(1)
 
-    with IOCacheVideo(video_path, cached=True) as video:
-        # ── 1. 音軌清理 ──────────────────────────────────────────
-        if is_cached(audio_transcription_cleaned_path):
-            tqdm.write(f"[{video_path.name}] ① 音軌清理 - 已存在，跳過")
-        else:
-            tqdm.write(f"[{video_path.name}] ① 音軌清理...")
-            transcription_paths = [
-                audio_transcription_dir / f"track_{i}.jsonl"
-                for i in range(len(video.audio_streams))
-            ]
-            await run_workflow_audio_transcription_cleanup_chunked(
-                llm_name=llm_name,
-                llm_client=llm_client,
-                transcription_paths=transcription_paths,
-                save_path=audio_transcription_cleaned_path,
-                sem=llm_sem,
-            )
+    # ── 1. 音軌清理 ──────────────────────────────────────────
+    if is_cached(audio_transcription_cleaned_path):
+        tqdm.write(f"[{video_path.name}] ① 音軌清理 - 已存在，跳過")
+    else:
+        tqdm.write(f"[{video_path.name}] ① 音軌清理...")
+        transcription_paths = list(audio_transcription_dir.glob("track_*.jsonl"))
+        await run_workflow_audio_transcription_cleanup_chunked(
+            llm_name=llm_name,
+            llm_client=llm_client,
+            transcription_paths=transcription_paths,
+            save_path=audio_transcription_cleaned_path,
+            sem=llm_sem,
+        )
 
+    return  # 截斷
+
+    with IOCacheVideo(video_path, cached=True) as video:
         # ── 2. 畫面提取 ───────────────────────────────────────────
         if is_cached(video_transcription_path):
             tqdm.write(f"[{video_path.name}] ② 畫面提取 - 已存在，跳過")
@@ -1028,9 +1020,7 @@ async def scan_and_run_phase2(
 
     file_sem = asyncio.Semaphore(max_concurrent)
     futures = [
-            _run_one_file_llm_wrapper(
-                video_path, llm_name, llm_client, llm_sem, file_sem
-            )
+        _run_one_file_llm_wrapper(video_path, llm_name, llm_client, file_sem, llm_sem)
         for video_path in video_paths
     ]
 

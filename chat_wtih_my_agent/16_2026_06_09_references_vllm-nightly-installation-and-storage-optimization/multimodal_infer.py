@@ -160,7 +160,7 @@ def build_multi_modal_data(
             audio_data_list = []
             for audio_path in audio_files:
                 # Load audio at 16kHz (required by Gemma 4)
-                data, sr = sf.read(audio_path, sr=16000)
+                data, sr = sf.read(audio_path, samplerate=16000)
                 if len(data.shape) > 1:  # Stereo to mono
                     data = data.mean(axis=1)
                 # Normalize to [-1, 1]

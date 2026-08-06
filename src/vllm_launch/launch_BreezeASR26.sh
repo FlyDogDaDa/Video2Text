@@ -16,8 +16,8 @@ export VLLM_ALLOW_LONG_MAX_MODEL_LEN=1
 vllm serve "MediaTek-Research/Breeze-ASR-26" \
   --max-model-len 448 \
   --max-num-batched-tokens 1500 \
-  --data-parallel-size "${DP_SIZE:-2}" \
-  --gpu-memory-utilization "${GPU_MEM_UTIL:-0.9}" \
+  --tensor-parallel-size "${TP_SIZE:-2}" \
+  --gpu-memory-utilization "${GPU_MEM_UTIL:-0.8}" \
   --host 0.0.0.0 \
   --port "${PORT:-8750}" \
   --trust-remote-code \

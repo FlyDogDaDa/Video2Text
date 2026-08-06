@@ -3,6 +3,17 @@
 from src.utils.audio import normalize_audio
 from src.utils.factory import create_bytes_io, create_slices_indices
 from src.utils.jsonl import read_jsonl, write_jsonl
+from src.utils.vad_cache import (
+    CACHE_DIR,
+    clear_vad_cache,
+    collect_video_tracks,
+    has_vad_cache,
+    load_vad_cache,
+    run_vad_preprocessing,
+    save_vad_cache,
+    vad_cache_path,
+    vad_process_one,
+)
 from src.utils.video import (
     IOCacheVideo,
     SliceParams,
@@ -22,4 +33,14 @@ __all__ = [
     "normalize_audio",
     "write_jsonl",
     "read_jsonl",
+    # VAD cache
+    "CACHE_DIR",
+    "clear_vad_cache",
+    "collect_video_tracks",
+    "has_vad_cache",
+    "load_vad_cache",
+    "run_vad_preprocessing",
+    "save_vad_cache",
+    "vad_cache_path",
+    "vad_process_one",
 ]

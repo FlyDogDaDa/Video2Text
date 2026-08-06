@@ -151,7 +151,15 @@ class IOCacheVideo:
 
         # Cache stream references
         self._video_stream = self._container.streams.video[0]
+        self._video_stream.thread_type = "AUTO"
+        self._video_stream.thread_count = 0  # auto-detect optimal thread count
         self._audio_streams = list(self._container.streams.audio)
+
+        # Enable multithreaded decoding for audio streams (FFmpeg level).
+        # This releases the GIL during decode() and runs on multiple CPU cores.
+        for _stream in self._audio_streams:
+            _stream.thread_type = "AUTO"
+            _stream.thread_count = 0  # auto-detect optimal thread count
 
         # Precompute useful metadata from PyAV
         self._video_tb = float(self._video_stream.time_base)

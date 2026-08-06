@@ -47,7 +47,7 @@ from typing import TYPE_CHECKING, Final
 
 import av
 import numpy as np
-import numpy.typing as npt
+from PIL.Image import Image as PILImage
 from scipy.signal import resample as _resample
 
 from src.utils.audio import normalize_audio
@@ -216,8 +216,8 @@ class IOCacheVideo:
         end: float,
         sample_fps: float = _DEFAULT_FPS,
         max_frames: int = _VIDEO_MAX_FRAMES,
-    ) -> npt.NDArray:
-        """Extract frames in ``[start, end)`` as ``[N, H, W, 3]`` uint8 RGB.
+    ) -> list[PILImage]:
+        """Extract frames in ``[start, end)`` as a list of ``PIL.Image.Image``.
 
         Parameters
         ----------
@@ -230,12 +230,10 @@ class IOCacheVideo:
 
         Returns
         -------
-        ``np.ndarray`` of shape ``[N, H, W, 3]`` or empty array if range is invalid.
+        List of ``PIL.Image.Image`` frames, or empty list if range is invalid.
         """
         if start >= end or start < 0:
-            return np.empty(
-                (0, self._video_height, self._video_width, 3), dtype=np.uint8
-            )
+            return []
 
         # Calculate frame indices
         start_time = start
@@ -244,16 +242,14 @@ class IOCacheVideo:
         num_samples = min(num_samples, max_frames)
 
         if num_samples <= 0:
-            return np.empty(
-                (0, self._video_height, self._video_width, 3), dtype=np.uint8
-            )
+            return []
 
         # Seek to start position (stream-level timebase)
         seek_pts = int(start_time / self._video_tb)
         self._container.seek(seek_pts, stream=self._video_stream)
 
         # Collect frames
-        frames_list: list[np.ndarray] = []
+        frames_list: list[PILImage] = []
         target_times = np.linspace(start_time, end_time - 1e-6, num_samples)
         target_idx = 0
 
@@ -267,19 +263,16 @@ class IOCacheVideo:
             # Check if we should sample this frame
             if target_idx < num_samples and frame_time >= target_times[target_idx]:
                 # Convert to RGB (PyAV outputs YUV)
-                rgb_frame = frame.to_rgb().to_ndarray()  # [H, W, 3] uint8
-                frames_list.append(rgb_frame)
+                frames_list.append(frame.to_rgb().to_image())
                 target_idx += 1
 
             if len(frames_list) >= max_frames:
                 break
 
         if not frames_list:
-            return np.empty(
-                (0, self._video_height, self._video_width, 3), dtype=np.uint8
-            )
+            return []
 
-        return np.stack(frames_list)
+        return frames_list
 
     # -- audio extraction -------------------------------------------------
 
@@ -289,6 +282,7 @@ class IOCacheVideo:
         end: float,
         max_clip_duration: float = 30.0,
         audio_streams: list[int] | None = None,
+        normalize: bool = False,
     ) -> list[np.ndarray]:
         """Extract audio in ``[start, end)`` as 16 kHz mono clips.
 
@@ -300,6 +294,8 @@ class IOCacheVideo:
             Maximum clip length in seconds.  Audio longer than this is split.
         audio_streams:
             Which audio streams to mix.  ``None`` means **all** streams.
+        normalize:
+            Whether to normalize the audio to unit peak.
 
         Returns
         -------
@@ -342,38 +338,31 @@ class IOCacheVideo:
             if not frames_list:
                 continue
 
-            # Mono-mix per frame, then concatenate
-            mono = [arr.mean(axis=1) for arr in frames_list]
-            track = np.concatenate(mono)
+            # Mono-mix
+            track = np.concatenate(frames_list, axis=-1)
+            mono = np.mean(track, axis=0)
 
             # Resample to 16 kHz if needed
             if int(stream.sample_rate) != _AUDIO_SAMPLE_RATE:
-                n_out = int(len(track) * _AUDIO_SAMPLE_RATE / int(stream.sample_rate))
-                track = _resample(track, n_out, axis=0)
+                # 正確：此時 mono 是一維陣列，長度要用 len(mono) 計算
+                n_out = int(
+                    mono.shape[0] * _AUDIO_SAMPLE_RATE / int(stream.sample_rate)
+                )
 
-            all_tracks.append(track)
+                # 正確：一維陣列只有一個軸，axis 必須指定為 0
+                mono = _resample(mono, n_out, axis=0)
+
+            all_tracks.append(mono)
 
         if not all_tracks:
             return []
 
-        # Zero-pad all tracks to the same length, then sum
-        max_len = max(len(t) for t in all_tracks)
-        summed = np.zeros(max_len, dtype=np.float32)
-        for t in all_tracks:
-            summed[: len(t)] += t
-
         # Peak-normalise
-        summed = normalize_audio(summed)
+        if normalize:
+            all_tracks = [normalize_audio(t) for t in all_tracks]
 
-        # Split if longer than max_clip_duration
-        if len(summed) <= _AUDIO_SAMPLE_RATE * max_clip_duration:
-            return [summed]
-
-        chunk_samples = int(_AUDIO_SAMPLE_RATE * max_clip_duration)
-        chunks: list[np.ndarray] = []
-        for i in range(0, len(summed), chunk_samples):
-            chunks.append(summed[i : i + chunk_samples])
-        return chunks
+        # Return tracks
+        return all_tracks
 
     # -- lifecycle --------------------------------------------------------
 

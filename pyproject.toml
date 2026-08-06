@@ -5,39 +5,16 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "av>=17.1.0",
-    "opencv-python-headless>=4.13.0.92",
-    "pydantic>=2.0.0",
+    "httpx>=0.28",
+    "imagebind",
+    "numpy>=1.26.4",
+    "pydantic>=2.13.4",
+    "pytest>=9.1.1",
     "python-dotenv>=1.2.2",
-    "scipy>=1.18.0rc1",
-    "soundfile>=0.14.0",
-    "torch",
-    "torchvision",
-    "torchaudio",
-    "transformers",
-    "vllm[audio]",
-    "scipy-stubs>=1.17.1.5",
-    "silero-vad>=6.2.1",
+    "pyyaml>=6.0.3",
+    "requests>=2.34.2",
+    "vllm>=0.1.2",
 ]
 
-[project.optional-dependencies]
-audio = ["vllm[audio]"]
-
-[tool.uv]
-environments = ["sys_platform == 'linux'"]
-index-strategy = "unsafe-best-match"
-prerelease = "allow"
-
-[[tool.uv.index]]
-name = "pytorch-cu130"
-url = "https://download.pytorch.org/whl/cu130"
-
-[[tool.uv.index]]
-name = "vllm-nightly"
-url = "https://wheels.vllm.ai/nightly/cu130"
-
 [tool.uv.sources]
-torch = { index = "pytorch-cu130" }
-torchvision = { index = "pytorch-cu130" }
-torchaudio = { index = "pytorch-cu130" }
-vllm = { index = "vllm-nightly" }
+imagebind = { git = "https://github.com/facebookresearch/ImageBind.git" }

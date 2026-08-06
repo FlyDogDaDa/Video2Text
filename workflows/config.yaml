@@ -1,0 +1,44 @@
+# ============================================================
+#  Speech-to-Text Workflow 設定
+# ============================================================
+
+speech_to_text:
+  # ── 輸入 ──────────────────────────────────────────────────────
+  # 要轉錄的音訊檔路徑
+  input_audio: "test-audio/保修工程會議.wav"
+
+  # Speaker 參考資料夾：此資料夾內的檔案名稱就是 speaker 名稱
+  # 例：test-audio/speaker-ref/黃.wav  → speaker="黃"
+  speaker_ref_dir: "test-audio/speaker-ref"
+
+  # ── 輸出 ──────────────────────────────────────────────────────
+  output_json: "output/speech_to_text_result.json"
+
+  # voicetag 推理設定
+  voicetag:
+    # 運算裝置: "auto" / "cpu" / "cuda:0" / "cuda:1" / "mps"
+    # auto: 自動偵測，有 CUDA 用 cuda:0，否則用 cpu
+    device: "auto"
+
+    # 聲紋比對閾值 (0.0–1.0)，低於此值標記為 UNKNOWN
+    similarity_threshold: 0.5
+
+    # pyannote 重疊偵測閾值
+    overlap_threshold: 0.5
+
+  # STT (Speech-to-Text) 提供者設定
+  stt:
+    # 提供者: "openai" 支援 OpenAI 相容 API (包含 Breeze-ASR)
+    provider: "openai"
+
+    # Breeze-ASR-26 vLLM endpoint
+    base_url: "http://localhost:8750/v1"
+
+    # 模型名稱（與 vLLM serve 的 model name 一致）
+    model: "MediaTek-Research/Breeze-ASR-26"
+
+    # 語言提示: "zh" = 中文
+    language: "zh"
+
+    # API key — 自部署的 Breeze-ASR 只要給非空字串即可
+    api_key: "breeze-asr"

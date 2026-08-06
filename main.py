@@ -1,78 +1,67 @@
-"""Video2Text console test — GPU check + text generation."""
+"""Video2Text console test — pipeline end-to-end (audio + video)."""
 
 from __future__ import annotations
 
 import os
 from pathlib import Path
 
-import torch
 from dotenv import load_dotenv
-from vllm import SamplingParams
+from vllm import LLM
 
 # Load .env from project root
 load_dotenv(Path(__file__).parent / ".env")
 
-GPU_0 = os.getenv("CUDA_VISIBLE_DEVICES", "0").split(",")[0]
-
-
-def test_gpu():
-    """Test GPU availability and configuration."""
-    print("=" * 60)
-    print("GPU TEST")
-    print("=" * 60)
-    print(f"PyTorch version: {torch.__version__}")
-    print(f"CUDA available: {torch.cuda.is_available()}")
-    print(f"CUDA device count: {torch.cuda.device_count()}")
-
-    for i in range(torch.cuda.device_count()):
-        props = torch.cuda.get_device_properties(i)
-        print(f"\nGPU {i}: {props.name}")
-        print(f"  Total memory: {props.total_memory / 1024**3:.1f} GB")
-        print(f"  Compute capability: {props.major}.{props.minor}")
-    print()
-
-
-def test_text_generation(llm):
-    """Test basic text generation."""
-    print("\n" + "=" * 60)
-    print("TEXT GENERATION TEST")
-    print("=" * 60)
-
-    prompts = ["Describe a sunset over the ocean."]
-
-    sampling_params = SamplingParams(
-        temperature=0.7,
-        max_tokens=256,
-    )
-
-    outputs = llm.generate(prompts, sampling_params)
-
-    print(f"\nPrompt: {prompts[0]}")
-    print(f"Response: {outputs[0].outputs[0].text}")
+VIDEO_PATH = os.getenv(
+    "VIDEO_PATH",
+    str(Path(__file__).parent / "short_test.mp4"),
+)
 
 
 def main():
-    """Run video2text console test."""
+    """Run pipeline: load model → slice video → extract structured."""
     model_path = os.getenv("VLLM_MODEL", "google/gemma-4-12B-it-qat-w4a16-ct")
 
     print("\n" + "#" * 60)
-    print("# VIDEO2TEXT CONSOLE TEST")
+    print("# VIDEO2TEXT PIPELINE TEST")
+    print(f"# Model: {model_path}")
+    print(f"# Video: {VIDEO_PATH}")
     print("#" * 60 + "\n")
 
-    # Test 1: GPU
-    test_gpu()
+    # Step 1: Load model
+    llm: LLM = load_model(model_path)
 
-    # Test 2: Load model
-    from src.pipeline import load_model
+    # Step 2: Open video and run structured extraction
+    from src.pipeline.extractor import extract_structured
+    from src.utils.video import IOCacheVideo
 
-    llm = load_model(model_path)
+    with IOCacheVideo(VIDEO_PATH, cached=True) as video:
+        results = extract_structured(llm, video)
 
-    # Test 3: Text generation
-    test_text_generation(llm)
+    # Step 3: Print results
+    print("\n" + "=" * 60)
+    print("RESULTS")
+    print("=" * 60)
+    for i, r in enumerate(results):
+        if "error" in r:
+            print(f"\n[{i}] ERROR: {r['error']}")
+        else:
+            print(f"\n[{i}] {r.get('time_range', r)}")
+            print(f"    visual: {r.get('visual', 'N/A')}")
+            print(f"    dialogue: {r.get('dialogue', 'N/A')}")
+            print(f"    sound: {r.get('sound', 'N/A')}")
 
     print("\n" + "#" * 60)
     print("# TEST COMPLETE")
     print("#" * 60 + "\n")
+
+
+def load_model(
+    model_path: str = "google/gemma-4-12B-it-qat-w4a16-ct",
+) -> LLM:
+    """Load vLLM model with compressed-tensors quantization."""
+    from src.pipeline.loader import load_model as _load
+
+    return _load(model_path, limit_mm_per_prompt={"image": 32, "audio": 1})
 
 
 if __name__ == "__main__":

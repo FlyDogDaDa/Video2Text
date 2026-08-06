@@ -1,5 +1,18 @@
 # chat_wtih_my_agent — Conversation Index
 
+Video2Text 專案的 agent 與 human 對話記錄。本目錄存放專案根目錄 `Video2Text/` 下開發歷程的完整記錄。
+
+## 專案結構提示
+
+| 項目 | 路徑 | 說明 |
+|------|------|------|
+| 專案根目錄（工作區） | `Video2Text/` | 所有 `cd` 指令的起點 |
+| 本目錄（對話記錄） | `Video2Text/chat_wtih_my_agent/` | 即此 README 所在 |
+| 原始碼 | `Video2Text/src/` | 包含 `pipeline/`, `utils/`, `types.py` 等 |
+| 入口腳本 | `Video2Text/main.py` | 控制台測試入口 |
+| 日誌記錄 | 本目錄（`*.md`） | 按 `count_date_type_topic.md` 命名 |
+| `cd` 參數 | `Video2Text` | **所有 terminal 指令的 `cd` 參數都必須指定為 `Video2Text`（工作區根目錄），指定錯誤會報 `was not in any of the project's worktrees`** |
+
 Video2Text 專案的 agent 與 human 對話記錄，涵蓋專案初始化、vLLM 框架選型與除錯、多模態模型驗證、影片切片工具實作，以及 FFmpeg 環境部署。
 
 ## 大綱與最終狀態
@@ -19,6 +32,16 @@ Video2Text 專案的 agent 與 human 對話記錄，涵蓋專案初始化、vLLM
 [06-10] 實作 slice-utils 切片工具 → 重構為 PyAV 單一後端 + IOCacheVideo
 [06-10] 部署 FFmpeg/ffprobe 7.0.2 靜態執行檔至 runtime/
 [06-10] 研究 PyAV ↔ MoviePy 架構關聯性（參考文檔）
+[06-11] 模組重構與結構化輸出進階功能
+         ├─ Swarm structured extraction 研究（23）
+         ├─ SliceResult 扁平化重構（24）→ 五欄位、optional fields
+         ├─ vLLM delayed guided decoding offline 研究（25）
+         ├─ Gemma-4 影片時間戳記格式調查（26）
+         ├─ main.py 模組化重構 → 430→79 行，pipeline/ 分離（27）
+         ├─ 命名清理：slice→video, container→factory, load_bytes→create_bytes_io（28）
+         ├─ Delayed guided decoding 實驗 → thinking mode 失效（29）
+         └─ extract_structured() 兩階段 thinking 參數（30）
+[06-11] 策略定案 → 離線推理 → Server API 模式（31）→ 定海神針
 ```
 
 ## 衝突資訊與轉折對照
@@ -31,6 +54,9 @@ Video2Text 專案的 agent 與 human 對話記錄，涵蓋專案初始化、vLLM
 | **flashinfer 崩潰** | `enforce_eager=True` 暫時解法（08） | ✅ 已適用 | → 最終改為 `--attention-backend TRITON_ATTN` 參數（11）|
 | **磁碟空間** | 467GB 已用 440GB（94%）（16） | ⚠️ | → `rm -rf .venv && uv cache clean` 釋放 55GB → 可用 61GB |
 | **後端選擇** | OpenCV + soundfile + PyAV 多後端（19） | ⚙️ | → 重構為 PyAV 單一後端 + IOCacheVideo（22）|
+| **模型命名** | `src/models.py`（2） | 🔀 | → 更名為 `src/types.py`（27）|
+| **main.py** | 430 行混雜測試+生產（19） | 🔀 | → 精簡為 79 行測試入口，pipeline/ 分離（27）|
+| **guided decoding** | delayed thinking + JSON 同時啟用（25） | ❌ | → thinking 從未觸發，改用兩階段 approach（29→30）|
 
 ## 文件列表
 
@@ -58,7 +84,16 @@ Video2Text 專案的 agent 與 human 對話記錄，涵蓋專案初始化、vLLM
 | 19 | [`19_2026_06_10_agent_slice-utils-implementation.md`](./19_2026_06_10_agent_slice-utils-implementation.md) | Agent | 06-10 | 實作 `src/utils/slice.py` 切片工具（視窗 30s + 2s 重疊、seek-buffer、range read、快取） |
 | 20 | [`20_2026_06_10_agent_ffmpeg-runtime-setup.md`](./20_2026_06_10_agent_ffmpeg-runtime-setup.md) | Agent | 06-10 | 部署 FFmpeg/ffprobe 7.0.2 靜態執行檔至 `runtime/` |
 | 21 | [`21_2026_06_10_docs_PyAV_and_MoviePy.md`](./21_2026_06_10_docs_PyAV_and_MoviePy.md) | Agent | 06-10 | PyAV ↔ MoviePy 架構關聯性深度研究（六層技術階梯） |
-| 22 | [`22_2026_06_10_agent_restructure-video-slicing-to-pyav.md`](./22_2026_06_10_agent_restructure-video-slicing-to-pyav.md) | Agent | 06-10 | 重構 slice.py：多後端 → PyAV 單一後端 + `IOCacheVideo` + `container.py` + `audio.py` |
+| 22 | [`22_2026_06_10_agent_restructure-video-slicing-to-pyav.md`](./22_2026_06_10_agent_restructure-video-slicing-to-pyav.md) | Agent | 06-10 | 重構 slice.py：多後端 → PyAV 單一後端 + `IOCacheVideo`（691行 → 393行） |
+| 23 | [`23_2026_06_11_references_swarm-structured-extraction.md`](./23_2026_06_11_references_swarm-structured-extraction.md) | References | 06-11 | Swarm 結構化提取研究（參考文檔） |
+| 24 | [`24_2026_06_11_agent_refactor-slice-result-model.md`](./24_2026_06_11_agent_refactor-slice-result-model.md) | Agent | 06-11 | SliceResult 重構：nested → 扁平五欄位（start_at, end_at, visual, dialogue, sound） |
+| 25 | [`25_2026_06_11_agent_vllm-delayed-guided-decoding-offline.md`](./25_2026_06_11_agent_vllm-delayed-guided-decoding-offline.md) | Agent | 06-11 | vLLM delayed guided decoding offline 研究（reasoning_parser + StructuredOutputsParams 整合） |
+| 26 | [`26_2026_06_11_agent_gemma4-video-timestamp-format.md`](./26_2026_06_11_agent_gemma4-video-timestamp-format.md) | Agent | 06-11 | Gemma-4 影片時間戳記格式調查（`MM:SS` vs `[X.Xs]`） |
+| 27 | [`27_2026_06_11_agent_main-py-modularization-and-pipeline-extraction.md`](./27_2026_06_11_agent_main-py-modularization-and-pipeline-extraction.md) | Agent | 06-11 | main.py 模組化：430→79 行，pipeline/ 分離（loader, slicer, extractor），models.py→types.py |
+| 28 | [`28_2026_06_11_agent_naming-cleanup.md`](./28_2026_06_11_agent_naming-cleanup.md) | Agent | 06-11 | 命名清理：slice.py→video.py, container.py→factory.py, load_bytes→create_bytes_io |
+| 29 | [`29_2026_06_11_agent_experiment-delayed-guided-decoding.md`](./29_2026_06_11_agent_experiment-delayed-guided-decoding.md) | Agent | 06-11 | Delayed guided decoding 實驗：thinking mode 從未觸發（guided JSON 從 token 1 就 enforcing） |
+| 30 | [`30_2026_06_11_agent_extractor-thinking-parameters.md`](./30_2026_06_11_agent_extractor-thinking-parameters.md) | Agent | 06-11 | extract_structured() 兩階段 thinking 參數（thinking + thinking_max_tokens） |
+| 31 | [`31_2026_06_11_human_strategy-vllm-server-api-pattern.md`](./31_2026_06_11_human_strategy-vllm-server-api-pattern.md) | Human | 06-11 | 專案策略轉向：離線推理 → Server API 模式評估（定海神針） |
 
 ## 關鍵決策時間軸
 
@@ -81,6 +116,15 @@ Video2Text 專案的 agent 與 human 對話記錄，涵蓋專案初始化、vLLM
 06-10  [部署]   FFmpeg 7.0.2 靜態執行檔 → runtime/
 06-10  [重構]   slice.py → PyAV 單一後端 + IOCacheVideo（691行 → 393行）
 06-10  [研究]   PyAV ↔ MoviePy 六層技術階梯參考文檔
+06-11  [研究]   Swarm 結構化提取（23）
+06-11  [重構]   SliceResult 扁平化：nested → 五欄位（24）
+06-11  [研究]   delayed guided decoding offline（25）
+06-11  [研究]   Gemma-4 時間戳記格式（26）
+06-11  [重構]   main.py 模組化：430→79 行，pipeline/ 分離，models.py→types.py（27）
+06-11  [清理]   命名修正：slice→video, container→factory, load_bytes→create_bytes_io（28）
+06-11  [實驗]   delayed guided decoding 失敗：thinking mode 被 guided JSON 擋住（29）
+06-11  [實作]   extract_structured() 兩階段 thinking 參數（30）
+06-11  [策略]   Server API 模式取代離線推理（31）→ 定海神針
 ```
 
 ## 當前可用功能總覽
@@ -92,7 +136,11 @@ Video2Text 專案的 agent 與 human 對話記錄，涵蓋專案初始化、vLLM
 | 圖片推論 | ✅ | dev301 已修復 num_soft_tokens bug |
 | 影片推論 | ✅ | dev301 支援 video_url |
 | 音訊推論 | ✅ | dev301 支援 |
-| 影片切片工具 | ✅ | `IOCacheVideo`（PyAV 單一後端）|
+| 結構化輸出 (guided JSON) | ⚠️ | offline 模式需手動 StructuredOutputsParams，Server 模式自動處理 |
+| 兩階段 thinking | ⚠️ | offline 模式 thinking 從未觸發（29）→ Server 模式 `--reasoning-parser` 原生支援 |
+| Delayed guided decoding | ❌ | offline 模式 thinking + JSON 無法同時啟用（29）→ Server 模式解決 |
+| **Server API 模式** | **🔄 規劃中** | **31 定義策略，待實作 client.py** |
+| 影片切片工具 | ✅ | `IOCacheVideo`（PyAV 單一後端）, `src/utils/video.py` |
 | FFmpeg/ffprobe | ✅ | 7.0.2 靜態執行檔 in `runtime/` |
 | SGLang | ❌ | 已移除（不支援 w4a16-ct）|
 
@@ -100,16 +148,18 @@ Video2Text 專案的 agent 與 human 對話記錄，涵蓋專案初始化、vLLM
 
 | 項目 | 路徑 |
 |------|------|
-| 專案根目錄 | `../` |
+| 專案根目錄（工作區） | `../` |
 | pyproject.toml | `../pyproject.toml` |
-| 資料模型 | `../src/models.py` |
+| 資料模型 | `../src/types.py`（原 models.py，已更名） |
 | 推論腳本 | `08_2026_06_08_references_gemma4-vllm-inference-fixes/try_video.py` |
 | 離線推論 | `../src/inference/multimodal_infer.py` |
-| 主程式 | `../main.py` |
-| 影片切片工具 | `../src/utils/slice.py`, `../src/utils/container.py`, `../src/utils/audio.py` |
+| 主程式 | `../main.py`（430→79 行，已精簡） |
+| 影片切片工具 | `../src/utils/video.py`（IOCacheVideo, SliceParams）, `../src/utils/factory.py`（create_bytes_io）, `../src/utils/audio.py` |
+| 模型管线 | `../src/pipeline/` — loader.py, slicer.py, extractor.py |
 | FFmpeg 執行檔 | `../runtime/ffmpeg`, `../runtime/ffprobe` |
 | 啟動腳本 | `../src/vllm_launch/launch_Gemma4-12b.sh` |
+| 策略文件 | `31_2026_06_11_human_strategy-vllm-server-api-pattern.md`（離線 → Server API 轉向） |
 
 ---
 
-更新日期：2026-06-10
+更新日期：2026-06-11

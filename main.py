@@ -455,7 +455,7 @@ async def run_workflow_audio_transcription_cleanup_chunked(
     ]
     total_items = len(valid_results)
 
-    async def process_chunk(messages, chunk_idx: int, pbar: tqdm):
+    async def process_chunk(messages, chunk_idx: int):
         async with sem:
             response = await llm_client.chat.completions.create(
                 model=llm_name,
@@ -475,7 +475,6 @@ async def run_workflow_audio_transcription_cleanup_chunked(
                 f"Response is None at chunk {chunk_idx}. "
                 "Your thinking model might be stuck in a loop; please try again."
             )
-        pbar.update(1)
         return cleaned.strip()
 
     def _build_messages(
@@ -523,15 +522,15 @@ async def run_workflow_audio_transcription_cleanup_chunked(
     # simultaneously — even though ``sem`` only allows a few to
     # execute.  Batched processing releases each batch's memory
     # before moving to the next one.
-    cleaned_parts = []
+    tasks = []
+    for batch_start in range(0, total_chunks, max_concurrency):
+        batch_end = min(batch_start + max_concurrency, total_chunks)
+        for idx in range(batch_start, batch_end):
+            messages = _build_messages(idx, total_items, valid_results, chunk_size)
+            tasks.append(process_chunk(messages, idx + 1))
+
     with tqdm(total=total_items, desc="清理音訊逐字稿", position=2) as pbar:
-        for batch_start in range(0, total_chunks, max_concurrency):
-            batch_end = min(batch_start + max_concurrency, total_chunks)
-            batch_tasks = []
-            for idx in range(batch_start, batch_end):
-                messages = _build_messages(idx, total_items, valid_results, chunk_size)
-                batch_tasks.append(process_chunk(messages, idx + 1, pbar))
-            cleaned_parts.extend(await asyncio.gather(*batch_tasks))
+        cleaned_parts = await asyncio.gather(*[wrap_task(t, pbar) for t in tasks])
 
     cleaned_merged = "\n---\n".join(cleaned_parts)
 
@@ -564,7 +563,7 @@ async def run_workflow_audio_transcription_cleanup_chunked(
     response = await llm_client.chat.completions.create(
         model=llm_name,
         messages=summary_messages,
-        max_tokens=12000,
+        max_tokens=24576,
         temperature=1.0,
         top_p=0.95,
         extra_body={"top_k": 64, "chat_template_kwargs": {"enable_thinking": True}},
@@ -649,7 +648,7 @@ async def run_workflow_transcribe_video(
             response = await llm_client.chat.completions.create(
                 model=llm_name,
                 messages=get_message(start, end),
-                max_tokens=12000,
+                max_tokens=24576,
                 temperature=1.0,
                 top_p=0.95,
                 extra_body={
@@ -659,10 +658,12 @@ async def run_workflow_transcribe_video(
             )
             result = response.choices[0].message.content
             if result is None:
-                raise ValueError(
-                    "response is None, Your thinking model might be stuck in a loop; "
-                    "please try again."
-                )
+                result = "Skipped because summary is filled with None"
+                tqdm.write(result)
+                # raise ValueError(
+                #     "response is None, Your thinking model might be stuck in a loop; "
+                #     "please try again."
+                # )
             return {"at": {"start": start, "end": end}, "result": result}
 
     slices_indices = create_slices_indices(0, video.duration, window=20, step=20)
@@ -686,39 +687,13 @@ async def run_workflow_video_transcription_cleanup_chunked(
     save_path: Path,
     chunk_size: int = 40,
     sem: asyncio.Semaphore = None,
-    max_concurrency: int = 4,
 ):
     if is_cached(save_path):
         return
 
     transcription = list(read_jsonl(transcription_path))
     total_items = len(transcription)
-
-    async def process_chunk(messages, pbar: tqdm):
-        try:
-            async with sem:
-                response = await llm_client.chat.completions.create(
-                    model=llm_name,
-                    messages=messages,
-                    max_tokens=16384,
-                    temperature=1.0,
-                    top_p=0.95,
-                    extra_body={
-                        "top_k": 64,
-                        "chat_template_kwargs": {"enable_thinking": True},
-                    },
-                )
-        except Exception as e:
-            raise RuntimeError(f"Failed at chunk processing: {e}")
-
-        cleaned = response.choices[0].message.content
-        if cleaned is None:
-            raise ValueError(
-                "Response is None. "
-                "Your thinking model might be stuck in a loop; please try again."
-            )
-        pbar.update(1)
-        return cleaned.strip()
+    total_chunks = (total_items + chunk_size - 1) // chunk_size
 
     def _build_video_messages(
         i: int, total_items: int, transcription: list, chunk_size: int
@@ -758,22 +733,39 @@ async def run_workflow_video_transcription_cleanup_chunked(
             },
         ]
 
-    total_chunks = (total_items + chunk_size - 1) // chunk_size
-
-    # Process chunks in bounded batches to avoid OOM (same issue as
-    # audio cleanup: asyncio.gather(*tasks) keeps all ``messages`` alive).
-    cleaned_parts = []
-    with tqdm(total=total_items, desc="清理影音逐字稿", position=3) as pbar:
-        for batch_start in range(0, total_chunks, max_concurrency):
-            batch_end = min(batch_start + max_concurrency, total_chunks)
-            batch_tasks = []
-            for batch_idx in range(batch_start, batch_end):
-                i = batch_idx * chunk_size
-                messages = _build_video_messages(
+    async def process_slice(i: int):
+        async with sem:
+            response = await llm_client.chat.completions.create(
+                model=llm_name,
+                messages=_build_video_messages(
                     i, total_items, transcription, chunk_size
-                )
-                batch_tasks.append(process_chunk(messages, pbar))
-            cleaned_parts.extend(await asyncio.gather(*batch_tasks))
+                ),
+                max_tokens=16384,
+                temperature=1.0,
+                top_p=0.95,
+                extra_body={
+                    "top_k": 64,
+                    "chat_template_kwargs": {"enable_thinking": True},
+                },
+            )
+            cleaned = response.choices[0].message.content
+            if cleaned is None:
+                cleaned = "Skipped because summary is filled with None"
+                tqdm.write(cleaned)
+                # raise ValueError(
+                #     "Response is None. "
+                #     "Your thinking model might be stuck in a loop; please try again."
+                # )
+            return cleaned.strip()
+
+    tasks = [process_slice(i * chunk_size) for i in range(total_chunks)]
+    cleaned_parts: list[str] = [""] * total_chunks
+
+    with tqdm(total=total_items, desc="清理影音逐字稿", position=3) as pbar:
+        for idx, part in enumerate(
+            await asyncio.gather(*[wrap_task(task, pbar) for task in tasks])
+        ):
+            cleaned_parts[idx] = part
 
     cleaned_merged = "\n---\n".join(cleaned_parts)
 
@@ -806,7 +798,7 @@ async def run_workflow_video_transcription_cleanup_chunked(
     response = await llm_client.chat.completions.create(
         model=llm_name,
         messages=summary_messages,
-        max_tokens=12000,
+        max_tokens=24576,
         temperature=1.0,
         top_p=0.95,
         extra_body={"top_k": 64, "chat_template_kwargs": {"enable_thinking": True}},
@@ -870,7 +862,7 @@ async def run_workflow_summarize(
     response = await llm_client.chat.completions.create(
         model=llm_name,
         messages=messages,
-        max_tokens=12000,
+        max_tokens=24576,
         temperature=1.0,
         top_p=0.95,
         extra_body={"top_k": 64, "chat_template_kwargs": {"enable_thinking": True}},
@@ -889,7 +881,7 @@ async def run_single_file_llm(
     video_path: Path,
     llm_name: str,
     llm_client: AsyncOpenAI,
-    llm_batch_size: int,
+    llm_sem: asyncio.Semaphore,
 ):
     """對單一檔案執行 Phase 2：所有 LLM 工作。"""
     save_dir = video_path.parent / video_path.stem / "results"
@@ -905,8 +897,7 @@ async def run_single_file_llm(
 
     summary_path = save_dir / "summary.md"
 
-    llm_sem = asyncio.Semaphore(llm_batch_size)
-    transcribe_video_sem = asyncio.Semaphore(2)
+    transcribe_video_sem = asyncio.Semaphore(1)
 
     with IOCacheVideo(video_path, cached=True) as video:
         # ── 1. 音軌清理 ──────────────────────────────────────────
@@ -1033,14 +1024,13 @@ async def scan_and_run_phase2(
     """掃整目錄，對所有檔案執行 Phase 2 (LLM)。"""
     video_paths = _collect_video_paths(video_root)
     tqdm.write(f"Phase 2 — 共 {len(video_paths)} 個檔案，開始 LLM 處理")
+    llm_sem = asyncio.Semaphore(llm_batch_size)
 
-    sem = asyncio.Semaphore(max_concurrent)
+    file_sem = asyncio.Semaphore(max_concurrent)
     futures = [
-        asyncio.create_task(
             _run_one_file_llm_wrapper(
-                video_path, llm_name, llm_client, llm_batch_size, sem
+                video_path, llm_name, llm_client, llm_sem, file_sem
             )
-        )
         for video_path in video_paths
     ]
 
@@ -1061,11 +1051,11 @@ async def _run_one_file_llm_wrapper(
     video_path: Path,
     llm_name: str,
     llm_client: AsyncOpenAI,
-    llm_batch_size: int,
-    sem: asyncio.Semaphore,
+    file_sem: asyncio.Semaphore,
+    llm_sem: asyncio.Semaphore,
 ):
-    async with sem:
-        await run_single_file_llm(video_path, llm_name, llm_client, llm_batch_size)
+    async with file_sem:
+        await run_single_file_llm(video_path, llm_name, llm_client, llm_sem)
 
 
 # ──────────────────────────── VAD 階段 ────────────────────────────

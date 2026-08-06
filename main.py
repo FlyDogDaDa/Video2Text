@@ -131,6 +131,83 @@ def extract_frames(video_path: str, output_dir: Path, fps: float = 1.0):
     return saved_count
 
 
+def swarm_extract(video_path: str, *, cached: bool = True) -> list[dict]:
+    """Swarm-style video extraction — splits video into sliding windows and extracts frames+audio.
+
+    Returns a list of dicts, one per slice, each containing:
+    - time_range: (start, end) in seconds
+    - frames: numpy array [N, H, W, 3] uint8 RGB
+    - audio_clips: list of 16kHz mono numpy arrays (each ≤30s)
+    - info: VideoInfo metadata
+    """
+    from pathlib import Path
+
+    import numpy as np
+
+    from src.utils.slice import IOCacheVideo, SliceParams, VideoInfo
+
+    params = SliceParams(window_seconds=30.0, overlap_seconds=2.0, sample_fps=1.0)
+    step = params.step_seconds
+
+    with IOCacheVideo(video_path, cached=cached) as video:
+        info = video.info
+        duration = info.duration
+
+        print(f"📹 {info.path}")
+        print(
+            f"   Duration: {duration:.1f}s | {info.fps:.1f}fps | {info.width}×{info.height}"
+        )
+        print(
+            f"   Window: {params.window_seconds}s | Overlap: {params.overlap_seconds}s | Step: {step:.1f}s"
+        )
+        print(
+            f"   Max frames/slice: {params.max_frames} | Sample FPS: {params.sample_fps}"
+        )
+
+        slices: list[dict] = []
+        t = 0.0
+        slice_num = 0
+
+        while t < duration:
+            end = min(t + params.window_seconds, duration)
+            # If last window, ensure it ends at exactly duration
+            if end == duration and t > 0:
+                # Adjust start so last window has proper size
+                t = max(0.0, end - params.window_seconds)
+
+            start = t
+            if start >= end:
+                break
+
+            print(f"  [{slice_num:3d}] [{start:6.1f}s – {end:6.1f}s] ", end="")
+
+            frames = video.get_frames(
+                start, end, sample_fps=params.sample_fps, max_frames=params.max_frames
+            )
+            audio_clips = video.get_audio(start, end, max_clip_duration=30.0)
+
+            audio_secs = [len(c) / 16000 for c in audio_clips]
+            print(
+                f"frames={frames.shape[0]:3d}/{frames.shape[1]}x{frames.shape[2]} | "
+                f"audio={len(audio_clips)}clip(s) [{', '.join(f'{s:.1f}s' for s in audio_secs)}]"
+            )
+
+            slices.append(
+                {
+                    "time_range": (float(start), float(end)),
+                    "frames": frames,
+                    "audio_clips": audio_clips,
+                    "info": info,
+                }
+            )
+
+            t += step
+            slice_num += 1
+
+        print(f"\n✅ {len(slices)} slices extracted ({duration / step:.0f} steps)")
+        return slices
+
+
 def test_multimodal(llm: LLM, video_path: str = "2026_05_11-19_18_26.mkv"):
     """Test video frame analysis."""
     print("\n" + "=" * 60)

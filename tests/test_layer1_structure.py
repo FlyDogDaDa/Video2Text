@@ -7,7 +7,8 @@ from pathlib import Path
 import pytest
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-PACKAGE_DIR = PROJECT_ROOT / "video2text"
+# Flat layout — framework, modules, profiles 都在專案根目錄
+PACKAGE_DIR = PROJECT_ROOT
 
 # ---------------------------------------------------------------------------
 # 輔助常數
@@ -23,7 +24,7 @@ MODULES = [
 
 EXPECTED_YAMLS = ["default.yaml", "research.yaml", "final.yaml"]
 
-PROFILE_DIR = PACKAGE_DIR / "profiles"
+PROFILE_DIR = PACKAGE_DIR / "profiles"  # 在 flat layout 中即 PROJECT_ROOT/profiles
 
 MAIN_FUNCTIONS = {
     "vad": "detect_speech",
@@ -41,7 +42,9 @@ MAIN_FUNCTIONS = {
 
 def test_framework_exists():
     """framework/config.py 檔案存在。"""
-    config_path = PACKAGE_DIR / "framework" / "config.py"
+    config_path = (
+        PACKAGE_DIR / "framework" / "config.py"
+    )  # flat layout: PROJECT_ROOT/framework/config.py
     assert config_path.exists(), (
         f"{config_path} 不存在 — 請確認 framework/config.py 已建立"
     )
@@ -54,7 +57,7 @@ def test_framework_exists():
 
 def test_framework_imports():
     """``from framework.config import cfg, set_profile`` 不會報錯。"""
-    # 確保 video2text 可被發現
+    # 確保專案根目錄可被發現（flat layout）
     package_dir = str(PACKAGE_DIR)
     if package_dir not in sys.path:
         sys.path.insert(0, package_dir)
@@ -76,7 +79,9 @@ def test_framework_imports():
 
 def test_modules_exists():
     """modules/__init__.py 檔案存在。"""
-    init_path = PACKAGE_DIR / "modules" / "__init__.py"
+    init_path = (
+        PACKAGE_DIR / "modules" / "__init__.py"
+    )  # flat layout: PROJECT_ROOT/modules/__init__.py
     assert init_path.exists(), f"{init_path} 不存在 — 請建立 modules/__init__.py"
 
 
@@ -92,7 +97,9 @@ def test_each_module_import(module_name, func_name):
     if package_dir not in sys.path:
         sys.path.insert(0, package_dir)
 
-    mod_path = PACKAGE_DIR / "modules" / f"{module_name}.py"
+    mod_path = (
+        PACKAGE_DIR / "modules" / f"{module_name}.py"
+    )  # flat layout: PROJECT_ROOT/modules/{name}.py
     assert mod_path.exists(), f"modules/{module_name}.py 不存在"
 
     try:
@@ -139,7 +146,9 @@ def test_profiles_exist():
 def test_each_module_has_base_config():
     """每個模組檔案都包含 ``BaseModel`` 的匯入（pydantic Config class）。"""
     for module_name in MODULES:
-        mod_path = PACKAGE_DIR / "modules" / f"{module_name}.py"
+        mod_path = (
+            PACKAGE_DIR / "modules" / f"{module_name}.py"
+        )  # flat layout: PROJECT_ROOT/modules/{name}.py
         assert mod_path.exists(), f"modules/{module_name}.py 不存在"
 
         content = mod_path.read_text()

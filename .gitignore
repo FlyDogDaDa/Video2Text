@@ -224,8 +224,12 @@ __marimo__/
 # Agent configuration
 .agents/
 
+# Model checkpoints
+serve/quark-audio/checkpoints/
+
 # Output directories
 runs/
+output/
 
 # Executables
 runtime/

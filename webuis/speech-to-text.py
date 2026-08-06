@@ -346,7 +346,8 @@ Speaker 辨識 + 語音轉文字整合介面
                 time.sleep(0.5)
 
             final_log = "\n".join(log_buf)
-            yield final_log, output_json
+            # Yield a gr.update() for download_btn to set both value and interactive
+            yield final_log, gr.update(value=output_json, interactive=True)
 
         run_btn.click(
             fn=on_run,
@@ -355,21 +356,12 @@ Speaker 辨識 + 語音轉文字整合介面
             show_progress=True,
         )
 
-        # 偵聽 log 輸出中的成功訊息，自動啟用下載按鈕
-        def check_download(log_text):
-            if log_text and "✅ 處理完成" in log_text:
-                for line in log_text.split("\n"):
-                    if "輸出檔案：" in line:
-                        path = line.split("輸出檔案：")[-1].strip()
-                        if Path(path).exists():
-                            return gr.update(value=path, interactive=True)
-            return gr.update(interactive=False)
-
-        log_output.change(
-            fn=check_download,
-            inputs=[log_output],
-            outputs=[download_btn],
-        )
+        # 處理失敗時停用下載按鈕
+        def handle_failure(log_text):
+            """處理失敗時停用下載按鈕."""
+            if log_text and "❌ 處理失敗" in log_text:
+                return gr.update(interactive=False, value=None)
+            return gr.update()  # 不變更
 
         # Tab 2: Speaker 管理
         def on_refresh(dir_path):

@@ -737,7 +737,7 @@ async def main():
         # short_test.mp4 #2026_03_17-20_27_48.mkv
         sem = asyncio.Semaphore(1)
         await for_each_file_async(
-            Path("2026_03_17-20_27_48.mkv"),
+            Path("runs/2026_03_17-20_27_48.mkv"),
             asr_batch_size=6,
             llm_batch_size=8,
             sem=sem,

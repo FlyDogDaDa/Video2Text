@@ -88,7 +88,7 @@ est. speed input: 168.73 toks/s, output: 23.36 toks/s]
 
 ## References
 
-- [try_video.py](../try_video.py)
+- [try_video.py](08_2026_06_08_references_gemma4-vllm-inference-fixes/try_video.py)
 - [07_2026_06_07_agent_test-video-spec.md](./07_2026_06_07_agent_test-video-spec.md)
 - [06_2026_06_07_agent_vllm-restore-for-gemma4.md](./06_2026_06_07_agent_vllm-restore-for-gemma4.md)
 - [flashinfer prefills.cuh:2964 — max_mma_kv check](https://github.com/flashinfer-ai/flashinfer/blob/main/include/flashinfer/attention/prefill.cuh)

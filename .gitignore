@@ -221,8 +221,10 @@ __marimo__/
 .streamlit/secrets.toml
 
 # Agent configuration
-.agent/
+.agents/
 
 # Media files
 ffmpeg
 2026_05_11-19_18_26.mkv
+2026_05_11-19_18_26.mp4
+2026_05_11-19_18_26_louder4x.mp4

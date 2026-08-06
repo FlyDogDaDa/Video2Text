@@ -1,8 +1,8 @@
 """Video2Text slice utilities — PyAV-based video/audio slicing."""
 
 from src.utils.audio import normalize_audio
-from src.utils.container import load_bytes
-from src.utils.slice import (
+from src.utils.factory import load_bytes
+from src.utils.video import (
     IOCacheVideo,
     SliceParams,
     VideoInfo,

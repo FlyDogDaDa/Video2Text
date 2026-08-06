@@ -15,24 +15,20 @@ Usage:
 
 from __future__ import annotations
 
-import importlib
 import importlib.util
-import json
-import os
 import shutil
 import sys
 import threading
 from pathlib import Path
 
 import gradio as gr
-import yaml
 
 # ── Path 設定：讓 import workflows.speech_to_text 能找到 ──
 _project_root = Path(__file__).resolve().parent.parent
 if str(_project_root) not in sys.path:
     sys.path.insert(0, str(_project_root))
 
-# ── voicetag circular import 修復（同 workflows/speech-to-text.py）──
+# ── voicetag circular import 修復 ──
 _voicetag_pkg_dir = (
     _project_root
     / "serve"
@@ -44,8 +40,6 @@ _voicetag_pkg_dir = (
     / "voicetag"
 )
 if _voicetag_pkg_dir.is_dir():
-    import importlib.util
-
     _spec = importlib.util.spec_from_file_location(
         "voicetag", _voicetag_pkg_dir / "__init__.py"
     )
@@ -53,7 +47,7 @@ if _voicetag_pkg_dir.is_dir():
     sys.modules["voicetag"] = _voicetag_mod
     _spec.loader.exec_module(_voicetag_mod)
 
-# ── 匯入主工作流程（speech-to-text.py 有連字號，必須用 importlib） ──
+# ── 匯入主工作流程 ──
 _s2t_module = importlib.util.spec_from_file_location(
     "speech_to_text",
     _project_root / "workflows" / "speech-to-text.py",
@@ -63,41 +57,9 @@ _s2t_module.loader.exec_module(_s2t_mod)
 discover_speakers = _s2t_mod.discover_speakers
 run_pipeline = _s2t_mod.run_pipeline
 
-# ── 設定檔 ──
-CONFIG_PATH = _project_root / "workflows" / "config.yaml"
+# ── 設定 ──
 DEFAULT_SPEAKER_REF_DIR = str(_project_root / "test-audio" / "speaker-ref")
 DEFAULT_OUTPUT_DIR = str(_project_root / "output")
-
-
-def load_config() -> dict:
-    """載入 config.yaml 的 speech_to_text 區段."""
-    if CONFIG_PATH.exists():
-        with open(CONFIG_PATH, "r", encoding="utf-8") as f:
-            cfg = yaml.safe_load(f) or {}
-            return cfg.get("speech_to_text", {})
-    return {}
-
-
-def load_defaults() -> dict:
-    """從 config.yaml 讀取預設值."""
-    stt_cfg = {}
-    vt_cfg = {}
-    cfg = load_config()
-    stt_cfg = cfg.get("stt", {})
-    vt_cfg = cfg.get("voicetag", {})
-
-    return {
-        "input_audio": cfg.get("input_audio", ""),
-        "speaker_ref_dir": vt_cfg.get("speaker_ref_dir", DEFAULT_SPEAKER_REF_DIR),
-        "output_json": cfg.get("output_json", ""),
-        "device": vt_cfg.get("device", "auto"),
-        "similarity_threshold": vt_cfg.get("similarity_threshold", 0.5),
-        "stt_provider": stt_cfg.get("provider", "openai"),
-        "stt_model": stt_cfg.get("model", "MediaTek-Research/Breeze-ASR-26"),
-        "stt_base_url": stt_cfg.get("base_url", "http://localhost:8750/v1"),
-        "stt_language": stt_cfg.get("language", "zh"),
-        "stt_api_key": stt_cfg.get("api_key", "breeze-asr"),
-    }
 
 
 # ====================================================================
@@ -106,10 +68,7 @@ def load_defaults() -> dict:
 
 
 def list_speakers(speaker_ref_dir: str) -> tuple[list[list], str]:
-    """列出所有 speaker 檔案.
-
-    Returns: (table_rows, info_text)
-    """
+    """列出所有 speaker 檔案."""
     ref_dir = Path(speaker_ref_dir)
     if not ref_dir.is_dir():
         return [["⚠ 資料夾不存在", "0", "-", "-"]], f"資料夾不存在：{ref_dir}"
@@ -125,21 +84,14 @@ def list_speakers(speaker_ref_dir: str) -> tuple[list[list], str]:
     return rows, info
 
 
-def upload_speaker(speaker_ref_dir: str, files) -> tuple[list[list], str, None]:
-    """上傳 speaker 參考音訊檔案.
-
-    Parameters
-    ----------
-    files:
-        gr.File upload event，可以是單個路徑或多個路徑的 list
-    """
+def upload_speaker(speaker_ref_dir: str, files) -> tuple[list[list], str]:
+    """上傳 speaker 參考音訊檔案."""
     if not files:
         return list_speakers(speaker_ref_dir)
 
     ref_dir = Path(speaker_ref_dir)
     ref_dir.mkdir(parents=True, exist_ok=True)
 
-    # 處理單個或多個檔案
     file_list = [files] if isinstance(files, str) else list(files)
 
     uploaded = []
@@ -150,10 +102,8 @@ def upload_speaker(speaker_ref_dir: str, files) -> tuple[list[list], str, None]:
         stem = Path(fpath).stem
         ext = Path(fpath).suffix
 
-        # 避免覆蓋同名檔案
         dest = ref_dir / f"{stem}{ext}"
         if dest.exists():
-            # 加序号
             i = 1
             while (ref_dir / f"{stem}_{i}{ext}").exists():
                 i += 1
@@ -170,7 +120,7 @@ def upload_speaker(speaker_ref_dir: str, files) -> tuple[list[list], str, None]:
     )
     if skipped:
         msg += f"\n⚠ 跳過（已存在）：{', '.join(skipped)}"
-    return rows, msg, gr.update()
+    return rows, msg
 
 
 def delete_speaker(speaker_ref_dir: str, speaker_name: str) -> tuple[list[list], str]:
@@ -202,10 +152,7 @@ def delete_speaker(speaker_ref_dir: str, speaker_name: str) -> tuple[list[list],
 def rename_speaker(
     speaker_ref_dir: str, old_name: str, new_name: str
 ) -> tuple[list[list], str]:
-    """改名 speaker 參考音訊檔案.
-
-    會將所有同名檔案改名為新名稱（保留副檔名）。
-    """
+    """改名 speaker 參考音訊檔案."""
     if not old_name or not new_name:
         return list_speakers(speaker_ref_dir)
 
@@ -242,8 +189,6 @@ def rename_speaker(
 
 def make_ui():
     """建立 Gradio UI."""
-    defaults = load_defaults()
-
     with gr.Blocks(title="Speech-to-Text") as ui:
         gr.Markdown(
             """
@@ -258,36 +203,11 @@ Speaker 辨識 + 語音轉文字整合介面
         with gr.Tabs():
             # ──── Tab 1: 轉錄 ────
             with gr.Tab("轉錄"):
-                with gr.Row():
-                    with gr.Column(scale=2):
-                        audio_input = gr.File(
-                            label="上傳音訊檔案",
-                            file_types=["audio/"],
-                            type="filepath",
-                        )
-                        device_input = gr.Dropdown(
-                            label="運算裝置",
-                            choices=["auto", "cpu", "cuda:0", "cuda:1"],
-                            value=defaults["device"],
-                        )
-                        stt_url_input = gr.Textbox(
-                            label="STT Endpoint",
-                            value=defaults["stt_base_url"],
-                            info="Breeze-ASR-26 的 vLLM endpoint",
-                        )
-                        stt_model_input = gr.Textbox(
-                            label="STT 模型",
-                            value=defaults["stt_model"],
-                        )
-                    with gr.Column(scale=1):
-                        threshold_input = gr.Slider(
-                            label="聲紋相似度閾值",
-                            minimum=0.0,
-                            maximum=1.0,
-                            step=0.05,
-                            value=defaults["similarity_threshold"],
-                        )
-                        gr.HTML(f"<small>輸出目錄：{DEFAULT_OUTPUT_DIR}</small>")
+                audio_input = gr.File(
+                    label="上傳音訊檔案",
+                    file_types=["audio/"],
+                    type="filepath",
+                )
 
                 run_btn = gr.Button("🚀 開始處理", variant="primary", size="lg")
 
@@ -311,7 +231,9 @@ Speaker 辨識 + 語音轉文字整合介面
                 gr.Markdown(
                     """
 管理 speaker 參考音訊檔案。檔案名稱即為 speaker 名稱，副檔名支援 `.wav`, `.mp3`, `.flac`, `.ogg`。
-                """
+
+> 💡 **提醒：**乾淨音色參考建議 3~5 秒（5 秒以上更佳）
+                    """
                 )
 
                 with gr.Row():
@@ -359,16 +281,7 @@ Speaker 辨識 + 語音轉文字整合介面
         # ── 事件綁定 ──
 
         # Tab 1: 轉錄
-        def on_run(
-            audio_path,
-            device,
-            threshold,
-            stt_provider,
-            stt_model,
-            stt_base_url,
-            stt_language,
-            stt_api_key,
-        ):
+        def on_run(audio_path):
             """處理按鈕點擊 — 觸發 pipeline 並回傳 UI 更新."""
             if not audio_path or not Path(audio_path).exists():
                 yield "❌ 請先上傳音訊檔案", None
@@ -378,27 +291,14 @@ Speaker 辨識 + 語音轉文字整合介面
             audio_name = Path(audio_path).stem
             output_json = str(output_dir / f"{audio_name}_stt.json")
 
-            # 先清理舊結果
             if Path(output_json).exists():
                 Path(output_json).unlink()
 
             log_buf: list[str] = []
             done_event = threading.Event()
 
-            def capture_print(*args, **kwargs):
-                msg = " ".join(str(a) for a in args) if args else ""
-                log_buf.append(msg)
-                if msg:
-                    print(msg, **kwargs)
-
-            import io
-
-            old_stdout = sys.stdout
-            sys.stdout = io.StringIO()
-
             def run_in_thread():
                 try:
-                    # 重定向 builtins.print 到 log_buf
                     import builtins
 
                     old_print = builtins.print
@@ -415,13 +315,6 @@ Speaker 辨識 + 語音轉文字整合介面
                         input_audio=audio_path,
                         speaker_ref_dir=DEFAULT_SPEAKER_REF_DIR,
                         output_json=output_json,
-                        device=device,
-                        similarity_threshold=float(threshold),
-                        stt_provider=stt_provider,
-                        stt_model=stt_model,
-                        base_url=stt_base_url,
-                        stt_language=stt_language,
-                        stt_api_key=stt_api_key,
                     )
 
                     log_buf.append(f"\n✅ 處理完成！輸出檔案：{output_json}")
@@ -433,13 +326,11 @@ Speaker 辨識 + 語音轉文字整合介面
 
                     log_buf.append(traceback.format_exc())
                 finally:
-                    sys.stdout = old_stdout
                     done_event.set()
 
             t = threading.Thread(target=run_in_thread, daemon=True)
             t.start()
 
-            # 持續更新 log 直到完成
             while not done_event.is_set():
                 current_log = "\n".join(log_buf)
                 yield current_log or "⏳ 正在初始化...", output_json
@@ -447,22 +338,12 @@ Speaker 辨識 + 語音轉文字整合介面
 
                 time.sleep(0.5)
 
-            # 最終更新
             final_log = "\n".join(log_buf)
             yield final_log, output_json
 
         run_btn.click(
             fn=on_run,
-            inputs=[
-                audio_input,
-                device_input,
-                threshold_input,
-                gr.State(value="openai"),
-                stt_model_input,
-                stt_url_input,
-                gr.State(value="zh"),
-                gr.State(value="breeze-asr"),
-            ],
+            inputs=[audio_input],
             outputs=[log_output, download_btn],
             show_progress=True,
         )
@@ -470,7 +351,6 @@ Speaker 辨識 + 語音轉文字整合介面
         # 偵聽 log 輸出中的成功訊息，自動啟用下載按鈕
         def check_download(log_text):
             if log_text and "✅ 處理完成" in log_text:
-                # 嘗試從 log 中提取路徑
                 for line in log_text.split("\n"):
                     if "輸出檔案：" in line:
                         path = line.split("輸出檔案：")[-1].strip()
@@ -483,8 +363,6 @@ Speaker 辨識 + 語音轉文字整合介面
             inputs=[log_output],
             outputs=[download_btn],
         )
-
-        # ── Tab 2: Speaker 管理 ──
 
         # Tab 2: Speaker 管理
         def on_refresh(dir_path):
@@ -527,7 +405,7 @@ Speaker 辨識 + 語音轉文字整合介面
             outputs=[speaker_table, action_output],
         )
 
-        # 初始載入
+        # 初始載入 speaker 列表
         ui.load(
             fn=on_refresh,
             inputs=[speaker_ref_dir_input],

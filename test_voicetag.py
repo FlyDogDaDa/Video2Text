@@ -7,7 +7,7 @@ import sys
 from pathlib import Path
 
 # Preload .env and token before any voicetag import
-os.environ["HF_TOKEN"] = "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"
+os.environ["HF_TOKEN"] = "YOUR_HF_TOKEN_HERE"
 
 sys.path.insert(0, str(Path(__file__).resolve().parent / "serve" / "voicetag"))
 

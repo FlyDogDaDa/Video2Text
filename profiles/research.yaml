@@ -1,6 +1,0 @@
-vad:
-  threshold: 0.4
-  chunk_seconds: 180
-
-asr:
-  batch_size: 32

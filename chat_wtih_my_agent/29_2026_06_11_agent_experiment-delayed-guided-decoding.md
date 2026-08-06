@@ -78,5 +78,5 @@ structured_outputs_config=StructuredOutputsConfig(
 ## References
 
 - [src/types.py](../src/types.py) — `SliceResult` 模型
-- [test_vllm_delayed_guided_decoding.py](../test_vllm_delayed_guided_decoding.py) — 測試腳本
+- [test_vllm_delayed_guided_decoding.py](../25_2026_06_11_references_vllm-delayed-guided-decoding-offline/test_vllm_delayed_guided_decoding.py) — 測試腳本（已歸檔至 #25 references）
 - [vLLM Structured Outputs docs](https://docs.vllm.ai/en/latest/features/structured_outputs.html)

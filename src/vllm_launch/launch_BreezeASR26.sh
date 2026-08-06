@@ -17,12 +17,12 @@ vllm serve "MediaTek-Research/Breeze-ASR-26" \
   --max-model-len 448 \
   --max-num-batched-tokens 1500 \
   --tensor-parallel-size "${TP_SIZE:-2}" \
-  --gpu-memory-utilization "${GPU_MEM_UTIL:-0.16}" \
+  --gpu-memory-utilization "${GPU_MEM_UTIL:-0.155}" \
   --host 0.0.0.0 \
   --port "${PORT:-8750}" \
   --trust-remote-code \
   --async-scheduling \
-  --max-num-seqs 4 \
+  --max-num-seqs 3 \
    --enforce-eager
   # --max-model-len 1500 \
   # --max-num-batched-tokens 1500 \

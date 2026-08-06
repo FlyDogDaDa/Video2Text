@@ -9,13 +9,13 @@
 
 Usage (CLI):
     # 使用預設 config.yaml (device=auto)
-    uv run --python=3.10 --directory serve/voicetag -- python ../workflows/speech-to-text.py
+    uv run --python=3.10 --directory serve/voicetag -- python ../workflows/speech_to_text.py
 
     # 指定自訂 config
-    uv run --python=3.10 --directory serve/voicetag -- python ../workflows/speech-to-text.py --config my-config.yaml
+    uv run --python=3.10 --directory serve/voicetag -- python ../workflows/speech_to_text.py --config my-config.yaml
 
     # 覆蓋參數
-    uv run --python=3.10 --directory serve/voicetag -- python ../workflows/speech-to-text.py \
+    uv run --python=3.10 --directory serve/voicetag -- python ../workflows/speech_to_text.py \
         --input test-audio/meeting_30s.wav \
         --output output/test-result.json
 
@@ -31,35 +31,12 @@ Usage (import):
 
 from __future__ import annotations
 
-# ── 修正 sys.path 優先級，避免 circular import ──────────────
-# workflows/voicetag.py 和 voicetag package 同名。當 PYTHONPATH
-# 把專案根目錄加到 sys.path 時，Python 會找到 workflows/voicetag.py
-# 而不是 site-packages/voicetag。這裡先把 voicetag package
-# 載入 sys.modules，後續 import 就不会被遮蔽。
-import importlib.util
 import json
 import sys
+import tempfile
 import time
 from pathlib import Path
 from typing import Any, Optional
-
-_voicetag_pkg_dir = (
-    Path(__file__).resolve().parent.parent
-    / "serve"
-    / "voicetag"
-    / ".venv"
-    / "lib"
-    / "python3.10"
-    / "site-packages"
-    / "voicetag"
-)
-if _voicetag_pkg_dir.is_dir():
-    _spec = importlib.util.spec_from_file_location(
-        "voicetag", _voicetag_pkg_dir / "__init__.py"
-    )
-    _voicetag_mod = importlib.util.module_from_spec(_spec)
-    sys.modules["voicetag"] = _voicetag_mod
-    _spec.loader.exec_module(_voicetag_mod)
 
 import yaml
 
@@ -235,8 +212,9 @@ def run_pipeline(
     if speaker_ref_dir:
         print("\n[step 2] 註冊 Speaker...")
         speakers = discover_speakers(speaker_ref_dir)
+        ref_dir = Path(speaker_ref_dir)
         for name in speakers:
-            ref_files = list(Path(speaker_ref_dir).glob(f"{name}.*"))
+            ref_files = list(ref_dir.glob(f"{name}.*"))
             # Filter only audio files
             ref_files = [
                 f
@@ -244,8 +222,28 @@ def run_pipeline(
                 if f.suffix.lower() in {".wav", ".mp3", ".flac", ".ogg"}
             ]
             if ref_files:
-                profile = vt.enroll(name, [str(f) for f in ref_files])
-                print(f"  ✓ 已註冊 speaker「{name}」({profile.num_samples} 個樣本)")
+                try:
+                    # DIAGNOSTIC: Directly test load_audio + get_embedding
+                    from voicetag.utils import load_audio as _load_audio
+
+                    _test_path = str(ref_files[0])
+                    try:
+                        _test_audio, _test_sr = _load_audio(_test_path)
+                        _test_emb = vt._encoder.get_embedding(_test_audio, _test_sr)
+                        print(
+                            f"  [DIAG] load_audio+get_embedding OK: emb shape={_test_emb.shape}"
+                        )
+                    except Exception as _diag_exc:
+                        print(f"  [DIAG] load_audio/get_embedding FAIL: {_diag_exc}")
+                        import traceback
+
+                        traceback.print_exc()
+                    profile = vt.enroll(name, [str(f) for f in ref_files])
+                    print(f"  ✓ 已註冊 speaker「{name}」({profile.num_samples} 個樣本)")
+                except Exception as exc:
+                    raise Exception(
+                        f"Failed to enroll speaker '{name}': {exc}\nTried paths: {[str(f) for f in ref_files]}"
+                    ) from exc
             else:
                 print(f"  ⚠ 找不到 speaker「{name}」的音訊檔")
         print(f"[step 2] 共註冊 {len(vt.enrolled_speakers)} 位 speaker")
@@ -256,14 +254,40 @@ def run_pipeline(
     print(f"\n[step 3] 執行轉錄（speaker diarization + {stt_provider} STT）...")
     t_start = time.monotonic()
 
-    transcript_result = vt.transcribe(
-        audio_path=str(input_audio),
-        provider=stt_provider,
-        api_key=stt_api_key,
-        model=stt_model,
-        language=stt_language,
-        base_url=base_url,
-    )
+    # Convert to temp WAV if needed (pyannote diarization requires audio
+    # samples to be divisible by 160000 (10s at 16kHz). Converting via
+    # librosa → soundfile avoids the "X samples instead of Y" ValueError.
+    temp_wav_path: Optional[str] = None
+    try:
+        audio_path_for_transcribe: str
+        input_audio_path = Path(input_audio)
+
+        if input_audio_path.suffix.lower() != ".wav":
+            import librosa
+            import soundfile as sf
+
+            print(f"  [convert] {input_audio_path.name} → temp WAV for diarization")
+            y, sr = librosa.load(str(input_audio_path), sr=48000, mono=True)
+            tmp = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
+            sf.write(tmp.name, y, sr, format="WAV")
+            temp_wav_path = tmp.name
+            audio_path_for_transcribe = tmp.name
+            print(f"  [convert] Converted to {Path(tmp.name).name} ({sr} Hz)")
+        else:
+            audio_path_for_transcribe = str(input_audio_path)
+
+        transcript_result = vt.transcribe(
+            audio_path=audio_path_for_transcribe,
+            provider=stt_provider,
+            api_key=stt_api_key,
+            model=stt_model,
+            language=stt_language,
+            base_url=base_url,
+        )
+    finally:
+        if temp_wav_path:
+            Path(temp_wav_path).unlink(missing_ok=True)
+            print(f"  [convert] Cleaned up temp WAV")
 
     processing_time = time.monotonic() - t_start
     print(

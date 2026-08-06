@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Speech-to-Text Web UI — Gradio
 
-簡易 WebUI 整合 workflows/speech-to-text.py 的完整流程：
+簡易 WebUI 整合 workflows/speech_to_text.py 的完整流程：
 - 上傳音訊檔案 → 執行 speaker diarization + STT → 下載 JSON 結果
 - Speaker 參考檔案管理（上傳、改名、刪除）
 
@@ -15,7 +15,6 @@ Usage:
 
 from __future__ import annotations
 
-import importlib.util
 import shutil
 import sys
 import threading
@@ -28,34 +27,8 @@ _project_root = Path(__file__).resolve().parent.parent
 if str(_project_root) not in sys.path:
     sys.path.insert(0, str(_project_root))
 
-# ── voicetag circular import 修復 ──
-_voicetag_pkg_dir = (
-    _project_root
-    / "serve"
-    / "voicetag"
-    / ".venv"
-    / "lib"
-    / "python3.10"
-    / "site-packages"
-    / "voicetag"
-)
-if _voicetag_pkg_dir.is_dir():
-    _spec = importlib.util.spec_from_file_location(
-        "voicetag", _voicetag_pkg_dir / "__init__.py"
-    )
-    _voicetag_mod = importlib.util.module_from_spec(_spec)
-    sys.modules["voicetag"] = _voicetag_mod
-    _spec.loader.exec_module(_voicetag_mod)
-
 # ── 匯入主工作流程 ──
-_s2t_module = importlib.util.spec_from_file_location(
-    "speech_to_text",
-    _project_root / "workflows" / "speech-to-text.py",
-)
-_s2t_mod = importlib.util.module_from_spec(_s2t_module)
-_s2t_module.loader.exec_module(_s2t_mod)
-discover_speakers = _s2t_mod.discover_speakers
-run_pipeline = _s2t_mod.run_pipeline
+from workflows.speech_to_text import discover_speakers, run_pipeline
 
 # ── 設定 ──
 DEFAULT_SPEAKER_REF_DIR = str(_project_root / "test-audio" / "speaker-ref")
@@ -92,7 +65,16 @@ def upload_speaker(speaker_ref_dir: str, files) -> tuple[list[list], str]:
     ref_dir = Path(speaker_ref_dir)
     ref_dir.mkdir(parents=True, exist_ok=True)
 
-    file_list = [files] if isinstance(files, str) else list(files)
+    # Gradio 6: files can be list of str, list of gr.FileResponse, or list of dict
+    file_list: list[str] = []
+    for item in [files] if isinstance(files, str) else list(files):
+        if isinstance(item, str):
+            file_list.append(item)
+        elif hasattr(item, "path"):  # gr.FileResponse
+            file_list.append(item.path)
+        elif isinstance(item, dict) and "path" in item:
+            file_list.append(item["path"])
+        # skip invalid
 
     uploaded = []
     skipped = []
@@ -205,7 +187,6 @@ Speaker 辨識 + 語音轉文字整合介面
             with gr.Tab("轉錄"):
                 audio_input = gr.File(
                     label="上傳音訊檔案",
-                    file_types=["audio/"],
                     type="filepath",
                 )
 
@@ -255,8 +236,6 @@ Speaker 辨識 + 語音轉文字整合介面
                         gr.Markdown("### 📤 上傳檔案")
                         upload_input = gr.File(
                             label="選擇音訊檔案",
-                            file_types=["audio/"],
-                            type="filepath",
                             file_count="multiple",
                         )
                         upload_btn = gr.Button(
@@ -299,32 +278,60 @@ Speaker 辨識 + 語音轉文字整合介面
 
             def run_in_thread():
                 try:
-                    import builtins
+                    # Use sys.stdout redirection instead of builtins.print
+                    # monkey-patching (which breaks numba's @infer_global(print)).
+                    import sys
 
-                    old_print = builtins.print
+                    class _Capture:
+                        def write(self, s):
+                            if s:
+                                for line in s.split("\n"):
+                                    if line:
+                                        log_buf.append(line)
 
-                    def capture(*args, **kwargs):
-                        msg = " ".join(str(a) for a in args) if args else ""
-                        log_buf.append(msg)
-                        if msg:
-                            old_print(msg, **kwargs)
+                        def flush(self):
+                            pass
 
-                    builtins.print = capture
+                        def isatty(self):
+                            return False
 
-                    result = run_pipeline(
-                        input_audio=audio_path,
-                        speaker_ref_dir=DEFAULT_SPEAKER_REF_DIR,
-                        output_json=output_json,
-                    )
+                    _capture = _Capture()
+                    _old_stdout = sys.stdout
+                    _old_stderr = sys.stderr
+                    sys.stdout = _capture
+                    sys.stderr = _capture
 
-                    log_buf.append(f"\n✅ 處理完成！輸出檔案：{output_json}")
-                    log_buf.append(f"   Segments: {len(result.get('segments', []))}")
-                    log_buf.append(f"   Speakers: {result.get('num_speakers', '?')}")
+                    try:
+                        result = run_pipeline(
+                            input_audio=audio_path,
+                            speaker_ref_dir=DEFAULT_SPEAKER_REF_DIR,
+                            output_json=output_json,
+                        )
+
+                        log_buf.append(f"\n✅ 處理完成！輸出檔案：{output_json}")
+                        log_buf.append(
+                            f"   Segments: {len(result.get('segments', []))}"
+                        )
+                        log_buf.append(
+                            f"   Speakers: {result.get('num_speakers', '?')}"
+                        )
+                    finally:
+                        sys.stdout = _old_stdout
+                        sys.stderr = _old_stderr
+
+                    # Print captured log for terminal visibility
+                    if log_buf:
+                        print("\n".join(log_buf))
                 except Exception as e:
                     log_buf.append(f"\n❌ 處理失敗：{e}")
                     import traceback
 
                     log_buf.append(traceback.format_exc())
+                    # Ensure stdout is restored for traceback printing
+                    try:
+                        print("\n".join(log_buf))
+                    except Exception:
+                        pass
                 finally:
                     done_event.set()
 

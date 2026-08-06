@@ -11,8 +11,10 @@ from api.service import SamAudioService
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Pre-load model on startup."""
-    print("[sam_audio_server] Loading SAM-Audio model...")
+    """Pre-load model on startup using the same device as the service."""
+    print(
+        f"[sam_audio_server] Loading SAM-Audio model on {SamAudioService.DEFAULT_DEVICE}..."
+    )
     _ensure_model(device=SamAudioService.DEFAULT_DEVICE)
     print("[sam_audio_server] Model loaded successfully")
     yield

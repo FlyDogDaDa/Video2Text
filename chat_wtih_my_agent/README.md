@@ -1,166 +1,242 @@
-# chat_wtih_my_agent — Conversation Index
+# Video2Text — 專案總覽
 
-Video2Text 專案的 agent 與 human 對話記錄。本目錄存放專案根目錄 `Video2Text/` 下開發歷程的完整記錄。
+## 專案目標
 
-## 專案結構提示
+將影片內容轉為結構化文字描述，使用 **Gemma-4-12B-it-qat-w4a16-ct** 進行視覺與音訊理解。
 
-| 項目 | 路徑 | 說明 |
-|------|------|------|
-| 專案根目錄（工作區） | `Video2Text/` | 所有 `cd` 指令的起點 |
-| 本目錄（對話記錄） | `Video2Text/chat_wtih_my_agent/` | 即此 README 所在 |
-| 原始碼 | `Video2Text/src/` | 包含 `pipeline/`, `utils/`, `types.py` 等 |
-| 入口腳本 | `Video2Text/main.py` | 控制台測試入口 |
-| 日誌記錄 | 本目錄（`*.md`） | 按 `count_date_type_topic.md` 命名 |
-| `cd` 參數 | `Video2Text` | **所有 terminal 指令的 `cd` 參數都必須指定為 `Video2Text`（工作區根目錄），指定錯誤會報 `was not in any of the project's worktrees`** |
+### 核心 Schema
 
-Video2Text 專案的 agent 與 human 對話記錄，涵蓋專案初始化、vLLM 框架選型與除錯、多模態模型驗證、影片切片工具實作，以及 FFmpeg 環境部署。
+每個影片切片（slice）輸出 JSON：
 
-## 大綱與最終狀態
-
-```
-[06-07] 專案初始化 → 框架選型（SGLang ↔ vLLM 來回）→ 確立 vLLM 為最終框架
-[06-08] 修復 flashinfer 崩潰 → 推論成功 → 系統環境稽核
-[06-09] 建立啟動腳本 → 修正 attention-backend 參數 → API 200 OK
-         ├─ 研究 vLLM 多模態模組結構（video/audio/image）
-         ├─ 發現 stable v0.22.1 不支援 video_url，圖片有 num_soft_tokens bug
-         ├─ 建立離線推論腳本 multimodal_infer.py（僅文字可用）
-         └─ 調查 fetch_video() 回傳值與 32 幀來源
-[06-09→10] 🔄 升級 nightly vLLM → 修復 num_soft_tokens bug → 四模態全部通過 ✅
-         ├─ 更正 Gemma-4-12B encoder-free 架構認知
-         ├─ 掃描磁碟空間 → 清理 55GB
-         └─ 規劃 NAS 搬移（待 NFS 掛載）
-[06-10] 實作 slice-utils 切片工具 → 重構為 PyAV 單一後端 + IOCacheVideo
-[06-10] 部署 FFmpeg/ffprobe 7.0.2 靜態執行檔至 runtime/
-[06-10] 研究 PyAV ↔ MoviePy 架構關聯性（參考文檔）
-[06-11] 模組重構與結構化輸出進階功能
-         ├─ Swarm structured extraction 研究（23）
-         ├─ SliceResult 扁平化重構（24）→ 五欄位、optional fields
-         ├─ vLLM delayed guided decoding offline 研究（25）
-         ├─ Gemma-4 影片時間戳記格式調查（26）
-         ├─ main.py 模組化重構 → 430→79 行，pipeline/ 分離（27）
-         ├─ 命名清理：slice→video, container→factory, load_bytes→create_bytes_io（28）
-         ├─ Delayed guided decoding 實驗 → thinking mode 失效（29）
-         └─ extract_structured() 兩階段 thinking 參數（30）
-[06-11] 策略定案 → 離線推理 → Server API 模式（31）→ 定海神針
+```json
+{
+  "start_at": 28.0,
+  "end_at": 58.0,
+  "visual": "畫面發生的事件描述",
+  "dialogue": [{"speaker": "...", "text": "..."}],
+  "sound": "背景音描述"
+}
 ```
 
-## 衝突資訊與轉折對照
-
-| 問題 | 初次發現 | 狀態 | 解決方式 |
-|------|----------|:----:|----------|
-| **影片功能** | stable v0.22.1 不支援 `video_url`（09） | ❌ | → 升級 nightly vLLM dev301（16）→ ✅ 四模態全部通過 |
-| **圖片 bug** | `'Gemma4UnifiedVisionConfig' object has no attribute 'num_soft_tokens'`（14） | ❌ | → nightly dev301 原生修復（16）→ ✅ |
-| **audio encoder** | 誤以為 Gemma-4-12B 沒有 audio encoder（15） | ❌ 認知錯誤 | → 更正：encoder-free 架構 ≠ 無 audio encoder（16）→ ✅ |
-| **flashinfer 崩潰** | `enforce_eager=True` 暫時解法（08） | ✅ 已適用 | → 最終改為 `--attention-backend TRITON_ATTN` 參數（11）|
-| **磁碟空間** | 467GB 已用 440GB（94%）（16） | ⚠️ | → `rm -rf .venv && uv cache clean` 釋放 55GB → 可用 61GB |
-| **後端選擇** | OpenCV + soundfile + PyAV 多後端（19） | ⚙️ | → 重構為 PyAV 單一後端 + IOCacheVideo（22）|
-| **模型命名** | `src/models.py`（2） | 🔀 | → 更名為 `src/types.py`（27）|
-| **main.py** | 430 行混雜測試+生產（19） | 🔀 | → 精簡為 79 行測試入口，pipeline/ 分離（27）|
-| **guided decoding** | delayed thinking + JSON 同時啟用（25） | ❌ | → thinking 從未觸發，改用兩階段 approach（29→30）|
-
-## 文件列表
-
-| # | 檔案 | 作者 | 日期 | 摘要 |
-|---|------|:----:|:----:|------|
-| 00 | [`00_2026_06_07_agent_project-initialization-and-vllm-setup.md`](./00_2026_06_07_agent_project-initialization-and-vllm-setup.md) | Agent | 06-07 | 專案初始化（`uv init`）、安裝 vLLM、建立 `.agent` 資料夾 |
-| 01 | [`01_2026_06_07_human_video2text-system-design.md`](./01_2026_06_07_human_video2text-system-design.md) | Human | 06-07 | 系統設計規格：schema、視窗處理模式（Sequential / Swarm）、Round 結構 |
-| 02 | [`02_2026_06_07_agent_structured-model-and-documentation.md`](./02_2026_06_07_agent_structured-model-and-documentation.md) | Agent | 06-07 | 建立 `src/models.py` Pydantic models（SliceResult 及其子結構） |
-| 03 | [`03_2026_06_07_docs_sglang-gemma4.md`](./03_2026_06_07_docs_sglang-gemma4.md) | Human | 06-07 | SGLang 官方文件索引（安裝、部署、呼叫、Benchmark） |
-| 04 | [`04_2026_06_07_docs_gemma4-12b-qat-w4a16.md`](./04_2026_06_07_docs_gemma4-12b-qat-w4a16.md) | Human | 06-07 | Gemma 4 12B QAT w4a16-ct 模型評估（規格、量化格式、Benchmark） |
-| 05 | [`05_2026_06_07_agent_sglang-installation.md`](./05_2026_06_07_agent_sglang-installation.md) | Agent | 06-07 | 安裝 SGLang 至專案，移除 vLLM（flashinfer 衝突），Python 3.12 定案 |
-| 06 | [`06_2026_06_07_agent_vllm-restore-for-gemma4.md`](./06_2026_06_07_agent_vllm-restore-for-gemma4.md) | Agent | 06-07 | 回退至 vLLM（SGLang 不支援 w4a16-ct），清理磁碟，確立最終框架 |
-| 07 | [`07_2026_06_07_agent_test-video-spec.md`](./07_2026_06_07_agent_test-video-spec.md) | Agent | 06-07 | 測試影片 `2026_05_11-19_18_26.mkv` 規格分析（57.7 分、60 FPS、207K 幀） |
-| 08 | [`08_2026_06_08_agent_gemma4-vllm-inference-fixes.md`](./08_2026_06_08_agent_gemma4-vllm-inference-fixes.md) | Agent | 06-08 | 修復 flashinfer 崩潰（`enforce_eager=True`）、修正影片路徑，推論成功 |
-| 09 | [`09_2026_06_08_agent_system-info-gathering.md`](./09_2026_06_08_agent_system-info-gathering.md) | Agent | 06-08 | 系統環境稽核（雙卡 GPU、框架版本、磁碟空間警報） |
-| 10 | [`10_2026_06_09_agent_vllm-launch-and-healthcheck.md`](./10_2026_06_09_agent_vllm-launch-and-healthcheck.md) | Agent | 06-09 | 建立啟動腳本 `launch_Gemma4-12b.sh` 與健康檢查 `block_me_with_file.sh`，修復 flashinfer 崩潰 |
-| 11 | [`11_2026_06_09_agent_fix-vllm-attention-backend-crash.md`](./11_2026_06_09_agent_fix-vllm-attention-backend-crash.md) | Agent | 06-09 | 修正 `--attention-backend` 參數值（`VLLM_ATTENTION_BACKEND` 不受支援 → `TRITON_ATTN`），API 測試 200 OK |
-| 12 | [`12_2026_06_09_agent_vllm-multimodal-video-research.md`](./12_2026_06_09_agent_vllm-multimodal-video-research.md) | Agent | 06-09 | vLLM 影片處理研究：API 格式、動態解析度、stable v0.22.1 不支援 video_url |
-| 13 | [`13_2026_06_09_agent_vllm-multimodal-modules-research.md`](./13_2026_06_09_agent_vllm-multimodal-modules-research.md) | Agent | 06-09 | 研究 `vllm.multimodal.video/audio/image` 模組結構，釐清線上 API vs 離線推理差異 |
-| 14 | [`14_2026_06_09_agent_vllm-multimodal-online-testing.md`](./14_2026_06_09_agent_vllm-multimodal-online-testing.md) | Agent | 06-09 | 線上 API 測試：文字 ✅、圖片 ❌ 500 bug、影片 ❌ 不支援 |
-| 15 | [`15_2026_06_09_agent_vllm-offline-inference-script.md`](./15_2026_06_09_agent_vllm-offline-inference-script.md) | Agent | 06-09 | 建立 `src/inference/multimodal_infer.py` 離線推論腳本（僅文字可用），更正 Gemma-4 賣點 |
-| 16 | [`16_2026_06_09_human_vllm-nightly-installation-and-storage-optimization.md`](./16_2026_06_09_human_vllm-nightly-installation-and-storage-optimization.md) | Human | 06-09 | 安裝 nightly vLLM dev301 修復 bug → 四模態全部通過 ✅，磁碟清理 55GB，NAS 搬移規劃 |
-| 17 | [`17_2026_06_09_agent_vllm-fetch-video-return-type-and-video-frame-count.md`](./17_2026_06_09_agent_vllm-fetch-video-return-type-and-video-frame-count.md) | Agent | 06-09 | 確認 `fetch_video()` 回傳格式，調查 `_VIDEO_MAX_FRAMES = 32` 來源 |
-| 18 | [`18_vllm_audio_extraction_logic.md`](./18_vllm_audio_extraction_logic.md) | Human | 06-09 | vLLM 音訊/影片預設行為調查（32 幀上限、音訊 30s 限制、無自動切分） |
-| 19 | [`19_2026_06_10_agent_slice-utils-implementation.md`](./19_2026_06_10_agent_slice-utils-implementation.md) | Agent | 06-10 | 實作 `src/utils/slice.py` 切片工具（視窗 30s + 2s 重疊、seek-buffer、range read、快取） |
-| 20 | [`20_2026_06_10_agent_ffmpeg-runtime-setup.md`](./20_2026_06_10_agent_ffmpeg-runtime-setup.md) | Agent | 06-10 | 部署 FFmpeg/ffprobe 7.0.2 靜態執行檔至 `runtime/` |
-| 21 | [`21_2026_06_10_docs_PyAV_and_MoviePy.md`](./21_2026_06_10_docs_PyAV_and_MoviePy.md) | Agent | 06-10 | PyAV ↔ MoviePy 架構關聯性深度研究（六層技術階梯） |
-| 22 | [`22_2026_06_10_agent_restructure-video-slicing-to-pyav.md`](./22_2026_06_10_agent_restructure-video-slicing-to-pyav.md) | Agent | 06-10 | 重構 slice.py：多後端 → PyAV 單一後端 + `IOCacheVideo`（691行 → 393行） |
-| 23 | [`23_2026_06_11_references_swarm-structured-extraction.md`](./23_2026_06_11_references_swarm-structured-extraction.md) | References | 06-11 | Swarm 結構化提取研究（參考文檔） |
-| 24 | [`24_2026_06_11_agent_refactor-slice-result-model.md`](./24_2026_06_11_agent_refactor-slice-result-model.md) | Agent | 06-11 | SliceResult 重構：nested → 扁平五欄位（start_at, end_at, visual, dialogue, sound） |
-| 25 | [`25_2026_06_11_agent_vllm-delayed-guided-decoding-offline.md`](./25_2026_06_11_agent_vllm-delayed-guided-decoding-offline.md) | Agent | 06-11 | vLLM delayed guided decoding offline 研究（reasoning_parser + StructuredOutputsParams 整合） |
-| 26 | [`26_2026_06_11_agent_gemma4-video-timestamp-format.md`](./26_2026_06_11_agent_gemma4-video-timestamp-format.md) | Agent | 06-11 | Gemma-4 影片時間戳記格式調查（`MM:SS` vs `[X.Xs]`） |
-| 27 | [`27_2026_06_11_agent_main-py-modularization-and-pipeline-extraction.md`](./27_2026_06_11_agent_main-py-modularization-and-pipeline-extraction.md) | Agent | 06-11 | main.py 模組化：430→79 行，pipeline/ 分離（loader, slicer, extractor），models.py→types.py |
-| 28 | [`28_2026_06_11_agent_naming-cleanup.md`](./28_2026_06_11_agent_naming-cleanup.md) | Agent | 06-11 | 命名清理：slice.py→video.py, container.py→factory.py, load_bytes→create_bytes_io |
-| 29 | [`29_2026_06_11_agent_experiment-delayed-guided-decoding.md`](./29_2026_06_11_agent_experiment-delayed-guided-decoding.md) | Agent | 06-11 | Delayed guided decoding 實驗：thinking mode 從未觸發（guided JSON 從 token 1 就 enforcing） |
-| 30 | [`30_2026_06_11_agent_extractor-thinking-parameters.md`](./30_2026_06_11_agent_extractor-thinking-parameters.md) | Agent | 06-11 | extract_structured() 兩階段 thinking 參數（thinking + thinking_max_tokens） |
-| 31 | [`31_2026_06_11_human_strategy-vllm-server-api-pattern.md`](./31_2026_06_11_human_strategy-vllm-server-api-pattern.md) | Human | 06-11 | 專案策略轉向：離線推理 → Server API 模式評估（定海神針） |
-
-## 關鍵決策時間軸
-
-```
-06-07  [初始化]  uv init → 安裝 vLLM
-06-07  [設計]   人類撰寫系統設計（schema、模式、Round）
-06-07  [探索]   評估 SGLang → 安裝成功
-06-07  [回退]   SGLang 不支援 w4a16-ct → 回退 vLLM ✅
-06-07  [驗證]   測試影片規格、frame extraction
-06-08  [修復]   flashinfer 崩潰 → enforce_eager → 推論成功 ✅
-06-08  [稽核]   系統環境全盤檢查
-06-09  [工具]   建立啟動腳本與健康檢查 shell script
-06-09  [修復]   --attention-backend TRITON_ATTN 取代環境變數，API 測試 200 OK
-06-09  [研究]   多模態模組結構、離線推論腳本、API 測試（文字✅ 圖片❌ 影片❌）
-06-09  [調查]   fetch_video() 回傳值、32 幀來源 (_VIDEO_MAX_FRAMES)
-🔀 06-09  [升級] nightly vLLM dev301 → 修復 num_soft_tokens + video_url → 四模態全部通過 ✅
-🔀 06-09  [更正] encoder-free ≠ 無 audio encoder，更新模型賣點
-🔀 06-09  [清理] rm -rf .venv && uv cache clean → 釋放 55GB
-06-10  [實作]   src/utils/slice.py 切片工具（視窗、seek-buffer、range read、快取）
-06-10  [部署]   FFmpeg 7.0.2 靜態執行檔 → runtime/
-06-10  [重構]   slice.py → PyAV 單一後端 + IOCacheVideo（691行 → 393行）
-06-10  [研究]   PyAV ↔ MoviePy 六層技術階梯參考文檔
-06-11  [研究]   Swarm 結構化提取（23）
-06-11  [重構]   SliceResult 扁平化：nested → 五欄位（24）
-06-11  [研究]   delayed guided decoding offline（25）
-06-11  [研究]   Gemma-4 時間戳記格式（26）
-06-11  [重構]   main.py 模組化：430→79 行，pipeline/ 分離，models.py→types.py（27）
-06-11  [清理]   命名修正：slice→video, container→factory, load_bytes→create_bytes_io（28）
-06-11  [實驗]   delayed guided decoding 失敗：thinking mode 被 guided JSON 擋住（29）
-06-11  [實作]   extract_structured() 兩階段 thinking 參數（30）
-06-11  [策略]   Server API 模式取代離線推理（31）→ 定海神針
-[06-11] 推理三變體實作與驗證（33）→ 4a/4b/4c 全部並行通過
-```
-
-## 當前可用功能總覽
-
-| 功能 | 狀態 | 備註 |
-|------|:----:|------|
-| vLLM server（OpenAI API） | ✅ | nightly dev301, TRITON_ATTN, port 8746 |
-| 純文字推論 | ✅ | stable |
-| 圖片推論 | ✅ | dev301 已修復 num_soft_tokens bug |
-| 影片推論 | ✅ | dev301 支援 video_url |
-| 音訊推論 | ✅ | dev301 支援 |
-| 結構化輸出 (guided JSON) | ⚠️ | offline 模式需手動 StructuredOutputsParams，Server 模式自動處理 |
-| 兩階段 thinking | ⚠️ | offline 模式 thinking 從未觸發（29）→ Server 模式 `--reasoning-parser` 原生支援 |
-| Delayed guided decoding | ❌ | offline 模式 thinking + JSON 無法同時啟用（29）→ Server 模式解決 |
-| **Server API 模式** | **🔄 規劃中** | **31 定義策略，待實作 client.py** |
-| 影片切片工具 | ✅ | `IOCacheVideo`（PyAV 單一後端）, `src/utils/video.py` |
-| FFmpeg/ffprobe | ✅ | 7.0.2 靜態執行檔 in `runtime/` |
-| SGLang | ❌ | 已移除（不支援 w4a16-ct）|
-
-## 參考路徑
-
-| 項目 | 路徑 |
-|------|------|
-| 專案根目錄（工作區） | `../` |
-| pyproject.toml | `../pyproject.toml` |
-| 資料模型 | `../src/types.py`（原 models.py，已更名） |
-| 推論腳本 | `08_2026_06_08_references_gemma4-vllm-inference-fixes/try_video.py` |
-| 離線推論 | `../src/inference/multimodal_infer.py` |
-| 主程式 | `../main.py`（430→79 行，已精簡） |
-| 影片切片工具 | `../src/utils/video.py`（IOCacheVideo, SliceParams）, `../src/utils/factory.py`（create_bytes_io）, `../src/utils/audio.py` |
-| 模型管线 | `../src/pipeline/` — loader.py, slicer.py, extractor.py |
-| FFmpeg 執行檔 | `../runtime/ffmpeg`, `../runtime/ffprobe` |
-| 啟動腳本 | `../src/vllm_launch/launch_Gemma4-12b.sh` |
-| 策略文件 | `31_2026_06_11_human_strategy-vllm-server-api-pattern.md`（離線 → Server API 轉向） |
+> **Window ＝ Slice**：設計文件稱「視窗」，程式碼用「slice」。30 秒視窗，滑動步長 = 視窗大小 - 重疊量。
 
 ---
 
-更新日期：2026-06-11
+## 最終架構（2026-06-12 定案）
+
+```
+┌─────────────────────────────────────────┐
+│              main.py                     │
+│  - slice_video() → list[SliceInput]     │
+│  - asyncio.gather(*tasks) 並行          │
+│  - 收集結果                             │
+└──────────────┬──────────────────────────┘
+               │ HTTP POST
+               ▼
+┌─────────────────────────────────────────┐
+│   vllm serve (:8746)                    │
+│   google/gemma-4-12B-it-qat-w4a16-ct    │
+│  ─────────────────────────────────────  │
+│  • 載入模型一次，永久可用               │
+│  • template + 多模態編碼                │
+│  • --reasoning-parser gemma4            │
+│  • --tool-call-parser gemma4            │
+└─────────────────────────────────────────┘
+```
+
+### 為什麼是 Server API 模式？
+
+| 維度 | 離線推理（淘汰） | Server API（採用） |
+|------|-----------------|-------------------|
+| 載入開銷 | 每次 20 秒 | 一次載入，永久可用 |
+| 多模態 bug | numpy array 格式不匹配 | `data:audio/wav;base64,...` 原生支援 |
+| video_url | ❌ stable 不支援 | ✅ nightly dev301 |
+| 並行 | 全部串列 | `asyncio.gather` 並行 |
+| guided decoding | 需手動 StructuredOutputsParams | vLLM 自動處理 |
+| reasoning 分離 | 需手動 parse_thinking_output | `--reasoning-parser` 自動 |
+| 部署 | 需 SSH 到 GPU 機器 | API 調用即可 |
+
+---
+
+## 請求策略：兩階段穩定輸出
+
+### 問題背景
+
+- `enable_thinking=True` + `response_format` 並用 → `reasoning=None`，JSON 截斷（#32）
+- `enable_thinking=True` + `tool_choice="required"` → `tool_calls=[]`（SDK 回傳 bug）（#35）
+- 兩階段注入推理 ≠ 原生思考（#34）
+
+### 最終方案
+
+```
+Phase 1: Free-form thinking
+  enable_thinking=True, tool_choice="none"
+  → 拿到完整 chain-of-thought + 自然語言描述
+
+Phase 2: Structured anchoring
+  enable_thinking=False, tool_choice="required"
+  → 帶第一輪輸出，強制工具呼叫，保證 JSON 格式
+```
+
+### 驗證結果（2026-06-12）
+
+用 `test_two_stage_output.py` 驗證通過：
+
+| Phase | 設定 | 結果 |
+|-------|------|------|
+| Phase 1 | thinking ✅, tool_choice=`none` | ✅ reasoning (2611 chars) + 自然語言 (993 chars) |
+| Phase 2 | thinking ❌, tool_choice=`required` | ✅ tool_call (8 relationships, clean JSON) |
+
+---
+
+## 已驗證能力
+
+| 能力 | 狀態 | 備註 |
+|------|:----:|------|
+| vLLM server（OpenAI API） | ✅ | nightly dev301, TRITON_ATTN, port 8746 |
+| 純文字推論 | ✅ | stable |
+| 圖片推論（base64） | ✅ | dev301 已修復 num_soft_tokens bug |
+| 音訊推論（base64 WAV） | ✅ | 原生支援 |
+| 影片推論（video_url） | ✅ | dev301 原生支援 |
+| thinking mode（單獨） | ✅ | `--reasoning-parser gemma4` 自動分離 |
+| Function Calling（無 thinking） | ✅ | `tool_choice="required"` 穩定 |
+| **兩階段 free-form → anchored** | ✅ | **生產環境策略** |
+| thinking + response_format 並用 | ❌ | `reasoning=None`，JSON 截斷 |
+| thinking + function calling 並用 | ❌ | `tool_calls=[]` SDK bug |
+| SGLang | ❌ | 不支援 w4a16-ct quantization |
+
+---
+
+## 專案結構
+
+```
+Video2Text/
+├── main.py                      # 入口（離線模式測試，待重構）
+├── pyproject.toml
+├── short_test.mp4               # 測試影片
+├── runtime/
+│   ├── ffmpeg                   # FFmpeg 7.0.2 靜態執行檔
+│   └── ffprobe
+├── src/
+│   ├── types.py                 # 資料模型（原 models.py）
+│   ├── pipeline/
+│   │   ├── loader.py            # 離線模型載入（待重構）
+│   │   ├── slicer.py            # 切片邏輯（待重構）
+│   │   └── extractor.py         # 結構化提取（待重構）
+│   ├── utils/
+│   │   ├── video.py             # IOCacheVideo（PyAV 單一後端）
+│   │   ├── factory.py           # create_bytes_io
+│   │   └── audio.py
+│   └── vllm_launch/
+│       └── launch_Gemma4-12b.sh # vLLM server 啟動腳本
+└── chat_wtih_my_agent/          # 開發日誌與策略文件
+```
+
+---
+
+## 開發日誌索引
+
+### 核心策略文件
+
+| 檔案 | 日期 | 摘要 |
+|------|------|------|
+| [`01_...-video2text-system-design.md`](./01_2026_06_07_human_video2text-system-design.md) | 06-07 | 系統設計：schema、Sequential / Swarm 模式 |
+| [`31_...-strategy-vllm-server-api-pattern.md`](./31_2026_06_11_human_strategy-vllm-server-api-pattern.md) | 06-11 | **策略定案：Server API 模式** |
+| [`37_...-strategy-summary-vllm-server-api-two-stage.md`](./37_2026_06_12_human_strategy-summary-vllm-server-api-two-stage.md) | 06-12 | **總結：兩階段穩定輸出策略** |
+| [`36_...-two-stage-free-form-anchored.md`](./36_2026_06_12_human_two-stage-free-form-anchored.md) | 06-12 | 兩階段策略詳細設計與驗證 |
+
+### 實作與測試
+
+| 檔案 | 日期 | 摘要 |
+|------|------|------|
+| [`00_...-project-initialization-and-vllm-setup.md`](./00_2026_06_07_agent_project-initialization-and-vllm-setup.md) | 06-07 | 專案初始化 |
+| [`06_...-vllm-restore-for-gemma4.md`](./06_2026_06_07_agent_vllm-restore-for-gemma4.md) | 06-07 | 確立 vLLM 框架 |
+| [`11_...-fix-vllm-attention-backend-crash.md`](./11_2026_06_09_agent_fix-vllm-attention-backend-crash.md) | 06-09 | `--attention-backend TRITON_ATTN`，API 200 OK |
+| [`16_...-vllm-nightly-installation-and-storage-optimization.md`](./16_2026_06_09_human_vllm-nightly-installation-and-storage-optimization.md) | 06-09 | nightly dev301 修復四模態 |
+| [`19_...-slice-utils-implementation.md`](./19_2026_06_10_agent_slice-utils-implementation.md) | 10-06 | 切片工具實作 |
+| [`22_...-restructure-video-slicing-to-pyav.md`](./22_2026_06_10_agent_restructure-video-slicing-to-pyav.md) | 10-06 | PyAV 單一後端 + IOCacheVideo |
+| [`27_...-main-py-modularization-and-pipeline-extraction.md`](./27_2026_06_11_agent_main-py-modularization-and-pipeline-extraction.md) | 11-06 | main.py 模組化 430→79 行 |
+| [`32_...-vllm-multimodal-openai-api-testing.md`](./32_2026_06_11_agent_vllm-multimodal-openai-api-testing.md) | 11-06 | thinking + structured output bug |
+| [`33_...-gemma4-reasoning-three-variants.md`](./33_2026_06_11_agent_vllm-gemma4-reasoning-three-variants.md) | 11-06 | 三變體並行跑通 |
+| [`34_...-vllm-reasoning-injection-equivalence.md`](./34_2026_06_11_agent_vllm-reasoning-injection-equivalence.md) | 11-06 | 兩階段注入推理 ≠ 原生思考 |
+| [`35_...-function-calling-test-refactoring.md`](./35_2026_06_12_agent_function-calling-test-refactoring.md) | 12-06 | Function Calling 測試與工具衝突發現 |
+| [`36_...-two-stage-free-form-guided.md`](./36_2026_06_12_agent_two-stage-free-form-guided.md) | 12-06 | 兩階段策略設計文檔 |
+
+### 測試腳本
+
+| 檔案 | 用途 |
+|------|------|
+| `31_.../test_two_stage_equivalence.py` | reasoning 注入等價性驗證 |
+| `31_.../how_to_use_vllm_multimodal_via_openai_api.py` | 多模態 demo（文字/圖片/音訊/推理） |
+| `31_.../test_function_calling.py` | Function Calling + Thinking 測試 |
+| `31_.../test_two_stage_output.py` | **兩階段策略驗證**（已驗證通過） |
+
+---
+
+## 決策時間軸
+
+```
+06-07  專案初始化 → vLLM 框架確定
+06-09  API 200 OK → nightly dev301 → 四模態全部通過
+06-10  PyAV 單一後端 + IOCacheVideo → FFmpeg 部署
+06-11  main.py 模組化 430→79 行
+06-11  Server API 模式定案（#31）
+06-11  thinking + structured output 發現 bug（#32）
+06-11  三變體驗證通過（#33）
+06-11  reasoning 注入不等價（#34）
+12-06  Function Calling 測試 → tool_choice 衝突發現（#35）
+12-06  兩階段策略驗證通過 ✅（#36, #37）
+```
+
+---
+
+## 已知限制與待辦
+
+| 項目 | 狀態 | 說明 |
+|------|------|------|
+| `main.py` Server API 重構 | ⏳ | 待實作，目前仍用離線模式 |
+| `extract_structured()` 兩階段實作 | ⏳ | 待寫入 `src/pipeline/extractor.py` |
+| 並行請求效能驗證 | ⏳ | 需測試 `asyncio.gather` 對多 slice 的加速比 |
+| Swarm Mode 整合 | 📋 | Round 1 兩階段 + Round 2+ context sandwich |
+| `max_num_seqs` 並行數限制 | ⚠️ | 當前 16，需 `asyncio.Semaphore` 控制 |
+| vLLM thinking + function calling bug | ❌ | `tool_calls=[]` SDK 回傳問題 |
+
+---
+
+## 快速開始
+
+### 啟動 vLLM Server
+
+```bash
+vllm serve google/gemma-4-12B-it-qat-w4a16-ct \
+  --reasoning-parser gemma4 \
+  --tool-call-parser gemma4 \
+  --enable-auto-tool-choice \
+  --attention-backend TRITON_ATTN \
+  --structured-outputs-config.enable_in_reasoning=True \
+  --enforce-eager
+```
+
+### 運行測試
+
+```bash
+# 測試多模態能力
+cd Video2Text
+uv run python chat_wtih_my_agent/31_2026_06_11_human_strategy-vllm-server-api-pattern/how_to_use_vllm_multimodal_via_openai_api.py
+
+# 測試 Function Calling
+uv run python chat_wtih_my_agent/31_2026_06_11_human_strategy-vllm-server-api-pattern/test_function_calling.py
+
+# 測試兩階段策略（已驗證通過）
+uv run python chat_wtih_my_agent/31_2026_06_11_human_strategy-vllm-server-api-pattern/test_two_stage_output.py
+```
+
+### 使用技巧
+
+- 所有 `cd` 參數都是 `Video2Text`（工作區根目錄）
+- vLLM server 需先啟動，測試腳本才會連上 `http://localhost:8746/v1`
+- 使用 `uv run` 進入虛擬環境
+
+---
+
+最後更新：2026-06-12

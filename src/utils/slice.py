@@ -63,6 +63,7 @@ class SliceParams:
     window_seconds: float = 30.0
     overlap_seconds: float = 2.0
     sample_fps: float = _DEFAULT_FPS
+    audio_streams: list[int] | None = None  # None = all audio streams
 
     @property
     def step_seconds(self) -> float:
@@ -306,14 +307,31 @@ def extract_audio_slice(
     start: float,
     end: float,
     max_clip_duration: float = 30.0,
+    audio_streams: list[int] | None = None,
 ) -> list[np.ndarray]:
     """Extract audio within [start, end), 16 kHz mono, clipped to ≤30 s.
 
-    Uses PyAV to open the video container, seek to the requested time
-    range, decode audio samples, and resample to 16 kHz.  Avoids loading
-    the entire file into memory.  Returns a list of 1-D ``np.ndarray``
-    of dtype ``float32``.  If the slice duration exceeds 30 s it is
-    split into ≤30 s segments.
+    Uses PyAV to open the video container, **decode every selected audio stream**
+    in the [start, end) window, sum them (with zero-padding), resample to
+    16 kHz mono, and peak-normalise to prevent clipping.
+
+    Parameters
+    ----------
+    path:
+        Path to the video/audio file.
+    start, end:
+        Time range in seconds (inclusive start, exclusive end).
+    max_clip_duration:
+        Maximum clip length in seconds.  Splits audio longer than this.
+    audio_streams:
+        Which audio streams to mix.  ``None`` means **all** streams.
+        Pass a list of indices, e.g. ``[0, 2]``, to mix specific tracks.
+
+    Returns
+    -------
+    A list of 1-D ``np.ndarray`` of dtype ``float32``.
+    If the total duration exceeds ``max_clip_duration`` it is split
+    into multiple clips of at most ``max_clip_duration`` seconds each.
     """
     if not _HAS_AV:
         raise ImportError("av (PyAV) is required for audio extraction from video.")
@@ -322,55 +340,72 @@ def extract_audio_slice(
         return []
 
     with _av.open(path) as container:
-        # Find the first audio stream
-        audio_stream = None
-        for stream in container.streams.audio:
-            audio_stream = stream
-            break
-        if audio_stream is None:
+        # Select which audio streams to decode
+        all_streams = list(container.streams.audio)
+        if not all_streams:
             return []
 
-        # Seek to start position
-        container.seek(int(start * 1_000_000), stream=audio_stream)
-
-        # Decode frames in [start, end)
-        all_samples: list[np.ndarray] = []
-        for frame in container.decode(audio_stream):
-            # frame.pts is in stream timebase; convert to seconds
-            frame_time = frame.pts * frame.time_base / _av.time_base
-            if frame_time is not None and frame_time >= end:
-                break
-            if frame_time is not None and frame_time >= start:
-                # frame.to_ndarray(): shape (num_samples, channels) float32 (fltp)
-                arr = frame.to_ndarray().astype(np.float32)
-                all_samples.append(arr)
-
-        if not all_samples:
+        selected_indices = (
+            audio_streams
+            if audio_streams is not None
+            else list(range(len(all_streams)))
+        )
+        streams_to_decode = [
+            all_streams[i] for i in selected_indices if i < len(all_streams)
+        ]
+        if not streams_to_decode:
             return []
 
-        # Each arr is (num_samples, channels). Mono-mix per frame, then concatenate.
-        mono = [arr.mean(axis=1) for arr in all_samples]  # list of (num_samples,)
-        raw_audio = np.concatenate(mono)
+        # Decode each selected stream independently
+        all_tracks: list[np.ndarray] = []
+        for stream in streams_to_decode:
+            frames_list: list[np.ndarray] = []
+            for frame in container.decode(stream):
+                if frame.pts is None:
+                    continue
+                # Convert PTS from stream timebase to seconds
+                frame_time = frame.pts * frame.time_base / _av.time_base
+                if frame_time >= end:
+                    break
+                if frame_time >= start:
+                    # frame.to_ndarray(): shape (num_samples, channels) float32
+                    frames_list.append(frame.to_ndarray().astype(np.float32))
 
-        # Get original sample rate
-        orig_sr = int(audio_stream.sample_rate)
+            if not frames_list:
+                continue
 
-    # Resample to 16 kHz if needed
-    if orig_sr != _AUDIO_SAMPLE_RATE:
-        n_out = int(len(raw_audio) * _AUDIO_SAMPLE_RATE / orig_sr)
-        raw_audio = _resample(raw_audio, n_out, axis=0)
+            # Mono-mix per frame, then concatenate along sample axis
+            mono = [arr.mean(axis=1) for arr in frames_list]  # each: (num_samples,)
+            track = np.concatenate(mono)
 
-    raw_audio = _normalize_audio(raw_audio)
+            # Resample to 16 kHz if the stream's native rate differs
+            if int(stream.sample_rate) != _AUDIO_SAMPLE_RATE:
+                n_out = int(len(track) * _AUDIO_SAMPLE_RATE / int(stream.sample_rate))
+                track = _resample(track, n_out, axis=0)
+
+            all_tracks.append(track)
+
+        if not all_tracks:
+            return []
+
+        # Zero-pad all tracks to the same length, then sum
+        max_len = max(len(t) for t in all_tracks)
+        summed = np.zeros(max_len, dtype=np.float32)
+        for t in all_tracks:
+            summed[: len(t)] += t
+
+        # Peak-normalise to [-1, 1] to prevent clipping when mixing multiple tracks
+        summed = _normalize_audio(summed)
 
     # If within limit, return as-is
-    if len(raw_audio) <= _AUDIO_SAMPLE_RATE * max_clip_duration:
-        return [raw_audio]
+    if len(summed) <= _AUDIO_SAMPLE_RATE * max_clip_duration:
+        return [summed]
 
     # Split into ≤30 s chunks.
     chunk_samples = int(_AUDIO_SAMPLE_RATE * max_clip_duration)
     chunks: list[np.ndarray] = []
-    for i in range(0, len(raw_audio), chunk_samples):
-        chunks.append(raw_audio[i : i + chunk_samples])
+    for i in range(0, len(summed), chunk_samples):
+        chunks.append(summed[i : i + chunk_samples])
     return chunks
 
 
@@ -512,6 +547,7 @@ class SliceStore:
         end: float,
         max_frames: int = _VIDEO_MAX_FRAMES,
         max_clip_duration: float = 30.0,
+        audio_streams: list[int] | None = None,
     ) -> SliceSource:
         """Return a ``SliceSource`` for the time range [start, end)."""
         # Ensure caches

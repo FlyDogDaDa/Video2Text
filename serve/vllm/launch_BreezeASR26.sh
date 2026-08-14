@@ -5,6 +5,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}")" && pwd )"
 
 # enter virtual environment
 source "$SCRIPT_DIR/.venv/bin/activate"
+export VIRTUAL_ENV=$SCRIPT_DIR/.venv
 
 # load .env for HF_TOKEN, etc.
 set -a; source "$SCRIPT_DIR/.env"; set +a
@@ -22,7 +23,7 @@ echo "TP_SIZE: $TP_SIZE"
 echo "GPU_MEM_UTIL: $GPU_MEM_UTIL"
 echo "================================"
 
-vllm serve "MediaTek-Research/Breeze-ASR-26" \
+uv run vllm serve "MediaTek-Research/Breeze-ASR-26" \
   --max-model-len 448 \
   --max-num-batched-tokens 1500 \
   --tensor-parallel-size "$TP_SIZE" \

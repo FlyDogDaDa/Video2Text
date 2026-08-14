@@ -6,12 +6,12 @@ status: final
 tags: [vllm, gemma4, fetch_video, video-frame-count, _VIDEO_MAX_FRAMES]
 ---
 
-# `vllm.multimodal.utils.fetch_video` 回傳值確認 & 32 幀採樣來源調查
+# `vllm.multimodal.utils.fetch_video` 回傳值確認 & 32 幀取樣來源調查
 
 ## What
 
 1. 確認 `fetch_video()` 回傳值的完整結構
-2. 調查 32 幀採樣數量的控制來源
+2. 調查 32 幀取樣數量的控制來源
 
 ## Why
 
@@ -42,15 +42,15 @@ fetch_video(video_url) -> tuple[NDArray, dict]
 | `fps` | `60.0` | 影片幀率 |
 | `duration` | `3463.08` | 影片長度（秒）= ~57.7 分鐘 |
 | `video_backend` | `opencv` | 讀取後端 |
-| `frames_indices` | `[0, 6702, 13405, ...]` | 被採樣的 32 個幀索引（等間距） |
-| `do_sample_frames` | `False` | 是否啟用了自定義幀採樣（預設值） |
+| `frames_indices` | `[0, 6702, 13405, ...]` | 被取樣的 32 個幀索引（等間距） |
+| `do_sample_frames` | `False` | 是否啟用了自定義幀取樣（預設值） |
 
 ### 2. 計算驗證
 
-- **幀間隔** = 207785 / 32 ≈ 6493 幀（等間距採樣）
+- **幀間隔** = 207785 / 32 ≈ 6493 幀（等間距取樣）
 - **每幀時長** = 1 / 60 ≈ 0.017 秒
 - **總時長** = 207785 / 60 ≈ 3463 秒 ≈ 57.7 分鐘
-- **採樣率** = 57.7 分鐘 / 32 幀 ≈ 每 1.8 分鐘取一幀
+- **取樣率** = 57.7 分鐘 / 32 幀 ≈ 每 1.8 分鐘取一幀
 
 ### 3. 32 幀來源 — 寫死在 vLLM Gemma4 模型檔案
 

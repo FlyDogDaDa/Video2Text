@@ -6,11 +6,11 @@ status: final
 tags: [tse, target-speaker-extraction, voiceprint, clearervoice, quarkaudio-unise, meanflow]
 ---
 
-# TSE（Target Speaker Extraction）可商用模型调研
+# TSE（Target Speaker Extraction）可商用模型調研
 
 ## What
 
-系統性搜尋並比較可商用、本地運行的 Target Speaker Extraction 模型。採用「找到一個後再找更新更好的」策略，逐層遞進評估。
+系統性搜尋並比較可商用、本地執行的 Target Speaker Extraction 模型。採用「找到一個後再找更新更好的」策略，逐層遞進評估。
 
 ## Why
 
@@ -27,7 +27,7 @@ tags: [tse, target-speaker-extraction, voiceprint, clearervoice, quarkaudio-unis
 | 維度 | 說明 |
 |------|------|
 | **授權** | 必須可商用（Apache 2.0 / MIT / BSD） |
-| **本地運行** | 可離線部署，不需雲端 API |
+| **本地執行** | 可離線部署，不需雲端 API |
 | **TSE 支援** | 輸入參考音訊（enrollment），輸出目標說話人分離結果 |
 | **預訓練權重** | 是否提供可直接使用的權重 |
 | **成熟度** | 星數、commits、社群規模 |
@@ -46,7 +46,7 @@ tags: [tse, target-speaker-extraction, voiceprint, clearervoice, quarkaudio-unis
 搜尋層級 5 → WeSep（網易, MIT, 完整工具鏈）
 ```
 
-### 排除項目（不可商用）
+### 排除專案（不可商用）
 
 | 模型 | 排除原因 |
 |------|----------|
@@ -76,7 +76,7 @@ tags: [tse, target-speaker-extraction, voiceprint, clearervoice, quarkaudio-unis
 - 兩階段推理：WavLM 特徵提取 → LM 自迴歸生成 token → BiCodec 重建波形
 - 統一框架：一個模型處理 SE、SR、TSE、SS、VC、Audio Editing 等 8+ 任務
 - 需手動下載 BiCodec（從 Spark-TTS-0.5B）+ WavLM-Large.pt
-- 5 秒分段處理，enroll_duration 參數控制參考音訊長度
+- 5 秒分段處理，enroll_duration 引數控制參考音訊長度
 
 #### MeanFlow-TSE
 - Flow Matching 生成式架構，單步推理（超低延遲）

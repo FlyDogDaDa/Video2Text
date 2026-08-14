@@ -4,7 +4,7 @@ import re
 
 import requests
 
-# 設定參數
+# 設定引數
 AUDIO_FILE = "intro_voice_cover.wav"
 ASR_URL = "http://localhost:8750/v1/audio/transcriptions"
 ALIGNER_URL = "http://localhost:8752/pooling"
@@ -25,7 +25,7 @@ def main():
         print(f"錯誤：在當前目錄找不到音檔 {AUDIO_FILE}")
         return
     except requests.exceptions.ConnectionError:
-        print(f"錯誤：無法連接到 ASR 伺服器 ({ASR_URL})，請確認 Port 8750 服務已開啟。")
+        print(f"錯誤：無法連線到 ASR 伺服器 ({ASR_URL})，請確認 Port 8750 服務已開啟。")
         return
 
     if asr_response.status_code != 200:
@@ -55,7 +55,7 @@ def main():
     align_prompt = f"<|audio_start|><|audio_pad|><|audio_end|>{prompt_body}"
 
     # -------------------------------------------------------------
-    # 第三步：將音檔轉為 Base64，並發送至對齊模型 (Port 8752)
+    # 第三步：將音檔轉為 Base64，並傳送至對齊模型 (Port 8752)
     # -------------------------------------------------------------
     print("【第三步】正在將音檔與 Prompt 送往對齊模型 (Qwen3-ForcedAligner)...")
 
@@ -85,7 +85,7 @@ def main():
         align_response = requests.post(ALIGNER_URL, headers=headers, json=align_payload)
     except requests.exceptions.ConnectionError:
         print(
-            f"錯誤：無法連接到對齊伺服器 ({ALIGNER_URL})，請確認 Port 8752 服務已開啟。"
+            f"錯誤：無法連線到對齊伺服器 ({ALIGNER_URL})，請確認 Port 8752 服務已開啟。"
         )
         return
 
@@ -99,7 +99,7 @@ def main():
     import numpy as np
 
     align_result = np.array(align_result)
-    print("🎉 對齊服務呼叫成功！以下為模型回傳結果（Pooling 數據）：")
+    print("🎉 對齊服務呼叫成功！以下為模型回傳結果（Pooling 資料）：")
     print(align_result.argmax(axis=1))
     # print(json.dumps(len(align_result), indent=2, ensure_ascii=False))
 

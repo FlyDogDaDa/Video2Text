@@ -29,9 +29,9 @@ tags: [vllm, guided-decoding, reasoning, gemma4, structured-output, experimental
 
 ### ✅ 成功部分
 
-| 項目 | 結果 |
+| 專案 | 結果 |
 |------|------|
-| `reasoning_parser` 參數載入 | ✅ Engine 正確識別 `reasoning_parser='gemma4'` |
+| `reasoning_parser` 引數載入 | ✅ Engine 正確識別 `reasoning_parser='gemma4'` |
 | `StructuredOutputsParams` | ✅ JSON 輸出完全符合 schema |
 | Pydantic 驗證 | ✅ `SliceResult.model_validate_json()` 通過 |
 | `parse_thinking_output` | ✅ 可用，回傳 dict 格式（非 named tuple） |
@@ -61,11 +61,11 @@ structured_outputs_config=StructuredOutputsConfig(
 1. xgrammar 的 guided JSON grammar 從 token 1 就開始強制 JSON 結構
 2. 這擋住了模型輸出思考標籤（如 `</think>`）的空間
 3. `enable_in_reasoning=False` 表示預設不啟用 reasoning 內的結構化輸出
-4. 即使 server 模式有 `--structured-outputs-config.enable_in_reasoning=True`，offline 模式目前無對應參數
+4. 即使 server 模式有 `--structured-outputs-config.enable_in_reasoning=True`，offline 模式目前無對應引數
 
 ## Conclusion
 
-- **可以同時傳兩個參數**（不會 crash）
+- **可以同時傳兩個引數**（不會 crash）
 - **但 thinking 不會實際產生**——guided JSON 從 token 1 就開始 enforcing
 - **這表示 delayed guided decoding 在 Gemma-4 上不生效**（或尚未實作完成）
 
@@ -78,5 +78,5 @@ structured_outputs_config=StructuredOutputsConfig(
 ## References
 
 - [src/types.py](../src/types.py) — `SliceResult` 模型
-- [test_vllm_delayed_guided_decoding.py](../25_2026_06_11_references_vllm-delayed-guided-decoding-offline/test_vllm_delayed_guided_decoding.py) — 測試腳本（已歸檔至 #25 references）
+- [test_vllm_delayed_guided_decoding.py](../25_2026_06_11_references_vllm-delayed-guided-decoding-offline/test_vllm_delayed_guided_decoding.py) — 測試指令碼（已歸檔至 #25 references）
 - [vLLM Structured Outputs docs](https://docs.vllm.ai/en/latest/features/structured_outputs.html)

@@ -10,15 +10,15 @@ tags: [git, branch-management, history-rewrite, legacy-backup]
 
 ## What
 
-將 `main` 分支歷史重構成線性干净的初始版本，把舊主線完整歷史移至 `legacy/` 分支，建立 `refactor/rewrite` 作為開發主分支，並制定未來分支開發流程。
+將 `main` 分支歷史重構成線性乾淨的初始版本，把舊主線完整歷史移至 `legacy/` 分支，建立 `refactor/rewrite` 作為開發主分支，並制定未來分支開發流程。
 
 ## Why
 
-之前的 `main` 分支累積了許多初期開發的 commits（含 merge commit、文件更新、實驗性變更），歷史雜亂。為了建立清晰的專案起點與未來開發流程，需要：
+之前的 `main` 分支累積了許多初期開發的 commits（含 merge commit、檔案更新、實驗性變更），歷史雜亂。為了建立清晰的專案起點與未來開發流程，需要：
 
 1. `main` 只保留專案初始化與新開發的線性歷史
 2. 舊歷史完整保留於 `legacy/*` 分支，供考古回溯
-3. 建立 `refactor/rewrite` 作為長周期開發分支
+3. 建立 `refactor/rewrite` 作為長週期開發分支
 4. 制定新的分支策略：新功能 → 大分支 → 子分支（保留完整足跡）→ 父分支 → main
 
 ## How
@@ -57,7 +57,7 @@ git branch legacy/sam-audio ae15a29    # SAM-Audio 微服務軌跡
 
 #### 階段三：重塑 Main 歷史
 
-核心操作：使用 Python 腳本 + `git commit-tree` 重建 `refactor/rewrite` 的 commit chain。
+核心操作：使用 Python 指令碼 + `git commit-tree` 重建 `refactor/rewrite` 的 commit chain。
 
 **原因**：`refactor/rewrite` 與 `main` 沒有共同祖先（tree 完全不同），`git rebase --onto` 會產生衝突，`cherry-pick --root` 則因 root commit 的 tree 與 main 相同而被視為空提交。
 
@@ -73,13 +73,13 @@ git push origin refactor/rewrite --force-with-lease # 88d56a2 取代 31d7d51
 #### 階段五：清理
 
 ```bash
-git branch -D refactor/rewrite-new   # 删除残留分支
-rm reparent.py                        # 删除腳本
+git branch -D refactor/rewrite-new   # 刪除殘留分支
+rm reparent.py                        # 刪除指令碼
 ```
 
 ### 驗證結果
 
-| 檢查項目 | 結果 |
+| 檢查專案 | 結果 |
 |---------|------|
 | `main` 只有 2 commits | ✅ `029f9af` → `9591a45` |
 | `refactor/rewrite` 是 main 後代 | ✅ `merge-base --is-ancestor` 通過 |

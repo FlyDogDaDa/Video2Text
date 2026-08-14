@@ -19,13 +19,13 @@ tags: [system-info, gpu, environment-audit]
 1. GPU 硬體規格是否足以執行量化多模態模型（12GB × 2 雙卡）
 2. 各依賴框架版本是否相容
 3. 系統資源是否足夠（特別是磁碟空間）
-4. 為後續效能優化（CUDA graph、TRITON_ATTN）提供基準數據
+4. 為後續效能最佳化（CUDA graph、TRITON_ATTN）提供基準資料
 
 ## How
 
 執行多項系統偵測命令：
 
-| 項目 | 工具/命令 |
+| 專案 | 工具/命令 |
 |------|-----------|
 | 作業系統 | `uname -a` + `/etc/os-release` |
 | Python | `python --version` |
@@ -74,4 +74,4 @@ tags: [system-info, gpu, environment-audit]
 
 - [08_2026_06_08_agent_gemma4-vllm-inference-fixes.md](./08_2026_06_08_agent_gemma4-vllm-inference-fixes.md) — 上一次推論修復記錄
 - [pyproject.toml](../../pyproject.toml) — 依賴版本定義
-- [try_video.py](08_2026_06_08_references_gemma4-vllm-inference-fixes/try_video.py) — 當前可用推論腳本
+- [try_video.py](08_2026_06_08_references_gemma4-vllm-inference-fixes/try_video.py) — 當前可用推論指令碼

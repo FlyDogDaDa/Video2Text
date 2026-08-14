@@ -6,7 +6,7 @@ status: final
 tags: [vllm, attention-backend, triton, flashinfer, fix, crash]
 ---
 
-# 修復 vLLM attention-backend 參數錯誤導致伺服器崩潰
+# 修復 vLLM attention-backend 引數錯誤導致伺服器崩潰
 
 ## What
 
@@ -18,7 +18,7 @@ tags: [vllm, attention-backend, triton, flashinfer, fix, crash]
 
 ### 問題一：`VLLM_ATTENTION_BACKEND` 環境變數被忽略
 
-啟動腳本第 10 行設定 `export VLLM_ATTENTION_BACKEND=triton`，但 vLLM v0.22.1 **不支援** 這個環境變數，log 中出現警告：
+啟動指令碼第 10 行設定 `export VLLM_ATTENTION_BACKEND=triton`，但 vLLM v0.22.1 **不支援** 這個環境變數，log 中出現警告：
 
 ```
 WARNING ... Unknown vLLM environment variable: VLLM_ATTENTION_BACKEND
@@ -32,9 +32,9 @@ RuntimeError: Unsupported max_mma_kv: 0
 
 FlashInfer 的 MHA KV head 數為 0（Gemma-4 的注意力結構特性），導致崩潰。
 
-### 問題二：舊 vLLM 實例佔滿 VRAM
+### 問題二：舊 vLLM 例項佔滿 VRAM
 
-系統中已有一個從 `screen -S run_vllm_gemma` 啟動的舊 vLLM 實例正在執行，兩張 GPU（A2000 + 4070 SUPER）各已使用約 11 GiB / 12 GiB。新實例啟動時偵測到 VRAM 不足：
+系統中已有一個從 `screen -S run_vllm_gemma` 啟動的舊 vLLM 例項正在執行，兩張 GPU（A2000 + 4070 SUPER）各已使用約 11 GiB / 12 GiB。新例項啟動時偵測到 VRAM 不足：
 
 ```
 ValueError: Free memory on device cuda:1 (0.54/11.59 GiB)
@@ -49,7 +49,7 @@ on startup is less than desired GPU memory utilization (0.9, 10.43 GiB).
 -export VLLM_ATTENTION_BACKEND=triton
 ```
 
-**改為** 使用 vLLM CLI 的 `--attention-backend` 參數：
+**改為** 使用 vLLM CLI 的 `--attention-backend` 引數：
 
 ```diff
 +  --attention-backend TRITON_ATTN \
@@ -57,7 +57,7 @@ on startup is less than desired GPU memory utilization (0.9, 10.43 GiB).
 
 經過三次嘗試確定正確值：
 
-| 嘗試 | 參數值 | 結果 |
+| 嘗試 | 引數值 | 結果 |
 |------|--------|------|
 | 1 | `triton` | `ValueError: Unknown attention backend: 'TRITON'` |
 | 2 | `triton-attn` | `ValueError: Unknown attention backend: 'TRITON-ATTN'` |
@@ -65,9 +65,9 @@ on startup is less than desired GPU memory utilization (0.9, 10.43 GiB).
 
 從 vLLM 原始碼 `vllm/v1/attention/backends/registry.py` 確認 `AttentionBackendEnum` 的成員為 `TRITON_ATTN`（大寫 + 底線）。
 
-### 2. 清理舊 vLLM 實例
+### 2. 清理舊 vLLM 例項
 
-停掉舊 vLLM 實例並 kill 剩餘的 vllm processes，確認兩張 GPU VRAM 歸零（A2000: 1 MiB used, 4070 SUPER: 5 MiB used）。
+停掉舊 vLLM 例項並 kill 剩餘的 vllm processes，確認兩張 GPU VRAM 歸零（A2000: 1 MiB used, 4070 SUPER: 5 MiB used）。
 
 ### 3. 以 `screen` 啟動 + 外部阻塞等待 + API 測試
 
@@ -84,7 +84,7 @@ bash src/vllm_launch/block_me_with_file.sh vllm.log && bash src/vllm_launch/test
 
 ## Follow-up
 
-- [ ] 將修復後的啟動腳本加入 `screen` 自動重啟機制（取代現有的 `run_vllm_gemma` screen session）
+- [ ] 將修復後的啟動指令碼加入 `screen` 自動重啟機制（取代現有的 `run_vllm_gemma` screen session）
 - [ ] 確認 Triton attention backend 的效能是否可接受（對比 FlashAttention）
 - [ ] 測試 256K context window 在 TRITON_ATTN backend 上的 VRAM 使用
 

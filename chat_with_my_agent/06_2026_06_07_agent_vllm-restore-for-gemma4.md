@@ -23,7 +23,7 @@ tags: [vllm, gemma4, compressed-tensors, video2text, gpu-restriction]
 | **vLLM** | ✅ 原生設計 | ✅ 支援 | ✅ 量化後 ~6-8GB |
 | **SGLang** | ❌ 不支援此格式 | ✅ 支援 | ❌ bf16 需 ~24GB |
 
-SGLang 的 QAT 支援僅針對 `qat-q4_0-unquantized`（未量化 BF16，11.95B 參數全量載入），**無法使用壓縮格式**。
+SGLang 的 QAT 支援僅針對 `qat-q4_0-unquantized`（未量化 BF16，11.95B 引數全量載入），**無法使用壓縮格式**。
 
 Gemma 4 12B QAT w4a16-ct 在 Hugging Face 上明確標註：
 > *"QAT checkpoints serialized in the compressed-tensors format for native, optimized inference with vLLM."*

@@ -27,7 +27,7 @@ tags:
 
 這兩個 breaking change 都讓 3.x 的 pyannote 無法正常運作。
 
-`pyannote.audio` 4.x 已修正 API（改用 `token=` 參數），但需要：
+`pyannote.audio` 4.x 已修正 API（改用 `token=` 引數），但需要：
 - `torchcodec` 讀音訊檔（3.x 用 `torchaudio`）
 - `torchcodec` 需要 CUDA 版 PyTorch
 
@@ -79,11 +79,11 @@ uv sync --project webuis
 
 ## Follow-up
 
-- 測試結果：0 segments detected（音訊檔可能沒有語音/或 diarization 參數需調整）
+- 測試結果：0 segments detected（音訊檔可能沒有語音/或 diarization 引數需調整）
 - 後續需確認：
   - 音訊檔是否有語音內容？
   - 是否需要先註冊 speaker reference audio？
-  - HF token 權限是否足夠下載 diarization model？
+  - HF token 許可權是否足夠下載 diarization model？
 
 ## References
 

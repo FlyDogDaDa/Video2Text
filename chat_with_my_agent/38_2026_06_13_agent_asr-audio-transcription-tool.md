@@ -12,7 +12,7 @@ tags: [vllm, breeze-asr-26, transcription, openai-api, audio-processing]
 
 2026-06-13
 
-## 工作項目
+## 工作專案
 
 建立一個 ASR 音訊轉錄工具，讓使用者可以透過 OpenAI-compatible API 呼叫 vLLM server 上的 Breeze-ASR-26 模型，進行音訊轉錄。
 
@@ -27,7 +27,7 @@ tags: [vllm, breeze-asr-26, transcription, openai-api, audio-processing]
 **問題：** 原本假設 Breeze-ASR-26 可以像 Gemma-4 一樣用 chat.completions + multimodal 呼叫。
 
 **研究過程：**
-- 先查 vLLM 官方文件 → 發現 vLLM 支援 speech-to-text via `/v1/audio/transcriptions`
+- 先查 vLLM 官方檔案 → 發現 vLLM 支援 speech-to-text via `/v1/audio/transcriptions`
 - 查 vLLM blog 文章 → 確認 Whisper 系列模型需要 `--task transcription` flag
 - 檢查 vLLM 版本（0.22.1rc1）→ 發現這個版本還不支援 `--task transcription`
 - 直接 curl 測試 → 確認伺服器已經在跑，`/v1/audio/transcriptions` 可以正常運作
@@ -60,11 +60,11 @@ tags: [vllm, breeze-asr-26, transcription, openai-api, audio-processing]
 
 ## 實作細節
 
-### 核心組件
+### 核心元件
 
 - `chat_wtih_my_agent/38_2026_06_13_asr_audio_transcription/asr_transcribe.py`
 
-### 類別與函數
+### 類別與函式
 
 - **`BreezeASRClient`**: 封裝 `/v1/audio/transcriptions` API 呼叫
   - `transcribe(audio_path, language, prompt)` → `TranscriptionResult`
@@ -136,7 +136,7 @@ uv run -- python asr_transcribe.py intro_voice_cover.wav --no-launch
 
 ## 參考
 
-- [vLLM Speech-to-Text 文件](https://docs.vllm.ai/en/latest/contributing/model/transcription/)
+- [vLLM Speech-to-Text 檔案](https://docs.vllm.ai/en/latest/contributing/model/transcription/)
 - [vLLM Whisper 實作範例](https://davidgao7.github.io/posts/vllm-v1-whisper-transcription/)
 - [Breeze-ASR-26 HuggingFace](https://huggingface.co/MediaTek-Research/Breeze-ASR-26)
 - `src/vllm_launch/launch_BreezeASR26.sh`: vLLM launch script

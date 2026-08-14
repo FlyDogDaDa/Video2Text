@@ -6,25 +6,25 @@ status: final
 tags: [voicetag, long-audio, padding-fix, bug-fix, env-loader]
 ---
 
-# VoiceTag 移除多餘 padding、修復 .env 載入、長音訊處理文件
+# VoiceTag 移除多餘 padding、修復 .env 載入、長音訊處理檔案
 
 ## What
 
 1. 移除 `voicetag_core.py:identify()` 中不必要的 10s audio padding
-2. 修復 `.env` 路徑解析 bug（`Path.resolve() / "../.env"` 無法正确 `exists()`）
+2. 修復 `.env` 路徑解析 bug（`Path.resolve() / "../.env"` 無法正確 `exists()`）
 3. 修復 `workflows/voicetag.py` 中 `OverlapSegment` 無 `confidence` 屬性的 bug
 4. 更新 `.env.example` 加入 gated model 授權連結
 5. 更新 `README.md` 加入長音訊支援說明
 
 ## Why
 
-**Padding 移除**：VoiceTag 的 `Diarizer.diarize()` 直接傳檔案路徑給 pyannote Pipeline，pyannote 3.x 原生使用 30s sliding window with 15s stride 處理任意長度音訊。我們自己 padding 是多余的，而且導致 `audio_duration` 不準確、segment 包含 padding 部分。
+**Padding 移除**：VoiceTag 的 `Diarizer.diarize()` 直接傳檔案路徑給 pyannote Pipeline，pyannote 3.x 原生使用 30s sliding window with 15s stride 處理任意長度音訊。我們自己 padding 是多餘的，而且導致 `audio_duration` 不準確、segment 包含 padding 部分。
 
 **.env 路徑 bug**：`Path(__file__).resolve() / "../.env"` 在 Linux 上 `exists()` 回傳 False，因為 `..` 在中間時不會被自動 canonicalize。改為 `Path(__file__).resolve().parent / ".env"`。
 
 **OverlapSegment bug**：`OverlapSegment` Pydantic model 沒有 `confidence` 欄位，只有 `SpeakerSegment` 有。直接存取會拋 `AttributeError`。
 
-**Gated model 連結**：用戶需要知道要接受哪些模型的授權才能使用 pyannote。
+**Gated model 連結**：使用者需要知道要接受哪些模型的授權才能使用 pyannote。
 
 ## How
 
@@ -94,7 +94,7 @@ for seg in result.segments:
 ### 5. 更新 `README.md`
 
 - 修正 CLI 指令（`-m workflows.voicetag` → `workflows/voicetag.py`）
-- 移除不存在的 `--threshold` 參數
+- 移除不存在的 `--threshold` 引數
 - 新增「長音訊支援」章節，說明 pyannote 30s sliding window 機制
 
 ## Follow-up

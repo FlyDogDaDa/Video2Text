@@ -9,7 +9,7 @@ tags: [prototype, video2text, pipeline, vllm, asyncio, gemma4]
 # 實作計畫：Video2Text 自動化處理原型機 (Prototyper)
 
 ## 1. 專案目標
-建立一個端到端的自動化腳本 `prototyper.py`，能夠將單一影片檔案轉換為高質量的長片總結。該腳本將包含多模態內容提取、去重清洗、視覺與語音內容對齊，並最終產出結構化的總結文件。
+建立一個端到端的自動化指令碼 `prototyper.py`，能夠將單一影片檔案轉換為高質量的長片總結。該指令碼將包含多模態內容提取、去重清洗、視覺與語音內容對齊，並最終產出結構化的總結檔案。
 
 ## 2. 技術架構與環境
 - **模型**: Gemma-4-12B-it-qat-w4a16-ct
@@ -21,7 +21,7 @@ tags: [prototype, video2text, pipeline, vllm, asyncio, gemma4]
 
 ### 階段一：逐字稿提取與清洗 (Audio/Speech Task)
 1.  **影片切片 (Slicing)**:
-    *   讀取影片並按 30 秒窗口、15 秒重疊進行切分。
+    *   讀取影片並按 30 秒視窗、15 秒重疊進行切分。
 2.  **逐字稿轉錄 (Transcription)**:
     *   呼叫 VLLM API 使用 `enable_thinking=True` 並搭配 `tool_choice="none"`。
     *   目的：獲取包含完整思考過程的高品質逐字稿。
@@ -34,15 +34,15 @@ tags: [prototype, video2text, pipeline, vllm, asyncio, gemma4]
 
 ### 階段二：視覺內容提取 (Visual Task)
 1.  **影片切片 (Slicing)**:
-    *   按 10 秒窗口、5 秒重疊進行切分。
+    *   按 10 秒視窗、5 秒重疊進行切分。
 2.  **視覺提取 (Visual Extraction)**:
-    *   **情境注入**: 從 `clean_transcript.md` 提取當前時間範圍內的語音內容，作為 Prompt 前導信息。
+    *   **情境注入**: 從 `clean_transcript.md` 提取當前時間範圍內的語音內容，作為 Prompt 前導資訊。
     *   **結構化輸出**: 要求模型描述畫面內容，輸出包含 `start_at`, `end_at`, `description` 的 JSON 格式。
 3.  **中間產物儲存**:
     *   將結果存入 `visual_segments.jsonl`。
 
 ### 階段三：最終長片總結 (Synthesis Task)
-1.  **數據對齊 (Data Alignment)**:
+1.  **資料對齊 (Data Alignment)**:
     *   將 `clean_transcript.md` 與 `visual_segments.jsonl` 內容按時間軸排序與對齊。
 2.  **最終總結 (Final Summary)**:
     *   將對齊後的資訊串接成 Prompt，要求模型生成整體的長片總結。
@@ -57,10 +57,10 @@ tags: [prototype, video2text, pipeline, vllm, asyncio, gemma4]
 ## 5. 待辦事項 (Follow-up)
 - [ ] 建立 `prototyper.py` 並實作階段一。
 - [ ] 建立中間產物儲存邏輯。
-- [ ] 實作視覺提取時的動態內容注入算法。
+- [ ] 實作視覺提取時的動態內容注入演算法。
 - [ ] 進行並行化效能壓力測試。
 
-## 6. 參考文件
+## 6. 參考檔案
 - [37_2026_06_12_human_strategy-summary-vllm-server-api-two-stage.md](../../37_2026_06_12_human_strategy-summary-vllm-server-api-two-stage.md)
 - [38_2026_06_13_agent_asr-audio-transcription-tool.md](../../38_2026_06_13_agent_asr-audio-transcription-tool.md)
 - [22_2026_06_10_agent_restructure-video-slicing-to-pyav.md](../../22_2026_06_10_agent_restructure-video-slicing-to-pyav.md)

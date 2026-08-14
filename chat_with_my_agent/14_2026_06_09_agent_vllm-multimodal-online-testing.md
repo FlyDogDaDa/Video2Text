@@ -84,7 +84,7 @@ r = client.chat.completions.create(
 | 音訊 | ❌ | 未測試（Gemma-4 12B 無 audio encoder） |
 | 影片 | ❌ | vLLM stable 不支援 |
 
-**限制原因：** `compressed-tensors` 量化與 Gemma-4 vision 在 vLLM v0.22.1 不兼容。
+**限制原因：** `compressed-tensors` 量化與 Gemma-4 vision 在 vLLM v0.22.1 不相容。
 
 ## 可能的解決方向
 

@@ -17,9 +17,9 @@ data = normalize_audio(data)                         # ③ 歸一化到 [-1, 1]
 
 ### 1.2 vLLM 內部 `vllm.multimodal.audio` 模組
 
-| 函數 / 類別 | 功能 |
+| 函式 / 類別 | 功能 |
 |---|---|
-| `normalize_audio(audio, spec)` | 多声道 → mono，使用 `ChannelReduction.MEAN`（平均值）|
+| `normalize_audio(audio, spec)` | 多聲道 → mono，使用 `ChannelReduction.MEAN`（平均值）|
 | `AudioResampler.resample(audio, orig_sr)` | 重取樣至 target_sr（支援 pyav / scipy 兩種方法）|
 | `split_audio(audio, sr, max_clip, overlap, min_energy)` | **切割長音訊**：在低能量區間切斷，支援 overlap |
 | `find_split_point(wav, start, end, min_energy_window)` | 在搜尋區間找最安靜的切割點（RMS energy）|
@@ -53,14 +53,14 @@ if duration_s > max_duration_s:
 
 ## 2. 影片處理管道
 
-### 2.1 幀採樣邏輯
+### 2.1 幀取樣邏輯
 
 ```python
 # fetch_video(video_url) → (frames: NDArray, metadata: dict)
 # vllm/multimodal/video.py: VideoBackend.compute_frames_index_to_sample()
 ```
 
-**採樣流程：**
+**取樣流程：**
 
 ```
 原始影片 (60fps, 1小時, 207785幀)
@@ -72,11 +72,11 @@ VideoSourceMetadata(total_frames=207785, fps=60, duration=3463s)
 VideoTargetMetadata(num_frames=32, fps=2, max_duration=...)
     │                    ↑              ↑
     │                    │              └─ 影片原始長度
-    │                    └─ 採樣目標 FPS
+    │                    └─ 取樣目標 FPS
     ▼
 compute_frames_index_to_sample()
     → np.linspace(0, 207784, 32) ≈ [0, 6702, 13405, ...]
-    └─ 等間距採樣，幀間隔 ≈ 6493 幀 ≈ 108 秒
+    └─ 等間距取樣，幀間隔 ≈ 6493 幀 ≈ 108 秒
     │
     ▼
 frames: np.ndarray [32, 1082, 1920, 3]  # uint8, RGB
@@ -107,7 +107,7 @@ _VIDEO_MAX_FRAMES = 32  # max sampled frames per video
 |---|---|
 | `_VIDEO_MAX_FRAMES` | 32 幀（寫死） |
 | `fps` 預設值 | 2（`VideoBackend.load_bytes` 的預設 `sampling_fps`） |
-| 實際 FPS | **1 fps**（Gemma-4 unified 模型使用 1fps 採樣） |
+| 實際 FPS | **1 fps**（Gemma-4 unified 模型使用 1fps 取樣） |
 | 有效涵蓋時長 | 32 幀 × 1s = 32 秒的「內容視窗」|
 | 原始影片長度 | **任意**（1 小時也可以，只是 99% 的畫面被跳過）|
 
@@ -132,30 +132,30 @@ _VIDEO_MAX_FRAMES = 32  # max sampled frames per video
 
 ### 3.1 視覺部分
 
-| 項目 | 值 |
+| 專案 | 值 |
 |---|---|
 | 抽取幀數 | **32 幀**（固定上限 `_VIDEO_MAX_FRAMES`）|
-| 採樣方式 | **等間距**（`np.linspace`）|
+| 取樣方式 | **等間距**（`np.linspace`）|
 | 幀間隔 | ~108 秒（對於 1 小時影片）|
 | 解碼後端 | OpenCV（預設）|
 | 幀恢復 | `frame_recovery=True`（容錯）|
 
 ### 3.2 音訊部分
 
-| 項目 | 值 |
+| 專案 | 值 |
 |---|---|
 | 讀取樣本率 | **16kHz**（寫死在 `sf.read(samplerate=16000)`）|
-| 声道處理 | **stereo → mono**（`data.mean(axis=1)`）|
+| 聲道處理 | **stereo → mono**（`data.mean(axis=1)`）|
 | 歸一化 | `normalize_audio()` → [-1, 1]|
 | 長度限制 | **30 秒**（`audio_seq_length=750` × `audio_ms_per_token=40ms`）|
 | 超長處理 | ⚠️ **只輸出 warning，不截斷不切分** |
-| 切割工具 | `split_audio()` 存在但 **此腳本未呼叫** |
+| 切割工具 | `split_audio()` 存在但 **此指令碼未呼叫** |
 
 ---
 
-## 4. 與 System Design 文件的差距
+## 4. 與 System Design 檔案的差距
 
-| 設計文件期望 | 目前實作 | 差距 |
+| 設計檔案期望 | 目前實作 | 差距 |
 |---|---|---|
 | 視窗大小 30 秒 | 影片直接丟全片（32 幀等間距） | ❌ 無視窗切片邏輯 |
 | 音訊 Mono 混音 | ✅ stereo → mono (mean) | ✅ 符合 |
@@ -171,4 +171,4 @@ _VIDEO_MAX_FRAMES = 32  # max sampled frames per video
 
 2. **視窗切片**：目前 `multimodal_infer.py` 是「一鍵送全片」模式，缺乏 design doc 中定義的 30 秒視窗 + 滑動步長機制。需自行實作切片邏輯。
 
-3. **幀採樣可客製化**：透過 `limit_mm_per_prompt={"video": N}` 可調整 `num_frames`，但 `_VIDEO_MAX_FRAMES=32` 是模型層級上限。
+3. **幀取樣可客製化**：透過 `limit_mm_per_prompt={"video": N}` 可調整 `num_frames`，但 `_VIDEO_MAX_FRAMES=32` 是模型層級上限。

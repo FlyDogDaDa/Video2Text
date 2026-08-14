@@ -14,8 +14,8 @@ tags: [slice-utilities, audio-extraction, video-frame-sampling, vllm, gemma4, me
 
 1. 視窗切片（30s 視窗 + 2s 重疊）
 2. 切片感知音訊提取（≤30s mono clips，split 超長音訊）
-3. 切片感知視頻幀提取（1 fps，seek-buffering 避免每 slice 重開）
-4. 可選記憶體快取（`cache_frames` / `cache_audio` 參數控制）
+3. 切片感知影片幀提取（1 fps，seek-buffering 避免每 slice 重開）
+4. 可選記憶體快取（`cache_frames` / `cache_audio` 引數控制）
 
 ## Why
 
@@ -39,7 +39,7 @@ System Design 要求：
 
 ```
 src/utils/
-├── __init__.py          # 導出所有 public API
+├── __init__.py          # 匯出所有 public API
 └── slice.py             # 核心實作 (~620 行)
 ```
 
@@ -53,7 +53,7 @@ class SliceSource:
     audio_clips: list[np.ndarray]     # 1-D mono, 16kHz, each ≤30s
 ```
 
-#### SliceParams — 視窗參數（預設符合 System Design）
+#### SliceParams — 視窗引數（預設符合 System Design）
 
 ```python
 @dataclass
@@ -101,7 +101,7 @@ class VideoReader:
         ...
 ```
 
-**不使用 `extract_frames_slice`**（每次開關 VideoCapture 的 single-use helper），而是在批量處理時用 `SliceStore` 共用 `VideoReader`。
+**不使用 `extract_frames_slice`**（每次開關 VideoCapture 的 single-use helper），而是在批次處理時用 `SliceStore` 共用 `VideoReader`。
 
 ### 3. 音訊提取 — soundfile range read
 
@@ -218,7 +218,7 @@ def create_slices(
 - [src/utils/__init__.py](../../src/utils/__init__.py) — 公共 API 出口
 - [01_2026_06_07_human_video2text-system-design.md](./01_2026_06_07_human_video2text-system-design.md) — System Design 規格（視窗 30s、重疊 2s、mono audio、1fps）
 - [18_vllm_audio_extraction_logic.md](./18_vllm_audio_extraction_logic.md) — vLLM 音訊/影片預設行為調查
-- [.venv/lib/.../vllm/multimodal/video.py](../.venv/lib/python3.12/site-packages/vllm/multimodal/video.py) — vLLM 幀採樣邏輯
+- [.venv/lib/.../vllm/multimodal/video.py](../.venv/lib/python3.12/site-packages/vllm/multimodal/video.py) — vLLM 幀取樣邏輯
 - [.venv/lib/.../vllm/multimodal/audio.py](../.venv/lib/python3.12/site-packages/vllm/multimodal/audio.py) — vLLM 音訊處理模組
 - [.venv/lib/.../vllm/model_executor/models/gemma4_mm.py](../.venv/lib/python3.12/site-packages/vllm/model_executor/models/gemma4_mm.py) — `_VIDEO_MAX_FRAMES=32`、`audio_seq_length=750`、`audio_ms_per_token=40`
-- [multimodal_infer.py](../src/inference/multimodal_infer.py) — 現有推論腳本（需整合 slice utilities）
+- [multimodal_infer.py](../src/inference/multimodal_infer.py) — 現有推論指令碼（需整合 slice utilities）

@@ -16,12 +16,12 @@ tags: [quark-audio, tse, bug-fix, inference]
 
 官方 `model/model.py` 的 `test_step` 實作中，TSE 推理使用 `src` 作為變數名，但我們在 API wrapper 中將輸入命名為 `mix`。第 255 行 `est.reshape(-1)[: src.size(-1)]` 會導致 `NameError`，因為 `_tse_infer(self, enroll, mix)` 作用域中沒有 `src` 變數。
 
-此外，官方程式碼的 TSE 實作（第 199-228 行）使用 padding + reshape 批量處理，不需要分段疊加。之前的實作有概念性錯誤，已重新對齊官方邏輯。
+此外，官方程式碼的 TSE 實作（第 199-228 行）使用 padding + reshape 批次處理，不需要分段疊加。之前的實作有概念性錯誤，已重新對齊官方邏輯。
 
 ## How
 
 - `serve/quark-audio/quark_audio/api.py`:
-  - `_tse_infer()` 第 228 行：新增 `orig_len = mix.size(-1)` 保存原始音訊長度
+  - `_tse_infer()` 第 228 行：新增 `orig_len = mix.size(-1)` 儲存原始音訊長度
   - `_tse_infer()` 第 256 行：將 `src.size(-1)` 改為 `orig_len`，避免變數不存在與正確截斷
 - 對齊官方 `model/model.py` 第 199-228 行 TSE 實作邏輯
 

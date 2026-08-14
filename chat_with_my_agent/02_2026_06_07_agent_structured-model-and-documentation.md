@@ -12,16 +12,16 @@ tags: [pydantic-models, slice-result, terminology, documentation]
 
 - 建立 `src` 套件與 `src/models.py`
 - 新增 `SliceResult` 及其子模型的 Pydantic schema
-- 在系統設計文件中新增 Terminology 章節，統一 Window = Slice 的命名
+- 在系統設計檔案中新增 Terminology 章節，統一 Window = Slice 的命名
 - 新增 `pydantic` 依賴至 `pyproject.toml`
 
 ## Why
 
-設計文件中的 JSON schema 需要對應到可執行、可驗證的程式碼。使用 Pydantic 的 `BaseModel` 可確保：
+設計檔案中的 JSON schema 需要對應到可執行、可驗證的程式碼。使用 Pydantic 的 `BaseModel` 可確保：
 1. 格式驗證 — LLM 輸出的 JSON 結構可透過 Pydantic 解析與驗證
 2. 型別安全 — `frozen=True` 確保不可變性，避免執行期意外修改
 3. 自動 JSON schema 產生 — 可直接作為 vLLM 的 `response_format` 使用
-4. 統一命名 — Window 與 Slice 的對照讓設計文件與程式碼保持一致
+4. 統一命名 — Window 與 Slice 的對照讓設計檔案與程式碼保持一致
 
 ## How
 
@@ -36,7 +36,7 @@ tags: [pydantic-models, slice-result, terminology, documentation]
 
 2. **`pyproject.toml`** — 新增 `"pydantic>=2.0.0"` 依賴
 
-3. **`01_2026_06_07_human_video2text-system-design.md`** — 新增 Terminology 章節，說明 Window（設計文件用詞）= Slice（程式碼用詞）
+3. **`01_2026_06_07_human_video2text-system-design.md`** — 新增 Terminology 章節，說明 Window（設計檔案用詞）= Slice（程式碼用詞）
 
 ### 設計決策
 

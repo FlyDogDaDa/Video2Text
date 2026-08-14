@@ -118,7 +118,7 @@ video.mp4 ──→ detect_speech() ──→ video_vad.jsonl
 7. **clean.py**（文本清理）— 本地處理
 8. **summarize.py**（總結生成）— 最後一步，接 vLLM server
 9. **錯誤處理 + 日誌** — 全域加入
-10. **進度條** — 用戶體驗
+10. **進度條** — 使用者體驗
 
 ## 必要依賴
 
@@ -131,6 +131,6 @@ uv add silero-vad              # VAD 偵測
 ## 模組實作注意事項
 
 - 每個模組的 `TODO` 註解處需實作核心邏輯
-- 使用 `jsonl.py` 的 `read_jsonl()` 和 `write_jsonl()` 函數
+- 使用 `jsonl.py` 的 `read_jsonl()` 和 `write_jsonl()` 函式
 - 輸出路徑命名規則：`{input.stem}_{module}.jsonl` 或 `{input.stem}_summary.md`
 - 需實作快取機制：若輸出檔案已存在且時間戳記新於輸入，跳過執行

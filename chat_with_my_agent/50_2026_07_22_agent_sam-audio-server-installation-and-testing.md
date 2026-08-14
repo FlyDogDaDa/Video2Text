@@ -14,7 +14,7 @@ tags: [sam-audio, installation, dependency-resolution, server-setup]
 
 ## Why
 
-`sam-audio` 需要獨立於主專案的虛擬環境運行，因為其相依套件 (`perception-models`) 硬編 `decord==0.6.0`，而 PyPI 不提供 Python 3.12 + Linux 的 wheel。此外，多個套件之間存在版本相依衝突鏈。
+`sam-audio` 需要獨立於主專案的虛擬環境執行，因為其相依套件 (`perception-models`) 硬編 `decord==0.6.0`，而 PyPI 不提供 Python 3.12 + Linux 的 wheel。此外，多個套件之間存在版本相依衝突鏈。
 
 ## How
 
@@ -48,11 +48,11 @@ transformers>=4.54 → huggingface_hub>=0.34 → 但 transformers>=5 不支援 s
 uv pip install "setuptools<69"
 ```
 
-**問題 5：`Processor.from_pretrained()` 不支援新版 huggingface_hub 參數**
+**問題 5：`Processor.from_pretrained()` 不支援新版 huggingface_hub 引數**
 
 `sam_audio_core.py` 第 38-41 行：
 ```python
-# 移除 proxies 和 resume_download 參數（Processor 未實作 **kwargs）
+# 移除 proxies 和 resume_download 引數（Processor 未實作 **kwargs）
 processor = SAMAudioProcessor.from_pretrained("facebook/sam-audio-small")
 ```
 
@@ -71,14 +71,14 @@ processor = SAMAudioProcessor.from_pretrained("facebook/sam-audio-small")
 
 | 提交 | Type | 說明 |
 |------|------|------|
-| `616bf45` | `fix(sam-audio)` | 移除 `Processor.from_pretrained()` 不支援的參數 |
+| `616bf45` | `fix(sam-audio)` | 移除 `Processor.from_pretrained()` 不支援的引數 |
 | `8141d73` | `docs(sam-audio)` | 新增 `INSTALL.md` 安裝 SOP 與 `uv.lock` |
 
 ### 關鍵檔案
 
 | 檔案 | 動作 | 說明 |
 |------|------|------|
-| `sam_audio_core.py` | 修改 | 移除不支援參數、新增 lifespan 預載 |
+| `sam_audio_core.py` | 修改 | 移除不支援引數、新增 lifespan 預載 |
 | `api/main.py` | 修改 | lifespan 上下文管理器 |
 | `server.py` | 修改 | 伺服器配置 |
 | `pyproject.toml` | 刪除 | 改由父專案管理 |

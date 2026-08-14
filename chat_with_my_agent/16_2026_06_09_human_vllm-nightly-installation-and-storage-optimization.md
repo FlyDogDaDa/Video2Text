@@ -19,7 +19,7 @@ tags: [vllm, gemma4, nightly, disk-space, nas, symlink, storage-optimization]
 
 - Stable vLLM 0.22.1 有 `'Gemma4UnifiedVisionConfig' object has no attribute 'num_soft_tokens'` bug
 - 之前日記錯誤寫 "12B 沒有 audio encoder"，實為 encoder-free 架構
-- `/` 分區 467GB 已用 440GB（94%），只剩 3.8GB
+- `/` 分割槽 467GB 已用 440GB（94%），只剩 3.8GB
 - DeepShader `runs/` (24GB) 和 StableDiffusion `models/` (5.8GB) 可搬移到 NAS
 
 ## How
@@ -28,7 +28,7 @@ tags: [vllm, gemma4, nightly, disk-space, nas, symlink, storage-optimization]
    - 新增 `[[tool.uv.index]]` 指向 `https://wheels.vllm.ai/nightly/cu129`
    - 設定 `[tool.uv.sources]` 讓 uv 從 nightly 解析 vllm
    - 初始版本：`0.22.1rc1.dev296+g2385e140d`（有 num_soft_tokens bug）
-   - 添加 `hf_overrides` patch 解決 dev296 bug
+   - 新增 `hf_overrides` patch 解決 dev296 bug
    - `uv add soundfile` 後 vLLM 自動升級到 **dev301**（bug 已原生修復）
    - **問題**：安裝後遇到 `libcudnn.so.9` 錯誤 → cuDNN 9 在 PyTorch bundled
    - 嘗試安裝 → **磁碟空間不足**（`No space left on device`）
@@ -41,7 +41,7 @@ tags: [vllm, gemma4, nightly, disk-space, nas, symlink, storage-optimization]
    - 不需要獨立的 vision/audio encoder
 
 3. **系統磁碟掃描結果**
-   - 用戶 b11223209 總用量：**156GB**
+   - 使用者 b11223209 總用量：**156GB**
    - workspace/ = 66GB（最大元兇）
    - DeepShader `runs/` = **24GB**（訓練記錄）
    - `.cache/uv/` = 51GB（已清理，uv 套件快取）→ **釋放 55GB**

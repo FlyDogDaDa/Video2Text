@@ -10,7 +10,7 @@ tags: [voicetag, openai-api, breeze-asr-26, speaker-diarization, transcription]
 
 ## What
 
-1. 研究 voicetag 官方 GitHub 倉庫（Gr122lyBr/voicetag）的 `openai_stt.py` 是否支援 `base_url` 參數
+1. 研究 voicetag 官方 GitHub 倉庫（Gr122lyBr/voicetag）的 `openai_stt.py` 是否支援 `base_url` 引數
 2. 評估能否用 voicetag 的 `transcribe()` 搭配 Breeze-ASR-26 達成「誰在何時說了什麼」
 3. 確認是否需要 patch 官方程式碼
 
@@ -49,7 +49,7 @@ def transcribe(self, audio, sr=16000, language=None) -> str:
 
 ### Patch 方案
 
-只需在 `__init__` 加一個 `base_url` 參數：
+只需在 `__init__` 加一個 `base_url` 引數：
 
 ```python
 def __init__(
@@ -70,7 +70,7 @@ def transcribe(self, audio, sr=16000, language=None) -> str:
     ...
 ```
 
-OpenAI SDK 原生支援 `base_url` 參數，這樣就能連任何 OpenAI 相容 API（包含 Breeze-ASR-26 的 `http://localhost:8750/v1`）。
+OpenAI SDK 原生支援 `base_url` 引數，這樣就能連任何 OpenAI 相容 API（包含 Breeze-ASR-26 的 `http://localhost:8750/v1`）。
 
 ### 使用流程（Patch 後）
 

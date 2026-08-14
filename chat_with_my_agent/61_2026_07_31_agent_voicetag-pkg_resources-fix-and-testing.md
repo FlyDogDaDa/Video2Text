@@ -6,15 +6,15 @@ status: completed
 tags: [voicetag, speaker-diarization, pkg_resources, MP3-conversion, Pydantic-frozen]
 ---
 
-# 修復 VoiceTag 測試管线：pkg_resources 相容性、MP3 編碼支援、Frozen Pydantic 問題
+# 修復 VoiceTag 測試管線：pkg_resources 相容性、MP3 編碼支援、Frozen Pydantic 問題
 
 ## What
 
-修復 `serve/voicetag/` 模組的三個關鍵問題，使完整測試管线（Enroll → Save → Identify → JSON）成功運行。
+修復 `serve/voicetag/` 模組的三個關鍵問題，使完整測試管線（Enroll → Save → Identify → JSON）成功執行。
 
 ## Why
 
-先前實作的 VoiceTag 模組因以下三個問題導致測試腳本失敗：
+先前實作的 VoiceTag 模組因以下三個問題導致測試指令碼失敗：
 1. `setuptools >= 70` 移除了 `pkg_resources` 模組，導致 `webrtcvad`（resemblyzer 的間接相依性）無法匯入
 2. `soundfile` 不支援 MP3 格式，enroll 階段無法讀取 `.mp3` 檔案
 3. voicetag 庫的回傳物件（`DiarizationResult`、`SpeakerSegment`）是 frozen Pydantic model，無法直接修改
@@ -74,7 +74,7 @@ def enroll(name: str, audio_paths: list[str | Path], ...) -> tuple[str, list[str
 object.__setattr__(result, "audio_duration", original_duration)
 ```
 
-同時移除不支援的 `threshold` 參數（`VoiceTagConfig` 是 frozen，無法執行期修改）。
+同時移除不支援的 `threshold` 引數（`VoiceTagConfig` 是 frozen，無法執行期修改）。
 
 ### 4. 修正原始長度記錄時機
 
@@ -88,7 +88,7 @@ original_duration = original_samples / sr
 
 ### 5. 測試結果
 
-完整 pipeline 在 GPU（cuda:0）上成功運行：
+完整 pipeline 在 GPU（cuda:0）上成功執行：
 
 ```
 音訊：test-audio/2026_07_21_test.mp3（120s，2.9 MB）
@@ -103,7 +103,7 @@ Boss 說話人識別 confidence 範圍：0.76 ~ 0.98。
 - [ ] 測試 API endpoint（`python serve/voicetag/server.py` + `curl`）
 - [ ] 使用 boss-reference（28.75s-36.618s 片段）測試更精確的說話人匹配
 - [ ] 評估不同音訊長度的效能
-- [ ] `serve/voicetag/api/service.py` 需同步更新（移除 `threshold` 參數傳遞）
+- [ ] `serve/voicetag/api/service.py` 需同步更新（移除 `threshold` 引數傳遞）
 
 ## References
 

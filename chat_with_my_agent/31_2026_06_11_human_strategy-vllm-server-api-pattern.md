@@ -10,7 +10,7 @@
 
 ### 當前離線模式的痛點
 
-1. **模型載入開銷巨大**：每次 `main.py` 啟動需 4-5s 加載 + 16s init，頻繁重啟就頻繁重付
+1. **模型載入開銷巨大**：每次 `main.py` 啟動需 4-5s 載入 + 16s init，頻繁重啟就頻繁重付
 2. **離線多模態已確定有 bug**：
    - 文字推論輸出 `01111111...` 亂碼（無意義重複）
    - 音訊 `multi_modal_data["audio"]` 不接受 numpy array，格式不匹配
@@ -35,7 +35,7 @@
 
 ```python
 # main.py 當前流程
-llm = load_model()  # 4-5s 加載 + 16s init
+llm = load_model()  # 4-5s 載入 + 16s init
 with IOCacheVideo(path) as video:
     for inp in slice_video(video, params):
         # 每一片都需要：
@@ -68,7 +68,7 @@ async def extract_structured(video_path: str, params: dict) -> list[dict]:
         api_key="EMPTY",
     ) as client:
         tasks = [_request_slice(client, s) for s in slices]
-        results = await asyncio.gather(*tasks)  # 並行發送
+        results = await asyncio.gather(*tasks)  # 並行傳送
     return results
 
 async def _request_slice(client, slice_data):
@@ -103,21 +103,21 @@ async def _request_slice(client, slice_data):
 
 | 維度 | 離線推理 | Server API |
 |------|---------|-----------|
-| **模型載入開銷** | 每次啟動重載（+20s） | 一次載入，持續可用 |
+| **模型載入開銷** | 每次啟動過載（+20s） | 一次載入，持續可用 |
 | **async 並行** | 需要 asyncio/gather 大改 | 同時多個 request，內建 |
-| **GPU VRAM 管理** | 多模型共存會 OOM | 單一實例，穩定 |
+| **GPU VRAM 管理** | 多模型共存會 OOM | 單一例項，穩定 |
 | **video_url 支援** | ❌ 需要 custom branch | ✅ dev301 原生支援 |
 | **audio 格式** | ❌ numpy array 格式不匹配 | ✅ `data:audio/wav;base64,...` |
 | **guided decoding** | ❌ 需要手動 StructuredOutputsParams | ✅ vLLM 自動處理 |
 | **reasoning 分離** | ❌ 需要 parse_thinking_output() | ✅ `--reasoning-parser gemma4` |
 | **重啟/熱更新** | 重寫 main.py + 重跑 | 重啟 server 即可 |
-| **遠端部署** | ❌ 需要 SSH 到 GPU 機器 | ✅ API 調用即可 |
+| **遠端部署** | ❌ 需要 SSH 到 GPU 機器 | ✅ API 呼叫即可 |
 | **重試/容錯** | 需要手動實現 | HTTP client 內建 |
-| **多語言支援** | ❌ 只能 Python | ✅ 任何語言調用 API |
+| **多語言支援** | ❌ 只能 Python | ✅ 任何語言呼叫 API |
 
 ### 3. Server 模式的劣勢與緩解
 
-| 項目 | 說明 | 緩解策略 |
+| 專案 | 說明 | 緩解策略 |
 |------|------|----------|
 | **需要維護 server 生命週期** | 需要確保 server 在跑 | 啟動 script + 健康檢查 `/health` |
 | **網路延遲** | HTTP roundtrip 比 `llm.generate()` 多 ~50ms | 對影片分析而言可忽略（推論需數秒） |
@@ -146,9 +146,9 @@ async def _request_slice(client, slice_data):
 
 **關鍵改變：**
 - `main.py` 不再負責模型載入、template、推理
-- `main.py` 只負責：切片 → HTTP 發送 → 結果收集
+- `main.py` 只負責：切片 → HTTP 傳送 → 結果收集
 - 所有多模態處理由 vLLM server 內部完成
-- 需要維護一個長駐 server 進程
+- 需要維護一個長駐 server 程式
 
 ### 5. 具體實作步驟
 

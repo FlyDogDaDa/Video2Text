@@ -41,13 +41,13 @@ PACKAGE_DIR = PROJECT_ROOT  # 修正：直接指向專案根目錄
 
 ### 層 1（結構測試）
 
-| 項目 | 數值 |
+| 專案 | 數值 |
 |------|------|
 | 測試總數 | 10 |
 | 通過 | 10 |
 | 失敗 | 0 |
 
-測試項目：
+測試專案：
 - `test_framework_exists` — ✅ framework/config.py 存在
 - `test_framework_imports` — ✅ framework.config 可匯入 cfg, set_profile
 - `test_modules_exists` — ✅ modules/__init__.py 存在
@@ -57,13 +57,13 @@ PACKAGE_DIR = PROJECT_ROOT  # 修正：直接指向專案根目錄
 
 ### 層 2（執行測試）
 
-| 項目 | 數值 |
+| 專案 | 數值 |
 |------|------|
 | 測試總數 | 10 |
 | 通過 | 10 |
 | 失敗 | 0 |
 
-測試項目：
+測試專案：
 - `test_framework_config_import` — ✅ 框架可匯入
 - `test_vad_import` — ✅ VAD 模組可匯入
 - `test_asr_import` — ✅ ASR 模組可匯入

@@ -6,7 +6,7 @@ status: draft
 tags: [swarm-extraction, structured-output, vllm-parameters, gemma4-sampling]
 ---
 
-# 蜂群式結構化提取 — 單輪測試與 vLLM 參數調校
+# 蜂群式結構化提取 — 單輪測試與 vLLM 引數調校
 
 ## What
 
@@ -14,8 +14,8 @@ tags: [swarm-extraction, structured-output, vllm-parameters, gemma4-sampling]
 
 ## Why
 
-- 需要將「影音提取」升級為「結構化內容提取」——即對每個視窗送 vLLM 進行視覺 + 音頻分析，產出 `SliceResult` 格式的 JSON。
-- 之前 `temperature=0.1` 設定過低，導致輸出速度極慢（26.72 秒/片）且 JSON 被截斷。需改用 Google 官方推薦參數。
+- 需要將「影音提取」升級為「結構化內容提取」——即對每個視窗送 vLLM 進行視覺 + 音訊分析，產出 `SliceResult` 格式的 JSON。
+- 之前 `temperature=0.1` 設定過低，導致輸出速度極慢（26.72 秒/片）且 JSON 被截斷。需改用 Google 官方推薦引數。
 
 ## How
 
@@ -23,7 +23,7 @@ tags: [swarm-extraction, structured-output, vllm-parameters, gemma4-sampling]
 
 **檔案：** `main.py` `load_model()` 函式
 
-| 修復項目 | 做法 |
+| 修復專案 | 做法 |
 |---------|------|
 | `num_soft_tokens` 缺失 | 加入 `hf_overrides={"vision_config": {"num_soft_tokens": 1120}}`（與 `multimodal_infer.py` 同） |
 | `limit_mm_per_prompt` 不足 | 預設值改設 `{"image": 4, "audio": 1}`（29 幀 → 取代表性幀） |
@@ -33,13 +33,13 @@ tags: [swarm-extraction, structured-output, vllm-parameters, gemma4-sampling]
 
 **檔案：** `main.py` `extract_structured()` 函式
 
-| 修正項目 | 之前 | 之後 |
+| 修正專案 | 之前 | 之後 |
 |---------|------|------|
 | `llm.generate()` API | 錯誤格式 `llm.generate("", sampling_params, multi_modal_data=...)` | 正確格式 `llm.generate({"prompt": prompt, "multi_modal_data": ...}, sampling_params)` |
 | Chat template | 手動建構 base64 image | 使用 `AutoProcessor.apply_chat_template()` |
 | Audio placeholder | 未放入 prompt | 加入 `{"type": "audio"}` placeholder |
 
-### 3. 測試腳本 `test_swarm.py` — 官方參數驗證
+### 3. 測試指令碼 `test_swarm.py` — 官方引數驗證
 
 **檔案：** `test_swarm.py`
 
@@ -95,12 +95,12 @@ SamplingParams(
 - [ ] **加上 guided decoding** — 使用 vLLM Structured Outputs 強制合法 JSON，修復引號格式錯誤
 - [ ] **測試多輪蜂群** — 對 3 個 slice 全部跑 vLLM 結構化提取
 - [ ] **長影片測試** — 用 57.7 分鐘的 `2026_05_11-19_18_26_louder4x.mp4` 實機驗證
-- [ ] **優化 prompt** — 目前 prompt 較簡短，可加入更多引導語提升描述品質
+- [ ] **最佳化 prompt** — 目前 prompt 較簡短，可加入更多引導語提升描述品質
 
 ## References
 
 - [main.py](23_2026_06_11_references_swarm-structured-extraction/main.py) — `swarm_extract()`, `extract_structured()`, `load_model()`
-- [test_swarm.py](23_2026_06_11_references_swarm-structured-extraction/test_swarm.py) — 單輪測試腳本
+- [test_swarm.py](23_2026_06_11_references_swarm-structured-extraction/test_swarm.py) — 單輪測試指令碼
 - [src/utils/slice.py](../src/utils/slice.py) — `IOCacheVideo`, `SliceParams`
 - [src/models.py](../src/models.py) — Pydantic `SliceResult` schema
 - [chat_wtih_my_agent/18_vllm_audio_extraction_logic.md](./18_vllm_audio_extraction_logic.md) — vLLM 音訊/影片行為分析

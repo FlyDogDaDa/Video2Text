@@ -10,7 +10,7 @@ tags: [vllm, gemma4, multimodal, openai-api, guided-decoding, thinking-mode, str
 
 ## What
 
-以 `how_to_use_vllm_multimodal_via_openai_api.py` 為示範腳本，全面測試 vLLM Server API 的多模態能力，並確認 `thinking mode` 與 `structured output` 並用時的 bug。
+以 `how_to_use_vllm_multimodal_via_openai_api.py` 為示範指令碼，全面測試 vLLM Server API 的多模態能力，並確認 `thinking mode` 與 `structured output` 並用時的 bug。
 
 ## Why
 
@@ -31,7 +31,7 @@ runtime/ffmpeg -ss 45 -t 1 -i short_test.mp4 -update 1 -q:v 2 references/test_im
 runtime/ffmpeg -ss 5 -t 30 -i short_test.mp4 -vn -ac 1 -ar 16000 -y references/test_audio.wav
 ```
 
-### 2. Server 啟動參數
+### 2. Server 啟動引數
 
 ```bash
 vllm serve google/gemma-4-12B-it-qat-w4a16-ct \
@@ -45,7 +45,7 @@ vllm serve google/gemma-4-12B-it-qat-w4a16-ct \
 
 `--structured-outputs-config.enable_in_reasoning=True` 是 vLLM 0.11.2+ 的 flag，讓 thinking mode 下仍能用 guided decoding。
 
-### 3. 示範腳本結構
+### 3. 示範指令碼結構
 
 - `how_to_use_vllm_multimodal_via_openai_api.py` 內含四個 async task，用 `asyncio.gather` 並行執行
 - Task 1: 純文字推論
@@ -75,7 +75,7 @@ vllm serve google/gemma-4-12B-it-qat-w4a16-ct \
 **診斷結論：**
 
 - `enable_thinking=True` 單獨使用時，server 正確將 reasoning 放入 `message.reasoning`，`message.content` 為 `None`
-- `response_format` 單獨使用時，server 正確導出 JSON 到 `message.content`
+- `response_format` 單獨使用時，server 正確匯出 JSON 到 `message.content`
 - 兩者並用時，vLLM server 沒有正確分離 reasoning。`reasoning` 是 `None`，`content` 包含 JSON 但被截斷且大量重複 `AI is a AI`，類似 guided decoding 崩潰
 
 **可能原因：**
@@ -84,7 +84,7 @@ vllm serve google/gemma-4-12B-it-qat-w4a16-ct \
 
 ## Follow-up
 
-- [ ] 重啟 server 時確認 `--structured-outputs-config.enable_in_reasoning=True` 確實生效（用 `vllm serve --help` 確認參數名稱）
+- [ ] 重啟 server 時確認 `--structured-outputs-config.enable_in_reasoning=True` 確實生效（用 `vllm serve --help` 確認引數名稱）
 - [ ] 試 `max_tokens=1024` 看是否是 token 不夠的問題
 - [ ] 確認 vLLM 版本是否有已知 bug（v0.22.1rc1.dev335）
 - [ ] 如果 bug 無法解決，Task 4 可拆成兩階段：先 thinking，再用結果做 guided decoding
@@ -92,7 +92,7 @@ vllm serve google/gemma-4-12B-it-qat-w4a16-ct \
 ## References
 
 - [how_to_use_vllm_multimodal_via_openai_api.py](./31_2026_06_11_human_strategy-vllm-server-api-pattern/how_to_use_vllm_multimodal_via_openai_api.py)
-- [31_2026_06_11_human_strategy-vllm-server-api-pattern.md](./31_2026_06_11_human_strategy-vllm-server-api-pattern.md)（Server API 策略文件）
+- [31_2026_06_11_human_strategy-vllm-server-api-pattern.md](./31_2026_06_11_human_strategy-vllm-server-api-pattern.md)（Server API 策略檔案）
 - [vLLM Structured Outputs](https://docs.vllm.ai/en/latest/features/structured_outputs/)
 - [vLLM Gemma 4 Usage Guide](https://docs.vllm.ai/projects/recipes/en/latest/Google/Gemma4.html)
 

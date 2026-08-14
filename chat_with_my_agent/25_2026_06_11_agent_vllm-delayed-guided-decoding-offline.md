@@ -124,7 +124,7 @@ print("SliceResult:", result.model_dump(mode="json"))
 
 ## References
 
-- [test_vllm_delayed_guided_decoding.py](25_2026_06_11_references_vllm-delayed-guided-decoding-offline/test_vllm_delayed_guided_decoding.py) — 測試腳本
+- [test_vllm_delayed_guided_decoding.py](25_2026_06_11_references_vllm-delayed-guided-decoding-offline/test_vllm_delayed_guided_decoding.py) — 測試指令碼
 - [src/types.py](../src/types.py)
 - [src/vllm_launch/launch_Gemma4-12b.sh](../src/vllm_launch/launch_Gemma4-12b.sh)
 - [vLLM Structured Outputs docs](https://docs.vllm.ai/en/latest/features/structured_outputs.html)

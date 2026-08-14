@@ -18,7 +18,7 @@ tags: [vllm, flashinfer, cuda-graph, gemma4-mm, inference, video2text]
 
 ### Flashinfer 崩潰
 
-vLLM 在 CUDA graph profiling 階段（`profile_cudagraph_memory` → `_warmup_and_capture` → `_dummy_run`）呼叫 flashinfer 的 `BatchPrefillWithPagedKVCache` kernel 時，`gemma4_mm` 模型傳入了一個無效的 `max_mma_kv = 0` 參數，導致 flashinfer 拋出 `RuntimeError` 並使整個 engine 崩潰。
+vLLM 在 CUDA graph profiling 階段（`profile_cudagraph_memory` → `_warmup_and_capture` → `_dummy_run`）呼叫 flashinfer 的 `BatchPrefillWithPagedKVCache` kernel 時，`gemma4_mm` 模型傳入了一個無效的 `max_mma_kv = 0` 引數，導致 flashinfer 丟擲 `RuntimeError` 並使整個 engine 崩潰。
 
 堆疊關鍵路徑：
 ```
@@ -38,9 +38,9 @@ BatchPrefillWithPagedKVCacheDispatched → max_mma_kv: 0
 
 在 `try_video.py` 的 `LLM()` 建構子中加入 `enforce_eager=True`：
 
-- `try_video.py` 第 22 行：加入 `enforce_eager=True` 參數
+- `try_video.py` 第 22 行：加入 `enforce_eager=True` 引數
 - 跳過 CUDA graph 的捕獲與記憶體配置，改用 eager mode 執行
-- 代價：推理速度可能降低 10-30%（失去 CUDA graph 優化），但能正常運作
+- 代價：推理速度可能降低 10-30%（失去 CUDA graph 最佳化），但能正常運作
 
 ```python
 llm = LLM(
@@ -82,7 +82,7 @@ est. speed input: 168.73 toks/s, output: 23.36 toks/s]
 
 ## Follow-up
 
-- [ ] 測試 `TRITON_ATTN` 後端能否在不用 `enforce_eager=True` 的情況下解決 flashinfer 問題（保留 CUDA graph 優化）
+- [ ] 測試 `TRITON_ATTN` 後端能否在不用 `enforce_eager=True` 的情況下解決 flashinfer 問題（保留 CUDA graph 最佳化）
 - [ ] 評估 `enforce_eager=True` 對推理速度的實際影響，若過慢可考慮調整 `max_model_len` 或增加 warmup
 - [ ] 確認是否有其他多模態模型也會觸發此 flashinfer 相容性問題
 

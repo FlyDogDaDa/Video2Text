@@ -14,11 +14,11 @@ tags: [sam-audio, gpu-fix, separation-test]
 
 ## Why
 
-Lifespan 預載模型時未傳入 `device` 參數，預設使用 CPU。後續 `service.separate()` 雖指定 `cuda:0`，但 `_ensure_model()` 因快取已存在而跳過載入，導致計算全在 CPU 執行，極度緩慢。
+Lifespan 預載模型時未傳入 `device` 引數，預設使用 CPU。後續 `service.separate()` 雖指定 `cuda:0`，但 `_ensure_model()` 因快取已存在而跳過載入，導致計算全在 CPU 執行，極度緩慢。
 
 ## How
 
-### Bug 修復：`api/main.py` — 移除 `alloc_conf` 錯誤參數
+### Bug 修復：`api/main.py` — 移除 `alloc_conf` 錯誤引數
 
 `malloc_fraction=0.5` 格式錯誤，導致 CUDA 初始化時 `ValueError: Unrecognized key 'malloc_fraction=0.5' in CUDA allocator config.`。
 
@@ -34,7 +34,7 @@ _ensure_model(device=SamAudioService.DEFAULT_DEVICE)
 
 ### Bug 修復：`sam_audio_core.py` — 簡化載入邏輯
 
-移除不需要的 `alloc_conf` 參數和 `PYTORCH_CUDA_ALLOC_CONF` 環境變數設定，遵循官方模式：
+移除不需要的 `alloc_conf` 引數和 `PYTORCH_CUDA_ALLOC_CONF` 環境變數設定，遵循官方模式：
 
 ```python
 def _ensure_model(device: str = "cpu"):
@@ -46,9 +46,9 @@ def _ensure_model(device: str = "cpu"):
 
 ### 分離測試
 
-| 參數 | 值 |
+| 引數 | 值 |
 |------|-----|
-| 音軌 | `~/文件/AudioRecording/2026_07_21_test.mp3`（120 秒） |
+| 音軌 | `~/檔案/AudioRecording/2026_07_21_test.mp3`（120 秒） |
 | 區間 | 28.750 ~ 36.618 秒 |
 | 提示 | "vocal" |
 | 裝置 | cuda:0 |

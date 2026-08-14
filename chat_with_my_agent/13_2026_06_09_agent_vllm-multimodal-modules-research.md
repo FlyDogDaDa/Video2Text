@@ -25,13 +25,13 @@ tags: [vllm, multimodal, video, audio, image, api, openai-sdk, research]
 
 **VideoBackend 家族（VideoLoader 抽象基類）：**
 
-| Backend | 註冊名稱 | 採樣策略 |
+| Backend | 註冊名稱 | 取樣策略 |
 |---------|----------|----------|
-| `VideoBackend` | `"opencv"` | 均勻採樣：`num_frames` 或 `1/fps` 取少者 |
+| `VideoBackend` | `"opencv"` | 均勻取樣：`num_frames` 或 `1/fps` 取少者 |
 | `DynamicVideoBackend` | `"opencv_dynamic"` | 長度感知：≤ max_duration 用 fps，超長則均勻分佈 |
 | `Molmo2VideoBackend` | `"molmo2"` | 針對 Molmo2 的 FPS 因子演算法 |
 | `NemotronVLVideoBackend` | `"nemotron_vl"` | 繼承 VideoBackend，額外回傳 `original_video_bytes` |
-| `OpenCVDynamicOpenPanguVideoBackend` | `"openpangu"` | 時間戳記基礎的均勻採樣 |
+| `OpenCVDynamicOpenPanguVideoBackend` | `"openpangu"` | 時間戳記基礎的均勻取樣 |
 
 **幀解碼混合器：**
 
@@ -47,7 +47,7 @@ tags: [vllm, multimodal, video, audio, image, api, openai-sdk, research]
 frames, meta = VideoBackend.load_bytes(
     data=video_bytes,       # 影片 raw bytes
     num_frames=-1,          # -1 = 全部幀
-    fps=2,                  # 採樣 FPS
+    fps=2,                  # 取樣 FPS
     max_duration=300,       # 最大長度（秒）
     backend="pyav",         # "opencv" 或 "pyav"
     frame_recovery=False,   # 幀恢復
@@ -55,21 +55,21 @@ frames, meta = VideoBackend.load_bytes(
 # frames: np.ndarray [num_frames, H, W, 3], dtype=np.uint8
 ```
 
-**輔助函數：**
+**輔助函式：**
 
 ```python
 sample_frames_from_video(frames, num_frames=16)    # 進一步抽幀
-resize_video(frames, size_factor=0.5)              # 調整分辨率
+resize_video(frames, size_factor=0.5)              # 調整解析度
 ```
 
 ### `vllm.multimodal.audio`
 
-| 類別/函數 | 用途 |
+| 類別/函式 | 用途 |
 |-----------|------|
 | `get_audio_duration(y, sr)` | 音訊長度（秒）|
 | `AudioSpec` | 規格：`target_channels`, `channel_reduction` |
 | `ChannelReduction` (Enum) | `MEAN`（預設）, `FIRST`, `MAX`, `SUM` |
-| `normalize_audio(audio, spec)` | 多声道 → 目標声道 |
+| `normalize_audio(audio, spec)` | 多聲道 → 目標聲道 |
 | `AudioResampler` | 重取樣，支援 `pyav` / `scipy` 方法 |
 | `split_audio(audio, sr, max_clip, overlap, min_energy)` | 低能量區間切割長音訊 |
 | `find_split_point(wav, start, end, window)` | 找最安靜的切割點 |
@@ -79,7 +79,7 @@ resize_video(frames, size_factor=0.5)              # 調整分辨率
 **主要 API：**
 
 ```python
-# 多声道 → mono
+# 多聲道 → mono
 mono = normalize_audio(audio_2d, AudioSpec(target_channels=1))
 
 # 重取樣
@@ -92,7 +92,7 @@ chunks = split_audio(audio, 16000, max_clip_duration_s=30, overlap_duration_s=1,
 
 ### `vllm.multimodal.image`
 
-| 函數 | 用途 |
+| 函式 | 用途 |
 |------|------|
 | `rescale_image_size(image, size_factor, transpose)` | 按比例縮放 |
 | `rgba_to_rgb(image, background_color)` | RGBA → RGB，透明處用底色填充 |
@@ -113,7 +113,7 @@ convert_image_mode(img, "L")              # 轉灰階
 
 | 模式 | 如何處理多模態輸入 |
 |------|-------------------|
-| **線上 API** (`/v1/chat/completions`) | 使用者傳 `{"type": "video_url", ...}` → vLLM 自動調用這些模組預處理 |
+| **線上 API** (`/v1/chat/completions`) | 使用者傳 `{"type": "video_url", ...}` → vLLM 自動呼叫這些模組預處理 |
 | **離線推理** (`LLM.generate()`) | 程式碼直接呼叫 `vllm.multimodal.video.VideoBackend.load_bytes()` |
 
 ### 線上 API 多模態 content 格式（OpenAI 相容）

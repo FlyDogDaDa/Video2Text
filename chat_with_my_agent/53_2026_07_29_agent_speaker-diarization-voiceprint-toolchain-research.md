@@ -6,7 +6,7 @@ status: final
 tags: [speaker-diarization, voiceprint, voicetag, resemblyzer, pyannote]
 ---
 
-# Speaker Diarization 聲紋識別工具鏈调研
+# Speaker Diarization 聲紋識別工具鏈調研
 
 ## What
 
@@ -42,7 +42,7 @@ tags: [speaker-diarization, voiceprint, voicetag, resemblyzer, pyannote]
 
 | 元件 | 許可證 | 商用 | 條件 |
 |------|--------|:----:|------|
-| voicetag | MIT | ✅ | 保留版權聲明 |
+| voicetag | MIT | ✅ | 保留版權宣告 |
 | Resemblyzer | Apache 2.0 | ✅ | 保留版權與許可證 |
 | SpeechBrain ECAPA | Apache 2.0 | ✅ | 同上 |
 | pyannote 模型 | CC-BY-4.0 | ✅ | 需適當歸 Attribution |

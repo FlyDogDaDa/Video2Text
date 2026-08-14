@@ -19,7 +19,7 @@ tags: [prototype-closure, codebase-summary, refactor-preparation]
 ### 資料流程
 
 ```
-影片檔案 → VAD 說話區間偵測 → ASR 語音辨識 → LLM 文本清理 → LLM 畫面描述 → 多模態整合 → 成果文件
+影片檔案 → VAD 說話區間偵測 → ASR 語音辨識 → LLM 文本清理 → LLM 畫面描述 → 多模態整合 → 成果檔案
 ```
 
 ### 四個獨立入口
@@ -29,7 +29,7 @@ tags: [prototype-closure, codebase-summary, refactor-preparation]
 | `main.py` | 完整 pipeline（VAD + ASR + LLM 三階段 CLI） | ⚠️ 1277 行，核心但臃腫 |
 | `prototyper.py` | 僅 ASR 流程的簡化版 | ⚠️ 重複主程式的 ASR 邏輯 |
 | `vad_preprocess.py` | VAD 預處理 CLI（多行程平行） | ⚠️ 與 main.py VAD 邏輯分離 |
-| `test_vllm_delayed_guided_decoding.py` | OpenAI API 測試腳本 | ✅ 可刪除（測試用） |
+| `test_vllm_delayed_guided_decoding.py` | OpenAI API 測試指令碼 | ✅ 可刪除（測試用） |
 | `debug_thinking_structured.py` | tqdm 多層進度條實驗 | ❌ 死碼 |
 
 ### 模組結構
@@ -47,7 +47,7 @@ src/
 │   ├── extractor.py      # 預期 local vLLM，與實際 OpenAI API 模式不符
 │   ├── slicer.py         # 同上
 │   └── loader.py         # load_model() 僅供參考
-└── vllm_launch/          # Shell 腳本（部署用）
+└── vllm_launch/          # Shell 指令碼（部署用）
 ```
 
 ### 核心程式邏輯
@@ -81,7 +81,7 @@ src/
 | 抽象層 | 用途 | 評價 |
 |--------|------|------|
 | `IOCacheVideo` | PyAV wrapper，支援快取模式 | ✅ 實作良好，可重用 |
-| `SliceParams` | 切片參數 | ✅ 合理 |
+| `SliceParams` | 切片引數 | ✅ 合理 |
 | `SliceResult` | Pydantic structured output | ✅ 設計良好 |
 | `vad_cache` 模組 | 快取管理 | ⚠️ 與 processing 邏輯混在一起 |
 | `src/pipeline/*` | 預期 vLLM local mode | ❌ 不能用，應刪除 |
@@ -109,13 +109,13 @@ src/
 
 ## 實驗者的學習收穫
 
-經過這一周的暴力開發，已掌握以下細節：
+經過這一週的暴力開發，已掌握以下細節：
 
 1. **VAD 行為** — silero-vad 在長音軌上的表現、chunk boundary 處理、靜音軌偵測
 2. **ASR 行為** — vLLM OpenAI API 的 latency、prompt 效果、多軌音訊處理
 3. **影片 IO** — PyAV seek 效能、cached vs non-cached 差異、多軌音軌處理
 4. **LLM 行為** — thinking mode、chunked 提示工程、兩輪清理策略
-5. **pipeline 流程** — 從影片到成果文件的完整資料鏈
+5. **pipeline 流程** — 從影片到成果檔案的完整資料鏈
 
 這些知識是重新建構的基礎。
 
@@ -124,7 +124,7 @@ src/
 根據實驗結果，新的架構應遵循以下原則：
 
 1. **重運算分離** — VAD 預處理、ASR、LLM 處理各自獨立，可平行執行
-2. **本地腳本驅動** — 每個階段獨立可執行，不依賴單一龐大 main.py
+2. **本地指令碼驅動** — 每個階段獨立可執行，不依賴單一龐大 main.py
 3. **檔案導向** — 所有 intermediate state 存在檔案系統，不依賴記憶體
 4. **OpenAI API 唯一通路** — 不需要 local vLLM mode
 5. **最小抽象** — 只抽象已重複三次以上的模式，不做預防性抽象

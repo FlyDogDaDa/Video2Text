@@ -14,7 +14,7 @@ tags: [ffmpeg, ffprobe, runtime, static-binaries, imageio-ffmpeg]
 
 ## Why
 
-專案使用 `imageio-ffmpeg` 作為影片處理依賴，但其內建套件只包含 ffmpeg 執行檔，沒有 ffprobe。專案需要兩者來提取影片規格、幀數、FPS 等元資料。用戶沒有系統安裝權限，需要無安裝部署（no-install）方案。
+專案使用 `imageio-ffmpeg` 作為影片處理依賴，但其內建套件只包含 ffmpeg 執行檔，沒有 ffprobe。專案需要兩者來提取影片規格、幀數、FPS 等元資料。使用者沒有系統安裝許可權，需要無安裝部署（no-install）方案。
 
 ## How
 

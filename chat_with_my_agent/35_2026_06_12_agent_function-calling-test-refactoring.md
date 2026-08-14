@@ -6,11 +6,11 @@ status: draft
 tags: [function-calling, thinking-mode, test-script, vllm]
 ---
 
-# Function Calling 測試腳本重構：統一 prompt、tool_choice、max_tokens
+# Function Calling 測試指令碼重構：統一 prompt、tool_choice、max_tokens
 
 ## What
 
-重構 `test_function_calling.py`（Thinking + Function Calling 測試腳本），統一四組測試的 prompt、固定 `tool_choice="required"`、提高 `max_tokens`，確保 F1/F3/F4 一定呼叫 tool。
+重構 `test_function_calling.py`（Thinking + Function Calling 測試指令碼），統一四組測試的 prompt、固定 `tool_choice="required"`、提高 `max_tokens`，確保 F1/F3/F4 一定呼叫 tool。
 
 ## Changes
 

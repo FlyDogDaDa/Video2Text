@@ -28,7 +28,7 @@ tags: [test-audit, validation, parallel-agents]
 | 1 | test_framework_exists | ✅ |
 | 2 | test_framework_imports | ✅ |
 | 3 | test_modules_exists | ✅ |
-| 4 | test_each_module_import (5 參數化) | ✅ |
+| 4 | test_each_module_import (5 引數化) | ✅ |
 | 5 | test_profiles_exist | ✅ |
 | 6 | test_each_module_has_base_config | ✅ |
 | 7 | test_profiles_valid_yaml | ✅ |
@@ -69,7 +69,7 @@ tags: [test-audit, validation, parallel-agents]
 
 ### Sub-agent 協調
 
-所有 sub-agent spawn 時均附上 `terminal-navigation-guard` 技能指令，防止 cd 參數錯誤。
+所有 sub-agent spawn 時均附上 `terminal-navigation-guard` 技能指令，防止 cd 引數錯誤。
 
 ## 後續步驟
 

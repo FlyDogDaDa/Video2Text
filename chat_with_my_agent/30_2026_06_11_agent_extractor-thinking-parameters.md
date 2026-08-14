@@ -10,19 +10,19 @@ tags: [vllm, extractor, thinking, two-stage, guided-decoding]
 
 ## What
 
-在 `extract_structured()` 新增 `thinking` 與 `thinking_max_tokens` 兩個參數，提供兩階段生成（two-stage generation）的切換開關。
+在 `extract_structured()` 新增 `thinking` 與 `thinking_max_tokens` 兩個引數，提供兩階段生成（two-stage generation）的切換開關。
 
 ## Why
 
-根據 vLLM GitHub #17638 討論的 consensus：offline 模式無法在 `StructuredOutputsParams` 的同時啟用 reasoning parser 和 thinking。`enable_in_reasoning` 僅有 server 端 CLI flag 對應，offline API 無對應參數。
+根據 vLLM GitHub #17638 討論的 consensus：offline 模式無法在 `StructuredOutputsParams` 的同時啟用 reasoning parser 和 thinking。`enable_in_reasoning` 僅有 server 端 CLI flag 對應，offline API 無對應引數。
 
 因此採用 community 建議的 workaround：**兩階段生成**——Stage 1 自由生成收集思考，Stage 2 帶入思考結果後用 guided JSON 產出最終結構化輸出。
 
 ## How
 
-### 參數
+### 引數
 
-| 參數 | 型別 | 預設 | 說明 |
+| 引數 | 型別 | 預設 | 說明 |
 |------|------|------|------|
 | `thinking` | `bool` | `False` | `True` 啟用兩階段生成 |
 | `thinking_max_tokens` | `int` | `512` | Stage 1 最大 token 數 |
@@ -63,7 +63,7 @@ thinking=True（two-stage）
 
 - 實際跑一段影片測試兩階段的 JSON 品質是否有提升
 - 評估 KV cache 在 Stage 2 的 reuse 效率（理論上 Stage 1 的 prompt tokens 會被 cache）
-- 考慮在 `main.py` 或上游呼叫處暴露這兩個參數
+- 考慮在 `main.py` 或上游呼叫處暴露這兩個引數
 
 ## References
 

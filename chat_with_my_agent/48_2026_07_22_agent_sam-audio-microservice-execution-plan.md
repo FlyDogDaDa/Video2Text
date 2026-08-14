@@ -54,7 +54,7 @@ Video2Text/
 
 ### 2. 修改原始模組 `modules/sam_audio.py`
 
-新增輸出路徑參數，讓使用者自訂：
+新增輸出路徑引數，讓使用者自訂：
 
 ```python
 def separate_by_anchor(
@@ -202,7 +202,7 @@ dependencies = [
 |------|------|------|
 | 檔案上傳同步 | ❌ | 大檔案 timeout |
 | **預先存放 + URL** | **✅** | 可斷點續傳、支援重試、API 只讀取 |
-| 非同步任務 | ❌ | 複雜度高，暂時不需要 |
+| 非同步任務 | ❌ | 複雜度高，暫時不需要 |
 
 **客戶端流程：**
 ```bash
@@ -227,19 +227,19 @@ ls -lh /data/output/video_speaker.wav
 ### GPU 記憶體管理
 
 - 服務啟動時載入一次（module-level cache）
-- 長期佔用 GPU 記憶體（合理，因為服務會持續運行）
-- 不支援按需卸載（未來可加）
+- 長期佔用 GPU 記憶體（合理，因為服務會持續執行）
+- 不支援按需解除安裝（未來可加）
 
 ### 原始模組：無狀態、獨立
 
 - 原始 `modules/sam_audio.py` 保持純函式、無狀態
 - 不處理上傳/下載/路徑管理
-- 服務層包裝，處理外部交互
+- 服務層包裝，處理外部互動
 
 ## 執行順序
 
 1. **建立 `serve/sam-audio/` 目錄結構**
-2. **修改 `modules/sam_audio.py`** — 加入 `speaker_output`, `residual_output` 參數
+2. **修改 `modules/sam_audio.py`** — 加入 `speaker_output`, `residual_output` 引數
 3. **建立 `serve/sam-audio/api/models.py`** — Pydantic 請求/回應模型
 4. **建立 `serve/sam-audio/api/service.py`** — 服務層包裝
 5. **建立 `serve/sam-audio/api/main.py`** — FastAPI 端點

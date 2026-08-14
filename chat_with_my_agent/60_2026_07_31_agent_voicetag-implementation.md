@@ -32,7 +32,7 @@ serve/voicetag/
 │   ├── main.py          # FastAPI app — /identify + /health
 │   ├── models.py         # Pydantic request/response models
 │   └── service.py        # 商業邏輯層
-├── voicetag_core.py      # 核心推理封裝（模型生命周期）
+├── voicetag_core.py      # 核心推理封裝（模型生命週期）
 ├── server.py             # uvicorn 進入點（port 8001）
 ├── pyproject.toml        # 依賴設定
 ├── .env                  # HF_TOKEN 設定

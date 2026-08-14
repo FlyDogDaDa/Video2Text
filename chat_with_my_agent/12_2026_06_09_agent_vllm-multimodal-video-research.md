@@ -52,7 +52,7 @@ vLLM 的 `/v1/chat/completions` 接受 `content` 為字串或陣列：
 
 ### 2. vLLM Server 啟動影片支援
 
-官方文件建議啟動時加 `--limit-mm-per-prompt`：
+官方檔案建議啟動時加 `--limit-mm-per-prompt`：
 
 ```bash
 vllm serve google/gemma-4-E2B-it \
@@ -70,7 +70,7 @@ vllm serve ... --mm-processor-kwargs '{"max_soft_tokens": 560}'
 
 ### 4. 現有 `try_video.py` 狀態
 
-| 項目 | 狀態 |
+| 專案 | 狀態 |
 |------|------|
 | `vllm.multimodal.utils.fetch_video` | ✅ 存在 |
 | `limit_mm_per_prompt={"video": 1}` | ✅ API 接受 |
@@ -80,7 +80,7 @@ vllm serve ... --mm-processor-kwargs '{"max_soft_tokens": 560}'
 
 ### 5. vLLM Server 確認
 
-目前 server 在 port 8746 正常運行，API 測試 200 OK：
+目前 server 在 port 8746 正常執行，API 測試 200 OK：
 
 ```json
 {
@@ -92,7 +92,7 @@ vllm serve ... --mm-processor-kwargs '{"max_soft_tokens": 560}'
 
 ### 6. 結論
 
-**影片功能在 v0.22.1 stable 不可用。** 文件明確指出影片處理 pipeline 在 "custom vLLM branch" 中。
+**影片功能在 v0.22.1 stable 不可用。** 檔案明確指出影片處理 pipeline 在 "custom vLLM branch" 中。
 
 **可能的解決路徑：**
 

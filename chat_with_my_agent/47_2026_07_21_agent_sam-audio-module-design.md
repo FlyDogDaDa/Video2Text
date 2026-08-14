@@ -254,7 +254,7 @@ result = separate_by_anchor(audio, anchors, "single speaker")
 
 ## 前置條件
 
-1. **Hugging Face 認證**：需登入取得 `facebook/sam-audio-large` 存取權限
+1. **Hugging Face 認證**：需登入取得 `facebook/sam-audio-large` 存取許可權
    
    ```bash
    huggingface-cli login

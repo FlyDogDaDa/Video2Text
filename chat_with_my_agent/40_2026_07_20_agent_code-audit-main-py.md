@@ -37,7 +37,7 @@ tags: [code-audit, architecture-review, refactoring]
 | 硬編碼路徑 | `/mnt/hdd/b11223209/螢幕錄影/2026_06/` 散落在 main.py、vad_preprocess.py |
 
 - 第 909 行 `run_single_file_llm()` 有 `return` 把畫面提取、影音清理、總結截斷為死碼
-- CLI 解析嵌套四層 `if args.phase` 分支，快速測試 / 單檔案 / 批次模式交錯
+- CLI 解析巢狀四層 `if args.phase` 分支，快速測試 / 單檔案 / 批次模式交錯
 - 兩個幾乎相同的 chunking cleanup 流程（音軌 vs 影音）各 160+ 行
 
 ### 2. 重複模式

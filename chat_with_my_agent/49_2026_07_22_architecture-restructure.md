@@ -17,12 +17,12 @@ tags: [architecture, decoupling, microservice, client-server, sam-audio]
 ## 架構決策
 
 ### 1. 模組端 (`modules/sam_audio.py`)
-**職責**：無狀態，僅負責發送請求。
+**職責**：無狀態，僅負責傳送請求。
 
 - 移除 `torch`, `torchaudio`, `sam-audio` 等重型依賴。
 - 移除 `_model`, `_processor` 全域快取。
 - 使用 `httpx` 呼叫 `localhost:8000`。
-- 回傳 `SeparationResult` 實例（由 JSON 轉換）。
+- 回傳 `SeparationResult` 例項（由 JSON 轉換）。
 
 ### 2. 服務端 (`serve/sam-audio`)
 **職責**：重型運算，負責模型生命週期管理。
@@ -65,20 +65,20 @@ tags: [architecture, decoupling, microservice, client-server, sam-audio]
 
 | 問題 | 修復 |
 |------|------|
-| `serve/sam-audio/api/service.py` 直接 import `modules.sam_audio`（循環依賴） | 改為呼叫獨立的 `sam_audio_core` |
+| `serve/sam-audio/api/service.py` 直接 import `modules.sam_audio`（迴圈依賴） | 改為呼叫獨立的 `sam_audio_core` |
 | FastAPI `async def` 端點呼叫同步 PyTorch 推理 → event loop block | 改為 `def`（sync），FastAPI 自動 threadpool |
 | `pyproject.toml` 仍依賴 torch/sam-audio | 移除，移至伺服器專案 |
 | 測試需要 GPU 才能執行 | 改為 mock httpx，測試可在任何環境執行 |
 
 ## 優點
 1. **解耦依賴**：主專案不需要安裝沉重的 PyTorch 生態系。
-2. **資源隔離**：模型 crashes 不會導致主程序崩潰。
-3. **靈活性**：日後可將微服務部署到另一台機器或 Docker Container。
+2. **資源隔離**：模型 crashes 不會導致主程式崩潰。
+3. **靈活性**：日後可將微服務部署到另一臺機器或 Docker Container。
 4. **測試友善**：Client 測試不需要 GPU 也能執行。
 
 ## 待辦事項
 - [x] 修改 `modules/sam_audio.py` 為 API Client
 - [x] 調整 `Video2Text/pyproject.toml` 依賴
-- [x] 測試跨進程呼叫（HTTP 端點驗證）
+- [x] 測試跨程式呼叫（HTTP 端點驗證）
 - [x] 確認 `serve/sam-audio` 能正確啟動並處理請求
 - [ ] 完整流程測試（需 GPU + 下載 SAM-Audio 模型）

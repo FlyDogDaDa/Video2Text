@@ -18,7 +18,7 @@ tags: [test-audio, ffmpeg, reference]
 
 ## How
 
-- 複製原始音檔至 `test-audio/`：`cp ~/文件/AudioRecording/2026_07_21_test.mp3 test-audio/`
+- 複製原始音檔至 `test-audio/`：`cp ~/檔案/AudioRecording/2026_07_21_test.mp3 test-audio/`
 - 使用 ffmpeg 裁剪：`ffmpeg -y -i test-audio/2026_07_21_test.mp3 -ss 28.750 -to 36.618 -c:a libmp3lame -q:a 2 test-audio/boss-reference.mp3`
 - 結果：`boss-reference.mp3`（196 KB，約 7.8 秒）
 

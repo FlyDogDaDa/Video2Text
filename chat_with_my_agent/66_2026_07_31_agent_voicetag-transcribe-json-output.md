@@ -10,7 +10,7 @@ tags: [voicetag, breeze-asr-26, diarization, transcription, json-output]
 
 ## What
 
-- 驗證 voicetag 的 `transcribe()` 能正常連接 Breeze-ASR-26 並輸出完整 JSON
+- 驗證 voicetag 的 `transcribe()` 能正常連線 Breeze-ASR-26 並輸出完整 JSON
 - 測試 pyannote diarization 與 transcription 的整合 pipeline
 - 確認輸出格式符合「誰、在何時、講了什麼」的需求
 
@@ -24,12 +24,12 @@ tags: [voicetag, breeze-asr-26, diarization, transcription, json-output]
 
 ### 測試環境
 
-| 項目 | 設定 |
+| 專案 | 設定 |
 |------|------|
 | Breeze-ASR-26 | port 8750, TP_SIZE=1, GPU_MEM_UTIL=0.08, async-scheduling, PID 273073 |
 | voicetag venv | `serve/voicetag/.venv` (Python 3.10.19) |
 | 測試音訊 | `test-audio/meeting_30_60s.wav` (30 秒) |
-| 測試設備 | CPU（GPU 在 resemblyzer embedding 階段被卡住） |
+| 測試裝置 | CPU（GPU 在 resemblyzer embedding 階段被卡住） |
 
 ### 測試結果
 
@@ -96,7 +96,7 @@ result = vt.transcribe(...)  # speaker 會被識別為 "黃"、"文"
 
 ## Follow-up
 
-- [ ] 用完整的 2 小時會議檔案（`~/文件/AudioRecording/保修工程會議.m4a`）測試
+- [ ] 用完整的 2 小時會議檔案（`~/檔案/AudioRecording/保修工程會議.m4a`）測試
 - [ ] 註冊 speaker 樣本後測試 identification（目前都是 UNKNOWN）
 - [ ] 修復 GPU 模式下的 resemblyzer 卡住問題（可能是 CUDA OOM 或 hanging）
 - [ ] 考慮用 `cuda` 替代 `cpu` 以加速 embedding 計算

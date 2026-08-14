@@ -14,7 +14,7 @@ tags: [tse, quark-audio, uni-se, environment-setup, voice-separation]
 
 ## Why
 
-需要可商用、本地運行的 TSE 方案，支援輸入聲紋/參考音訊並從混合音訊中提取目標說話人內容。
+需要可商用、本地執行的 TSE 方案，支援輸入聲紋/參考音訊並從混合音訊中提取目標說話人內容。
 
 ## 模型選型過程
 
@@ -52,7 +52,7 @@ tags: [tse, quark-audio, uni-se, environment-setup, voice-separation]
 ### 2. 取得官方程式碼
 
 - Clone `alibaba/unified-audio` 至 `serve/quark-audio/unified-audio/QuarkAudio-UniSE/`
-- 官方已提供推理腳本（`test.py`），但需調整為獨立 API
+- 官方已提供推理指令碼（`test.py`），但需調整為獨立 API
 
 ### 3. 建立 Python API 包裝
 
@@ -71,9 +71,9 @@ tags: [tse, quark-audio, uni-se, environment-setup, voice-separation]
 
 1. **用 uv 不用 pip**：符合專案慣例
 2. **`--no-build-isolation`**：官方 repo 的 `pyproject.toml` 不需隔離建構
-3. **刪除下載腳本**：直接運行推理時自動下載模型權重
+3. **刪除下載指令碼**：直接執行推理時自動下載模型權重
 4. **HF 預設快取**：wav2vec2 等模型存於 `~/.cache/huggingface`
-5. **僅使用推理程式**：不需要訓練相關代碼
+5. **僅使用推理程式**：不需要訓練相關程式碼
 
 ## Follow-up
 

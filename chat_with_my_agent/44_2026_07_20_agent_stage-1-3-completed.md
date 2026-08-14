@@ -13,14 +13,14 @@ tags: [framework, modules, profile, workflow, stage-1-3-complete]
 完成 Video2Text v0.1.1 架構的階段 1-3 實作：
 - 階段 1：`framework/config.py`（profile 管理框架）
 - 階段 2：5 個 modules + 3 個 profiles（模組骨架 + 設定檔）
-- 階段 3：`workflow.py`（入口腳本）
+- 階段 3：`workflow.py`（入口指令碼）
 
 ## 實作結果
 
 ### 階段 1：框架（1 個檔案）
 
 **`framework/config.py`**
-- `set_profile(path: str)` — 設定全局 profile 路徑
+- `set_profile(path: str)` — 設定全域性 profile 路徑
 - `cfg(key: str, model: type[BaseModel]) -> BaseModel` — 從 YAML 讀取 key section，用 Pydantic 初始化
 
 ### 階段 2：模組 + 設定檔（8 個檔案）
@@ -47,7 +47,7 @@ tags: [framework, modules, profile, workflow, stage-1-3-complete]
 
 **`workflow.py`**
 - argparse 解析 `--input` 和 `--profile`
-- 呼叫 `set_profile(profile_path)` 設定全局 profile
+- 呼叫 `set_profile(profile_path)` 設定全域性 profile
 - 按順序呼叫各模組函式
 - 印出結果路徑
 

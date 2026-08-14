@@ -6,21 +6,21 @@ status: final
 tags: [architecture, design, v0.1.1, prototype-closure]
 ---
 
-# 架構設計文件 — Video2Text v0.1.1
+# 架構設計檔案 — Video2Text v0.1.1
 
 ## 概要
 
-此文件定義 Video2Text 專案重新建構後的架構。整個專案是一個實驗性 prototype 的重寫，目標是清除所有 legacy code，以全新的模組化架構重新建構。
+此檔案定義 Video2Text 專案重新建構後的架構。整個專案是一個實驗性 prototype 的重寫，目標是清除所有 legacy code，以全新的模組化架構重新建構。
 
 ## 核心設計原則
 
 ### 1. 直接函式呼叫（拒絕超級函式）
 
-不使用通用 `run(module_name, ...)` 這種查表式呼叫。每個功能都是明確命名的函式，簽名即文件。
+不使用通用 `run(module_name, ...)` 這種查表式呼叫。每個功能都是明確命名的函式，簽名即檔案。
 
 ### 2. Config 提走（數學提公因式）
 
-Config 不作為 public API 的必須參數。模組內部自行從全局 profile 載入 config，外部只看見「輸入路徑 → 輸出路徑」。
+Config 不作為 public API 的必須引數。模組內部自行從全域性 profile 載入 config，外部只看見「輸入路徑 → 輸出路徑」。
 
 ### 3. 對外開放，對內封閉
 
@@ -60,7 +60,7 @@ video2text/
 
 ### config.py
 
-提供兩個全域函數：
+提供兩個全域函式：
 
 ```python
 # ── 設定 profile 路徑（workflow.py 呼叫一次） ──
@@ -73,7 +73,7 @@ def cfg(key: str, model: type[BaseModel]) -> BaseModel:
 ```
 
 **行為**：
-- `set_profile()` 設定全局變數 `_PROFILE_PATH`
+- `set_profile()` 設定全域性變數 `_PROFILE_PATH`
 - `cfg(key, Model)` 讀取 `_PROFILE_PATH` 的指定 key，用 Pydantic 初始化
 - 無快取（YAML 很小，讀取成本可忽略）
 
@@ -116,9 +116,9 @@ def main_function(input_path: Path) -> Path:
 
 | 規則 | 說明 |
 |------|------|
-| 輸入路徑 | `Path` 類型，明確指定輸入檔案 |
-| 輸出路徑 | 回傳 `Path` 類型，明確指定輸出位置 |
-| Config 不作為參數 | 透過 `cfg()` 內部取得 |
+| 輸入路徑 | `Path` 型別，明確指定輸入檔案 |
+| 輸出路徑 | 回傳 `Path` 型別，明確指定輸出位置 |
+| Config 不作為引數 | 透過 `cfg()` 內部取得 |
 | 名稱明確 | 不用 `run()`、`process()` 等模糊名稱 |
 
 ### 模組清單
@@ -190,7 +190,7 @@ asr:
 
 ### workflow.py
 
-唯一的入口腳本，組合各模組：
+唯一的入口指令碼，組合各模組：
 
 ```python
 import argparse
@@ -230,14 +230,14 @@ uv run python workflow.py --input video.mp4 --profile profiles/research.yaml
 
 | 決策 | 選擇 | 理由 |
 |------|------|------|
-| Config 傳遞 | 全域 `cfg()` 函數 | 模組 API 乾淨，不用每次傳 cfg |
+| Config 傳遞 | 全域 `cfg()` 函式 | 模組 API 乾淨，不用每次傳 cfg |
 | Profile 管理 | `set_profile()` 全域變數 | 簡單，workflow 級別設定一次 |
-| 模組介面 | 明確名稱 + Path 參數/回傳 | 簽名即文件，無查表成本 |
+| 模組介面 | 明確名稱 + Path 引數/回傳 | 簽名即檔案，無查表成本 |
 | 目錄結構 | 按「做的事情」分類 | 每個模組只做一件事 |
 | YAML key | 模組自己定義 | 框架不決定模組的 key |
 | Cache | 模組自己實現 | 框架不干涉執行邏輯 |
 
-## 未定義項目（待討論）
+## 未定義專案（待討論）
 
 - Cache 策略細節（cache key 格式、過期策略）
 - Error handling 模式

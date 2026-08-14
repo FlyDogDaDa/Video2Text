@@ -13,7 +13,7 @@ tags: [vllm, multimodal, offline, inference, TRITON_ATTN, compressed-tensors, VR
 建立 `src/inference/multimodal_infer.py` 支援文字、圖片、音訊、影片的多模態離線推理，但測試結果只有純文字可用。
 
 **結果：**
-- 純文字 ✅ 穩定運行
+- 純文字 ✅ 穩定執行
 - 圖片 ❌ VRAM 不足 + vision 相容性 bug
 - 影片 ❌ vLLM stable v0.22.1 不支援
 - 音訊 ❌ Gemma-4-12B 無 audio encoder
@@ -40,7 +40,7 @@ ERROR: Available KV cache memory: 0.83 GiB
 
 原因：`compressed-tensors` 量化模型 + vision profiling 吃掉過多 VRAM（2×12GB GPU = 24GB 總容量）。
 
-**錯誤 2：Vision 與 compressed-tensors 不兼容**
+**錯誤 2：Vision 與 compressed-tensors 不相容**
 
 ```
 ValueError: Found 1 <|image|> tokens in the text but no images were passed.
@@ -79,7 +79,7 @@ Gemma-4-12B 是 Google DeepMind 於 2026/06/03 發布的開源多模態模型，
 | **原生多模態** | 音訊、影像、影片皆透過 linear projection 投影到 text token space |
 | **全模態支援** | 12B 版本支援 **text + image + audio（30s）+ video（60s）** |
 | **256K context** | 超長上下文 |
-| **16GB VRAM 可運行** | 目標消費級硬體 |
+| **16GB VRAM 可執行** | 目標消費級硬體 |
 | **Apache 2.0** | 開放權重 |
 | **效能** | MMLU Pro 77.2%，媲美 2× 更大的 26B 模型 |
 
@@ -91,9 +91,9 @@ Gemma-4-12B 是 Google DeepMind 於 2026/06/03 發布的開源多模態模型，
 
 ## 限制原因
 
-1. **vLLM v0.22.1 + compressed-tensors + Gemma-4 vision 不兼容**
+1. **vLLM v0.22.1 + compressed-tensors + Gemma-4 vision 不相容**
    - 錯誤：`'Gemma4UnifiedVisionConfig' object has no attribute 'num_soft_tokens'`
-   - 需要在線上 API 或離線推理都修好
+   - 需要線上上 API 或離線推理都修好
 
 2. **VRAM 不足**
    - `limit_mm_per_prompt` 觸發 multimodal profiling 吃掉 ~5-7GB VRAM
@@ -101,7 +101,7 @@ Gemma-4-12B 是 Google DeepMind 於 2026/06/03 發布的開源多模態模型，
 
 3. **vLLM stable 不支援 video_url**
    - 需要 custom vLLM branch
-   - `fetch_video` 函數存在，但 vision encoder 處理未實裝
+   - `fetch_video` 函式存在，但 vision encoder 處理未實裝
 
 ## 程式結構
 
@@ -143,9 +143,9 @@ python src/inference/multimodal_infer.py \
 └─────────────────────────────────────────────────────┘
 ```
 
-### 關鍵函數
+### 關鍵函式
 
-| 函數 | 用途 |
+| 函式 | 用途 |
 |------|------|
 | `create_llm()` | 建立 LLM 實體，設定 TRITON_ATTN、enforce_eager |
 | `build_messages()` | 構建 OpenAI content array：`[{"type": "text"}, {"type": "image"}, ...]` |

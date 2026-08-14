@@ -26,7 +26,7 @@ tags:
 
 > 「逐字稿」被聽成「竹子搞」
 
-需要研究能否透過 `prompt` 參數改善专有名词辨識。
+需要研究能否透過 `prompt` 引數改善專有名詞辨識。
 
 ## 二、研究方法
 
@@ -34,24 +34,24 @@ tags:
 
 | 編號 | 子任務 | 分析目標 |
 |------|--------|----------|
-| A | voicetag `openai_stt.py` 內部實作 | 是否已有 prompt 參數？ |
+| A | voicetag `openai_stt.py` 內部實作 | 是否已有 prompt 引數？ |
 | B | OpenAI / Whisper API prompt 規格 | 格式、限制、使用方式 |
 | C | Breeze-ASR-26 部署與 API | vLLM 是否支援 prompt？ |
-| D | voicetag `pipeline.py` 流程 | `transcribe()` 如何傳遞參數給 provider？ |
+| D | voicetag `pipeline.py` 流程 | `transcribe()` 如何傳遞引數給 provider？ |
 
 ## 三、研究結果
 
 ### A. voicetag `openai_stt.py` 內部實作
 
-**`transcribe()` 目前接受的參數：**
+**`transcribe()` 目前接受的引數：**
 
-| 參數 | 型別 | 預設值 | 說明 |
+| 引數 | 型別 | 預設值 | 說明 |
 |------|------|--------|------|
 | `audio` | `np.ndarray` | （必填） | 音訊資料 |
-| `sr` | `int` | 16000 | 採樣率 |
-| `language` | `Optional[str]` | None | 語言代碼 |
+| `sr` | `int` | 16000 | 取樣率 |
+| `language` | `Optional[str]` | None | 語言程式碼 |
 
-**❌ 沒有 `prompt` 參數。**
+**❌ 沒有 `prompt` 引數。**
 
 `kwargs` 只包含 `model`、`file`、有條件的 `language`。其他 provider 結構類似。
 
@@ -71,12 +71,12 @@ tags:
 
 ```
 ❌ "Please correctly spell 逐字稿 instead of 竹子搞"
-✅ "逐字稿, 竹科, 政府公文, 文件, 紀錄, 報告"
+✅ "逐字稿, 竹科, 政府公文, 檔案, 紀錄, 報告"
 ```
 
 **限制：**
 - `whisper-1` 上限 **224 tokens**
-- 禁用字元：`<`, `>`, `\r`, `\n`
+- 停用字元：`<`, `>`, `\r`, `\n`
 - prompt 語言必須與音檔主要語言一致
 - 超過限制 → 超出部分被忽略；格式錯誤 → 400 錯誤
 
@@ -86,7 +86,7 @@ tags:
 
 **API 端點：** `POST /v1/audio/transcriptions`（OpenAI 相容格式）
 
-**✅ 完整支援 `prompt` 參數。**
+**✅ 完整支援 `prompt` 引數。**
 
 vLLM Transcriptions API 規格：
 ```
@@ -95,9 +95,9 @@ prompt: Optional text to guide the transcription style (optional)
 
 **❌ 不支援 grammar / constrained decoding**（這些功能僅存在於 vLLM Chat Completions API）。
 
-**部署參數備註：** `--gpu-memory-utilization 0.035` 異常低（通常 Whisper 至少需要 2-6GB VRAM），可能為了低顯存環境共存。
+**部署引數備註：** `--gpu-memory-utilization 0.035` 異常低（通常 Whisper 至少需要 2-6GB VRAM），可能為了低視訊記憶體環境共存。
 
-### D. voicetag `pipeline.py` 參數傳遞
+### D. voicetag `pipeline.py` 引數傳遞
 
 `transcribe()` 方法：
 ```python
@@ -112,11 +112,11 @@ def transcribe(
 ) -> TranscriptResult:
 ```
 
-**可以透過 `**provider_kwargs` 傳遞**，但各 provider 的 `__init__` / `transcribe()` 尚未定義 `prompt` 參數，所以目前會被無視。
+**可以透過 `**provider_kwargs` 傳遞**，但各 provider 的 `__init__` / `transcribe()` 尚未定義 `prompt` 引數，所以目前會被無視。
 
 ## 四、結論
 
-| 項目 | 現況 | 支援度 |
+| 專案 | 現況 | 支援度 |
 |------|------|--------|
 | Breeze-ASR-26 (vLLM) 支援 prompt | vLLM ASR API | ✅ 完整支援 |
 | OpenAI-compatible 格式一致 | `/v1/audio/transcriptions` | ✅ 一致 |
@@ -127,10 +127,10 @@ def transcribe(
 
 需要修改的檔案（由外而內）：
 
-| 檔案 | 修改內容 | 優先級 |
+| 檔案 | 修改內容 | 優先順序 |
 |------|----------|--------|
 | `webuis/speech-to-text.py` | 新增 prompt 輸入框（textarea） | 🟡 前端 |
-| `workflows/speech_to_text.py` | `run_pipeline()` 接受 `prompt` 參數 | 🟡 橋接 |
+| `workflows/speech_to_text.py` | `run_pipeline()` 接受 `prompt` 引數 | 🟡 橋接 |
 | `voicetag/providers/openai_stt.py` | `__init__` / `transcribe()` 新增 `prompt` | 🔴 核心 |
 | `voicetag/pipeline.py` | `transcribe()` 接受 `prompt` 並傳遞 | 🔴 核心 |
 

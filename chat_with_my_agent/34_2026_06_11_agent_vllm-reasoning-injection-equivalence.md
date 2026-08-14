@@ -24,17 +24,17 @@ tags: [vllm, gemma-4, reasoning, injection-equivalence, two-stage, function-call
 
 ## Why
 
-vLLM 目前在單一請求中同時支援 `reasoning` + `structured output` 有局限性（如 `enable_thinking` + `response_format` 組合時 `reasoning` 欄位可能為空）。
+vLLM 目前在單一請求中同時支援 `reasoning` + `structured output` 有侷限性（如 `enable_thinking` + `response_format` 組合時 `reasoning` 欄位可能為空）。
 
 為了在 API 模式下實現推理引導，通常採用「兩階段方法」：
 1. 第一次呼叫開啟思考，停產於 `<channel|>`，抽離 reasoning
 2. 第二次呼叫將 reasoning 注入 `assistant.content`，強制輸出結構化內容
 
-需要驗證：這種兩階段注入是否真的能復現模型「原生連續思考」的效果，還是只是有額外效果或等效。
+需要驗證：這種兩階段注入是否真的能復現模型「原生連續思考」的效果，還是隻是有額外效果或等效。
 
 ## How
 
-### 實驗代碼
+### 實驗程式碼
 
 `chat_wtih_my_agent/31_2026_06_11_human_strategy-vllm-server-api-pattern/test_two_stage_equivalence.py`
 
@@ -99,7 +99,7 @@ messages_with_reasoning = [
 
 兩階段注入推理只是 vLLM 支援不周時的替代方案，無法完全等價於原生連續思考→輸出。
 
-## 展望：Function Calling (工具調用) 作為結構化輸出的替代方案
+## 展望：Function Calling (工具呼叫) 作為結構化輸出的替代方案
 
 ### 問題背景
 
@@ -107,7 +107,7 @@ messages_with_reasoning = [
 
 ### 為什麼 Function Calling 才是正解
 
-Gemma-4 設計思考模式的 **真正用途** 就是配合 Function Calling。Google 官方 Prompt Formatting 明確指出 thinking + tool use 是原生兼容的：
+Gemma-4 設計思考模式的 **真正用途** 就是配合 Function Calling。Google 官方 Prompt Formatting 明確指出 thinking + tool use 是原生相容的：
 
 ```
 <|turn>user ...what happens in these frames?<turn|>
@@ -128,9 +128,9 @@ Thinking Process: 1. Analyze each frame... 2. Extract relationships...
 
 | 特性 | `response_format` (guided JSON) | `tools` (Function Calling) |
 |------|------|------|
-| thinking 兼容 | ❌ `reasoning` 變空或幻覺 | ✅ 原生支持，先思考再調用 |
+| thinking 相容 | ❌ `reasoning` 變空或幻覺 | ✅ 原生支援，先思考再呼叫 |
 | JSON 生成方式 | 模型 token by token 硬寫 JSON | vLLM 自動將 tool response 解析為 JSON |
-| 推理干擾 | 從 token 1 強制 JSON 格式，干擾思考過程 | `<|channel|>` 內部自由推理，不受 JSON 綁架 |
+| 推理幹擾 | 從 token 1 強制 JSON 格式，幹擾思考過程 | `<|channel|>` 內部自由推理，不受 JSON 綁架 |
 | 結構化程度 | 依賴模型寫出合法 JSON（可能失敗） | 工具定義強制結構，輸出可靠 |
 | vLLM 支援 | ⚠️ 與 thinking 互斥 | ✅ `--tool-call-parser gemma4` 原生支援 |
 
@@ -145,7 +145,7 @@ Thinking Process: 1. Analyze each frame... 2. Extract relationships...
 
 - [ ] 建立 Function Calling 測試：驗證 Gemma-4 + vLLM 的 thinking + tool use 是否正常工作
 - [ ] 以 Function Calling 取代目前兩階段 `task_double_call_reason_then_structured()`
-- [ ] 考慮這作為生產環境的首选結構化輸出方案
+- [ ] 考慮這作為生產環境的首選結構化輸出方案
 
 ## Follow-up
 
@@ -153,7 +153,7 @@ Thinking Process: 1. Analyze each frame... 2. Extract relationships...
 - 生產環境可根據需求選擇：
   - 追求速度：使用純 `task_structured_output()`（無思考）
   - 需要推理品質：使用 `task_double_call_reason_then_structured()`（兩階段，直接塞 reasoning 到 content）
-  - **長期首選：Function Calling（待驗證）** — 原生支持 thinking + 結構化輸出
+  - **長期首選：Function Calling（待驗證）** — 原生支援 thinking + 結構化輸出
 
 ## References
 

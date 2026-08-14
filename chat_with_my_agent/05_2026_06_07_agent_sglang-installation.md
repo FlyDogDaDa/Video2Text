@@ -97,7 +97,7 @@ Transformers 5.8.1 已由 SGLang 依賴解析為 compatible version（與 main b
 - [ ] 測試 SGLang 能否成功 load Gemma 4 12B 模型
 - [ ] 驗證多模態輸入（image + audio）是否正常工作
 - [ ] 測試 thinking mode 輸出格式
-- [ ] 更新 system design 文件中的推論框架說明
+- [ ] 更新 system design 檔案中的推論框架說明
 
 ## References
 

@@ -34,7 +34,7 @@ tags:
 
 ### 測試結果（40 分鐘音訊）
 
-| 項目 | 結果 |
+| 專案 | 結果 |
 |------|------|
 | **device 偵測** | `auto` → `cuda:0` 正確 |
 | **speaker 註冊** | 4 位（婕、文、陳、黃），各 1 個樣本 |
@@ -60,13 +60,13 @@ tags:
 
 ### Gradio 6.0 API 調整
 
-- `theme` 從 `Blocks()` 移到 `launch()` 參數
+- `theme` 從 `Blocks()` 移到 `launch()` 引數
 - 移除 `Textbox.show_copy_button`（6.0 不支援）
 - 移除 `Dataframe.wrap_table`（6.0 不支援）
 
 ## 三、WebUI 完整修復（2026-08-03）
 
-修復兩個阻斷性問題，使完整 pipeline 成功運行。
+修復兩個阻斷性問題，使完整 pipeline 成功執行。
 
 ### 1. 修復 Numba `__main__.has no attribute 'capture'` crash
 

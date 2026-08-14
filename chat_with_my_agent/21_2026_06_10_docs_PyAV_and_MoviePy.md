@@ -12,10 +12,10 @@
 3. [PyAV 與 FFmpeg 架構定位](#3pyav-與-ffmpeg-架構定位)
 4. [libavfilter 過濾器完整分類目錄](#4libavfilter-過濾器完整分類目錄)
 5. [PyAV Filter Graph 進階應用](#5pyav-filter-graph-進階應用)
-6. [PyAV + NumPy 每幀像素操控](#6pyav--numpy-每幀像素操控)
+6. [PyAV + NumPy 每幀畫素操控](#6pyav--numpy-每幀畫素操控)
 7. [PyAV + CuPy GPU 加速特效](#7pyav--cupy-gpu-加速特效)
 8. [三層混合架構：PyAV + FFmpeg CLI + MoviePy](#8三層混合架構pyav--ffmpeg-cli--moviepy)
-9. [效能優化建議](#9效能優化建議)
+9. [效能最佳化建議](#9效能最佳化建議)
 10. [總結：複雜度階梯](#10總結複雜度階梯)
 
 ---
@@ -26,11 +26,11 @@
 
 | 特性 | MoviePy | PyAV |
 |---|---|---|
-| **技術本質** | 高階影片剪輯框架，預設透過子進程呼叫 FFmpeg | 低階 FFmpeg C API 的 Cython 綁定庫 |
-| **數據模型** | 全域處理 NumPy 陣列 (H×W×3) | 直接操作 Container、Packet、Frame、Stream |
-| **擅長領域** | 剪切、多軌混音、字幕、圖層疊加、特效 | 精確解碼、即時串流、自訂編碼參數 |
-| **執行方式** | 傳統方式啟動 FFmpeg 命令行子進程 | 直接載入 FFmpeg 共享庫進記憶體 |
-| **效能表現** | 較高 I/O 開銷（進程間管道） | 極快（記憶體內直接操作） |
+| **技術本質** | 高階影片剪輯框架，預設透過子程式呼叫 FFmpeg | 低階 FFmpeg C API 的 Cython 繫結庫 |
+| **資料模型** | 全域處理 NumPy 陣列 (H×W×3) | 直接操作 Container、Packet、Frame、Stream |
+| **擅長領域** | 剪下、多軌混音、字幕、圖層疊加、特效 | 精確解碼、即時串流、自訂編碼引數 |
+| **執行方式** | 傳統方式啟動 FFmpeg 命令列子程式 | 直接載入 FFmpeg 共享庫進記憶體 |
+| **效能表現** | 較高 I/O 開銷（程式間管道） | 極快（記憶體內直接操作） |
 
 ### 1.2 核心關係：MoviePy 的替代後端
 
@@ -42,14 +42,14 @@
 └──────────┬──────────────────────┬────────────────┘
            ▼                      ▼
 ┌────────────────────┐  ┌────────────────────┐
-│ FFmpeg 子進程模式  │  │   PyAV 後端模式    │
+│ FFmpeg 子程式模式  │  │   PyAV 後端模式    │
 │ (預設 / Legacy)    │  │   (Optional)       │
 ├────────────────────┤  ├────────────────────┤
 │ 啟動 ffmpeg.exe    │  │  載入 libavcodec   │
 │ OS 管道傳輸原始    │  │  libavformat       │
 │ 位元資料           │  │  libavfilter       │
-│ 解析 stderr 文字   │  │  直接記憶體映射     │
-│ 序列化/反序列化    │  │  零拷貝 NumPy 轉換 │
+│ 解析 stderr 文字   │  │  直接記憶體對映     │
+│ 序列化/反序列化    │  │  零複製 NumPy 轉換 │
 └────────────────────┘  └────────────────────┘
 ```
 
@@ -60,15 +60,15 @@
 | **速度** | 大型影片的精確搜尋更快，沒有管道瓶頸 |
 | **VFR 支援** | 變更動幀率（Variable Frame Rate）影片不會有音視訊漂移 |
 | **精確度** | 直接存取低階中繼資料、封包串流、多軌音訊路由 |
-| **錯誤處理** | 損壞幀以 Python 例外處理，可優雅跳過而非子進程崩潰 |
-| **零拷貝** | 解碼記憶體直接映射到 NumPy，不需管道傳輸 |
+| **錯誤處理** | 損壞幀以 Python 例外處理，可優雅跳過而非子程式崩潰 |
+| **零複製** | 解碼記憶體直接對映到 NumPy，不需管道傳輸 |
 
 ### 1.4 潛在缺點
 
 | 考量 | 說明 |
 |---|---|
 | **安裝複雜度** | 需要與 FFmpeg 匹配的 C 編譯輪（wheel），不像預設模式自動下載 |
-| **平台相容性** | 某些平台上 PyAV 輪可能較難安裝或版本不匹配 |
+| **平臺相容性** | 某些平臺上 PyAV 輪可能較難安裝或版本不匹配 |
 
 ### 1.5 為什麼選擇 PyAV 後端？（詳細對比）
 
@@ -83,7 +83,7 @@
 
 ## 2. MoviePy 兩種後端架構對比
 
-### 2.1 傳統方式：FFmpeg 子進程模式
+### 2.1 傳統方式：FFmpeg 子程式模式
 
 ```
 [ MoviePy Clip ] --> [ 啟動 ffmpeg.exe ] --> [ OS Pipe ] --> [ FFmpeg 解碼 ]
@@ -95,13 +95,13 @@
 
 **工作流程：**
 1. MoviePy 組建 FFmpeg CLI 命令
-2. 啟動獨立的 `ffmpeg.exe`（或 `ffmpeg`）子進程
+2. 啟動獨立的 `ffmpeg.exe`（或 `ffmpeg`）子程式
 3. 透過 OS 管道傳輸原始位元資料
 4. 解析 stderr 文字輸出以提取中繼資料
 5. 等待管道傳輸完整幀位元流
 
 **缺點：**
-- 子進程啟動與管理開銷
+- 子程式啟動與管理開銷
 - OS 管道 I/O 瓶頸
 - 序列化/反序列化延遲
 - stderr 文字解析脆弱
@@ -112,19 +112,19 @@
 [ MoviePy Clip ] --> [ PyAV Wrapper ] --> [ FFmpeg C-Libraries ]
                               │                      │
                               ▼                      ▼
-                       精確 PTS 尋址          libavcodec/libavformat
-                       零拷貝 NumPy 映射      記憶體內直接操作
+                       精確 PTS 定址          libavcodec/libavformat
+                       零複製 NumPy 對映      記憶體內直接操作
 ```
 
 **工作流程：**
 1. MoviePy 請求特定時間 t 的幀
-2. PyAV 使用原生 PTS（Presentation Timestamp）精確尋址到關鍵幀
+2. PyAV 使用原生 PTS（Presentation Timestamp）精確定址到關鍵幀
 3. 在記憶體中直接解碼封包
-4. 將解碼資料零拷貝映射到 NumPy 陣列
-5. MoviePy 直接操作 NumPy 陣列進行像素變換
+4. 將解碼資料零複製對映到 NumPy 陣列
+5. MoviePy 直接操作 NumPy 陣列進行畫素變換
 
 **優勢：**
-- 無子進程啟動開銷
+- 無子程式啟動開銷
 - 記憶體內直接操作
 - 精確時間戳追蹤
 - Python 異常處理
@@ -157,9 +157,9 @@
 └──────────────────────────────────────────────────────────┘
 ```
 
-### 3.2 PyAV 綁定範圍
+### 3.2 PyAV 繫結範圍
 
-PyAV 提供 Pythonic 綁定到以下 FFmpeg 庫：
+PyAV 提供 Pythonic 繫結到以下 FFmpeg 庫：
 
 | FFmpeg Library | PyAV 對應 | 功能 |
 |---|---|---|
@@ -224,8 +224,8 @@ output.close()
 |---|---|
 | `eq` | 調整亮度、對比度、飽和度、Gamma |
 | `colorbalance` | 修改陰影、中間調、高Light 的 RGB 強度 |
-| `colorchannelmixer` | 透過通道混合調整色彩配置文件 |
-| `lut2` / `lut3d` | 套用 3D 查找表（LUT）進行電影級調色 |
+| `colorchannelmixer` | 透過通道混合調整色彩配置檔案 |
+| `lut2` / `lut3d` | 套用 3D 查詢表（LUT）進行電影級調色 |
 | `colorspace` | 色彩標準轉換（BT.601, BT.709, BT.2020） |
 | `hsvkey` / `hsvhold` | 基於 Hue/Saturation/Value 的範圍選色 |
 | `grayworld` | 自動白平衡調整 |
@@ -242,7 +242,7 @@ output.close()
 | `bm3d` | 3D 塊匹配匹配進階降噪 |
 | `hqdn3d` | 高品質 3D 降噪 |
 | `cas` | 對比度自適應銳化 |
-| `varblur` | 變量模糊（使用二進制映射） |
+| `varblur` | 變數模糊（使用二進位制對映） |
 | `deband` | 消除色彩帶狀偽影 |
 
 #### 4.1.4 幀率、去隔行與時間操控
@@ -265,20 +265,20 @@ output.close()
 | `overlay` | 將一個影片疊加在另一個之上 |
 | `blend` | 使用自訂數學模式混合（Multiply, Screen, Overlay） |
 | `alphaextract` / `alphamerge` | 提取或套用透明 Alpha 通道 |
-| `drawtext` | 渲染文字字串或元數據疊加 |
+| `drawtext` | 渲染文字字串或後設資料疊加 |
 | `drawbox` / `drawgrid` | 繪製矩形或網格 |
 | `ass` / `subtitles` | 燒錄 ASS/SSA 或 SRT 字幕 |
 | `xfade` | 過場轉場（Dissolve, Slide, Fade 等） |
-| `chromakey` | 綠幕/藍幕抠像 |
+| `chromakey` | 綠幕/藍幕摳像 |
 
-#### 4.1.6 診斷、測試與元數據
+#### 4.1.6 診斷、測試與後設資料
 
 | 過濾器 | 功能 |
 |---|---|
 | `showinfo` | 記錄每個影片幀的詳細中繼資料 |
 | `blackdetect` / `blackframe` | 偵測純黑序列或轉場段落 |
 | `freezedetect` | 偵測凍結影片段落 |
-| `vectorscope` / `histogram` | 可視化色彩範圍與訊號剖面 |
+| `vectorscope` / `histogram` | 視覺化色彩範圍與訊號剖面 |
 | `psnr` / `ssim` | 計算客觀影片品質指標 |
 | `addroi` | 定義感興趣區域（ROI） |
 
@@ -286,7 +286,7 @@ output.close()
 
 | 過濾器 | 功能 |
 |---|---|
-| `dnn_processing` | 深度神經網絡模型（超解析度、風格轉換） |
+| `dnn_processing` | 深度神經網路模型（超解析度、風格轉換） |
 | `libplacebo` | GPU 加速 HDR tone mapping、去帶、縮放 |
 | `scale_vulkan` / `scale_cuda` / `scale_vaapi` | GPU 加速縮放 |
 | `yadif_videotoolbox` | Apple 硬體加速去隔行 |
@@ -295,10 +295,10 @@ output.close()
 ### 4.2 查詢過濾器方法
 
 ```bash
-# 查看所有編譯進去的過濾器
+# 檢視所有編譯進去的過濾器
 ffmpeg -filters
 
-# 查看特定過濾器的詳細功能與參數
+# 檢視特定過濾器的詳細功能與引數
 ffmpeg -h filter=scale
 ```
 
@@ -319,7 +319,7 @@ vflip = graph.add("vflip")
 hue = graph.add("hue", "h=45:s=1.5")
 buffer_out = graph.add("buffersink")
 
-# 線性連接：輸入 → vflip → hue → 輸出
+# 線性連線：輸入 → vflip → hue → 輸出
 buffer_in.link_to(vflip)
 vflip.link_to(hue)
 hue.link_to(buffer_out)
@@ -344,7 +344,7 @@ scale = graph.add("scale", f"{int(v_stream.width/4)}:-1")
 overlay = graph.add("overlay", "x=20:y=20")
 sink = graph.add("buffersink")
 
-# 線路連接：
+# 線路連線：
 #  1 input → split → [1: scaled, 2: original] → overlay → sink
 src.link_to(split)
 split.link_to(overlay, 0, 0)  # Path 1 到 overlay 背景
@@ -379,7 +379,7 @@ blur = graph.add("boxblur", "luma_radius=20:luma_power=2")
 scale = graph.add("scale", f"{in_stream.width//2}:{in_stream.height//2}")
 overlay = graph.add("overlay", "x=(W-w)/2:y=(H-h)/2")
 
-# 連接圖譜
+# 連線圖譜
 link_in.link_to(split)
 split.outputs[0].link_to(blur)       # 背景軌道
 split.outputs[1].link_to(scale)      # 前景軌道
@@ -399,18 +399,18 @@ for frame in container.decode(video=0):
             for packet in out_stream.encode(out_frame):
                 output.mux(packet)
     except av.EOFError:
-        pass  # 圖譜刷新
+        pass  # 圖譜重新整理
 
-# 刷新編碼器
+# 重新整理編碼器
 for packet in out_stream.encode():
     output.mux(packet)
 output.close()
 ```
 
-### 5.4 動態參數調控（Runtime Filter Modification）
+### 5.4 動態引數調控（Runtime Filter Modification）
 
 ```python
-# 在處理迴圈中動態修改過濾器參數
+# 在處理迴圈中動態修改過濾器引數
 # 例如：每幀修改 hue 的色相值
 hue_node.process_command(cmd="h", arg=str(new_hue_value))
 ```
@@ -428,7 +428,7 @@ hue_node.process_command(cmd="h", arg=str(new_hue_value))
 
 ---
 
-## 6. PyAV + NumPy 每幀像素操控
+## 6. PyAV + NumPy 每幀畫素操控
 
 ### 6.1 RGB 色差特效（Chromatic Aberration）
 
@@ -518,7 +518,7 @@ for packet in out_stream.encode():
 output.close()
 ```
 
-### 6.3 綠幕抠像合成（Green Screen Compositing）
+### 6.3 綠幕摳像合成（Green Screen Compositing）
 
 ```python
 import av
@@ -535,10 +535,10 @@ green_mask = (
     (fg_nodes[:,:,2] < 100)     # Blue 通道低
 )
 
-# 將遮罩擴展到 3 個色彩通道
+# 將遮罩擴充套件到 3 個色彩通道
 mask_3d = np.repeat(green_mask[:, :, np.newaxis], 3, axis=2)
 
-# 將綠色像素替換為背景像素
+# 將綠色畫素替換為背景畫素
 composited_nodes = np.where(mask_3d, bg_nodes, fg_nodes)
 
 composited_frame = av.VideoFrame.from_ndarray(composited_nodes, format='rgb24')
@@ -550,17 +550,17 @@ composited_frame = av.VideoFrame.from_ndarray(composited_nodes, format='rgb24')
 |---|---|---|
 | **色差偏移** | RGB 通道切片與位移 | 模擬鏡頭色散效果 |
 | **殘影追蹤** | 歷史幀緩衝 + 權重疊加 | 光軌拖尾、動態模糊 |
-| **綠幕抠像** | 閾值判斷 + np.where | 前景與背景無縫合成 |
+| **綠幕摳像** | 閾值判斷 + np.where | 前景與背景無縫合成 |
 | **邊緣檢測** | Sobel/Canny NumPy 實現 | 輪廓線描效果 |
 | **頻率域濾波** | FFT → 頻域遮罩 → IFFT | 進階頻域處理 |
 | **自訂遮罩** | 布林運算 + np.select | 任意形狀的透明區域 |
-| **像素替換** | 座標映射 + 陣列索引 | 鏡像、扭曲、平移 |
+| **畫素替換** | 座標對映 + 陣列索引 | 映象、扭曲、平移 |
 
 ---
 
 ## 7. PyAV + CuPy GPU 加速特效
 
-### 7.1 核心架構：PyAV → CuPy 零拷貝轉換
+### 7.1 核心架構：PyAV → CuPy 零複製轉換
 
 ```python
 import av
@@ -661,7 +661,7 @@ class MotionTrackerEffect:
         return output
 ```
 
-### 7.4 GPU Datamoshing（數據融合破壞）
+### 7.4 GPU Datamoshing（資料融合破壞）
 
 ```python
 class GPUDatamosher:
@@ -683,17 +683,17 @@ class GPUDatamosher:
         gray = (0.299 * img_gpu[:,:,0] + 0.587 * img_gpu[:,:,1] + 0.114 * img_gpu[:,:,2])
         grad_x = cp.gradient(gray, axis=1)
 
-        # 根據梯度大小，將 anchor_frame 的像素進行無序揉捏（Glitch）
+        # 根據梯度大小，將 anchor_frame 的畫素進行無序揉捏（Glitch）
         shift = (grad_x * 0.1).astype(cp.int32)
 
-        # 透過 GPU 網格重採樣（Grid Mapping）產生破壞性撕裂
+        # 透過 GPU 網格重取樣（Grid Mapping）產生破壞性撕裂
         rows, cols, ch = img_gpu.shape
         c_idx, r_idx = cp.meshgrid(cp.arange(cols), cp.arange(rows))
 
         # 扭曲 X 座標
         mushed_c_idx = cp.clip(c_idx + shift, 0, cols - 1)
 
-        # 從基準幀抽取像素，覆蓋到當前幀
+        # 從基準幀抽取畫素，覆蓋到當前幀
         for i in range(ch):
             self.anchor_frame[:, :, i] = self.anchor_frame[r_idx, mushed_c_idx, i]
 
@@ -760,18 +760,18 @@ if __name__ == "__main__":
 │  ├── 非線性剪輯時間軸管理                                  │
 │  ├── 多軌音訊混音 + 同步                                   │
 │  ├── 字幕 + 圖層 + 轉場                                   │
-│  └── write_videofile 快速導出                              │
+│  └── write_videofile 快速匯出                              │
 ├──────────────────────────────────────────────────────────┤
 │              Mid-Level: FFmpeg CLI                         │
 │  ├── filter_complex 多軌精細控制                          │
 │  ├── xfade 過場轉場                                       │
 │  ├── dnn_processing AI 超解析度                            │
-│  └── libplacebo HDR 調色映射                              │
+│  └── libplacebo HDR 調色對映                              │
 ├──────────────────────────────────────────────────────────┤
 │              Low-Level: PyAV                               │
 │  ├── 高效解碼、精確時間戳追蹤                              │
 │  ├── Filter Graph 處理合成/過場/調色                       │
-│  └── NumPy/CuPy 像素數學運算                               │
+│  └── NumPy/CuPy 畫素數學運算                               │
 └──────────────────────────────────────────────────────────┘
 ```
 
@@ -781,7 +781,7 @@ if __name__ == "__main__":
 """
 完整工作流：
 1. PyAV 高效解碼大型影片 → 提取特定範圍幀
-2. CuPy GPU 做像素級特效（色差、運動追蹤、Datamoshing）
+2. CuPy GPU 做畫素級特效（色差、運動追蹤、Datamoshing）
 3. 轉為 NumPy 陣列後交給 MoviePy 加字幕、混音、加轉場
 4. MoviePy write_videofile 輸出最終成品
 """
@@ -835,7 +835,7 @@ processed_clip = (
 final_clip = processed_clip.with_subtitles('subtitle.srt')
 
 # ===========================
-# Stage 4: 導出
+# Stage 4: 匯出
 # ===========================
 final_clip.write_videofile('output_final.mp4', fps=fps)
 ```
@@ -865,15 +865,15 @@ ffmpeg -i input.mp4 -vf dnn_processing=model=upscaler.onnx output.mp4
 
 ---
 
-## 9. 效能優化建議
+## 9. 效能最佳化建議
 
 ### 9.1 記憶體管理
 
-| 優化策略 | 說明 |
+| 最佳化策略 | 說明 |
 |---|---|
 | **預分配陣列** | 重複使用 `np.empty()` 或 `np.zeros()`，避免每幀重新配置 |
 | **避免 GC 開銷** | 在 CuPy 中盡量重用固定形狀的 `cp.zeros` 或 `motion_buffer` |
-| **零拷貝優先** | 基本裁剪、縮放等操作留在 `yuv420p` 空間，避免 RGB↔YUV 轉換 |
+| **零複製優先** | 基本裁剪、縮放等操作留在 `yuv420p` 空間，避免 RGB↔YUV 轉換 |
 
 ### 9.2 多執行緒配置
 
@@ -894,7 +894,7 @@ graph.thread_count = 4
 | 情境 | 建議 |
 |---|---|
 | 基本裁剪/縮放 | 留在 `yuv420p` 空間，使用 FFmpeg 過濾器圖譜 |
-| 像素級數學運算 | 轉換到 `rgb24` 後用 NumPy/CuPy 處理 |
+| 畫素級數學運算 | 轉換到 `rgb24` 後用 NumPy/CuPy 處理 |
 | HDR 調色 | 使用 `libplacebo` 或 `lut3d`，避免手動色彩空間轉換 |
 | 硬體解碼 | PyAV 設定 `hwaccel='cuda'`，解碼→GPU→編碼全流程留在 GPU |
 
@@ -908,12 +908,12 @@ container = av.open(
 )
 # 解碼階段留在 GPU 內
 # 結合 CuPy 進行 GPU 處理
-# 全程避免 CPU-GPU 記憶體拷貝
+# 全程避免 CPU-GPU 記憶體複製
 ```
 
 ### 9.5 自訂 CUDA Kernel
 
-若切片或网格映射操作仍未達到滿幀率，可使用 CuPy 的 `cp.ElementwiseKernel` 撰寫原生 C++ CUDA 核心：
+若切片或網格對映操作仍未達到滿幀率，可使用 CuPy 的 `cp.ElementwiseKernel` 撰寫原生 C++ CUDA 核心：
 
 ```python
 import cupy as cp
@@ -948,10 +948,10 @@ chromatic_aberration_kernel = cp.ElementwiseKernel(
 | 階梯 | 技術層次 | 可達到的效果 | 適用場景 |
 |---|---|---|---|
 | **Lv1** | FFmpeg CLI 命令 | 調色、裁切、疊加、過場、綠幕 | 快速批次處理 |
-| **Lv2** | PyAV Filter Graph | 程式化多分支過濾器圖譜、動態參數 | 自訂過場與合成 |
-| **Lv3** | PyAV + NumPy 每幀運算 | 色差、殘影、Datamoshing、邊緣檢測 | 像素級自訂特效 |
-| **Lv4** | PyAV + CuPy GPU 加速 | 實時 GPU 像素級特效、硬體解碼 | 高吞吐量管線 |
-| **Lv5** | PyAV + CuPy + CUDA Kernel | 自訂 GPU 核心、極致幀率 | 商業級實時處理 |
+| **Lv2** | PyAV Filter Graph | 程式化多分支過濾器圖譜、動態引數 | 自訂過場與合成 |
+| **Lv3** | PyAV + NumPy 每幀運算 | 色差、殘影、Datamoshing、邊緣檢測 | 畫素級自訂特效 |
+| **Lv4** | PyAV + CuPy GPU 加速 | 即時 GPU 畫素級特效、硬體解碼 | 高吞吐量管線 |
+| **Lv5** | PyAV + CuPy + CUDA Kernel | 自訂 GPU 核心、極致幀率 | 商業級即時處理 |
 | **Lv6** | PyAV + MoviePy + FFmpeg 混合 | 完整商業級影片後製管線 | 專業影片製作 |
 
 ### 10.2 選擇建議
@@ -959,19 +959,19 @@ chromatic_aberration_kernel = cp.ElementwiseKernel(
 | 需求 | 推薦方案 |
 |---|---|
 | **快速剪輯與原型** | MoviePy（預設 FFmpeg 後端） |
-| **高頻率影片解碼** | PyAV（替代 FFmpeg 子進程） |
+| **高頻率影片解碼** | PyAV（替代 FFmpeg 子程式） |
 | **複雜過濾器圖譜** | PyAV Filter Graph API |
-| **像素級自訂特效** | PyAV + NumPy |
-| **GPU 加速實時處理** | PyAV + CuPy |
+| **畫素級自訂特效** | PyAV + NumPy |
+| **GPU 加速即時處理** | PyAV + CuPy |
 | **完整影片後製管線** | PyAV（I/O）+ CuPy（特效）+ MoviePy（高階邏輯） |
 
 ### 10.3 核心結論
 
 1. **PyAV 並非 MoviePy 的必要依賴，而是其效能最佳化的選擇性後端。**
-2. **MoviePy 預設使用 FFmpeg 子進程模式，但可切換到 PyAV 後端獲得更好的效能與準確性。**
+2. **MoviePy 預設使用 FFmpeg 子程式模式，但可切換到 PyAV 後端獲得更好的效能與準確性。**
 3. **FFmpeg 提供了強大的過濾器底層，PyAV 讓你能以程式化方式完全控制每一個解碼幀。**
-4. **結合 NumPy/CuPy 的數學運算能力，理論上你能實現任何基於像素的影像特效。**
-5. **最高級的實務應用是三者分工協作：PyAV 負責 I/O 與低階處理，MoviePy 負責高階剪輯邏輯，FFmpeg CLI 負責批次進階過濾器。**
+4. **結合 NumPy/CuPy 的數學運算能力，理論上你能實現任何基於畫素的影像特效。**
+5. **最高階的實務應用是三者分工協作：PyAV 負責 I/O 與低階處理，MoviePy 負責高階剪輯邏輯，FFmpeg CLI 負責批次進階過濾器。**
 
 ---
 
@@ -979,10 +979,10 @@ chromatic_aberration_kernel = cp.ElementwiseKernel(
 
 | 資源 | 連結 |
 |---|---|
-| PyAV 官方文件 | https://pyav.org/ |
-| MoviePy 官方文件 | https://zulko.github.io/moviepy/ |
-| FFmpeg 過濾器文件 | https://ffmpeg.org/ffmpeg-filters.html |
-| CuPy 文件 | https://docs.cupy.dev/ |
+| PyAV 官方檔案 | https://pyav.org/ |
+| MoviePy 官方檔案 | https://zulko.github.io/moviepy/ |
+| FFmpeg 過濾器檔案 | https://ffmpeg.org/ffmpeg-filters.html |
+| CuPy 檔案 | https://docs.cupy.dev/ |
 | MoviePy PyAV 後端整合 | https://zulko.github.io/moviepy/getting_started/install.html |
 
 ---

@@ -6,11 +6,11 @@ status: final
 tags: [quark-audio, checkpoint-download, huggingface-cli]
 ---
 
-# 2026-07-31 建立 QuarkAudio-UniSE 權重下載腳本
+# 2026-07-31 建立 QuarkAudio-UniSE 權重下載指令碼
 
 ## What
 
-建立 `download_checkpoints.sh` 腳本，使用 `hf` CLI 自動下載 QuarkAudio-UniSE 推理所需的所有模型權重。
+建立 `download_checkpoints.sh` 指令碼，使用 `hf` CLI 自動下載 QuarkAudio-UniSE 推理所需的所有模型權重。
 
 ## Why
 
@@ -20,8 +20,8 @@ tags: [quark-audio, checkpoint-download, huggingface-cli]
 
 ## How
 
-- 腳本：`serve/quark-audio/download_checkpoints.sh`
-- 使用 `hf download` 搭配子路徑參數，自動建立 `BiCodec/` 目錄結構
+- 指令碼：`serve/quark-audio/download_checkpoints.sh`
+- 使用 `hf download` 搭配子路徑引數，自動建立 `BiCodec/` 目錄結構
 - 關鍵技巧：`hf download <repo> <子路徑> --local-dir .` 會讓 hf 自動建立對應子目錄
 
 ### 下載命令

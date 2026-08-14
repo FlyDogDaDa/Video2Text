@@ -36,7 +36,7 @@ tags: [vllm, gemma-4, reasoning, structured-output, openai-api]
 _STOP_REASONING = ["<channel|>"]
 ```
 
-Gemma-4 的 token 定義（來自 Google 官方文件）：
+Gemma-4 的 token 定義（來自 Google 官方檔案）：
 - `<|think|>` — 啟動思考模式
 - `<|channel>` — 思考內容開始
 - `<channel|>` — 思考內容結束（stop token）
@@ -49,9 +49,9 @@ Gemma-4 的 token 定義（來自 Google 官方文件）：
 | `task_structured_output()` | 無思考，直接 guided JSON | 無 | ❌ | ✅ |
 | `task_double_call_reason_then_structured()` | 兩次呼叫：Call1 推理 → Call2 結構化輸出 | Call1: `["<channel|>"]` | Call1: ✅ | Call2: ✅ |
 
-**3. 修正 `stop` 參數位置**
+**3. 修正 `stop` 引數位置**
 
-`stop` 必須放在 `create()` 外層（OpenAI SDK 標準參數），不是 `extra_body`：
+`stop` 必須放在 `create()` 外層（OpenAI SDK 標準引數），不是 `extra_body`：
 
 ```python
 # ❌ 錯誤
@@ -113,14 +113,14 @@ Task 4c: Double Call — Reason → Structured Output
 | Task 4b: Structured Output | ✅ | 12 triplets，直接 JSON 輸出 |
 | Task 4c: Double Call | ✅ | Call 1 思考 → Call 2 帶思考輸出 9 triplets |
 
-所有 6 個任務並行執行成功，vLLM server 自動調度。
+所有 6 個任務並行執行成功，vLLM server 自動排程。
 
 ## Follow-up
 
 - 考慮把 `task_structured_output()` 作為生產模式（最快、token 最省）
 - 4c double-call 雖然多一次呼叫但能確保思考品質，適合複雜推理場景
 - Task 3 音訊為中文（`short_test.mp4` 第 5 秒提取 30s），模型輸出「네, 저는 100% 긍정적인…」韓語重覆為明顯幻覺。音訊內容可能是影片中的背景音或雜訊，需要檢查原始音訊。
-- **Function Calling 方向**：`response_format` 無法與 `enable_thinking` 同時使用（思考為空或 `do. do. do.` 幻覺）。Function Calling 是模型原生能力，思考 + 工具調用是原生兼容的（`<channel>` → `tool_call` → `tool_response`），建議後續實作探索此方向。
+- **Function Calling 方向**：`response_format` 無法與 `enable_thinking` 同時使用（思考為空或 `do. do. do.` 幻覺）。Function Calling 是模型原生能力，思考 + 工具呼叫是原生相容的（`<channel>` → `tool_call` → `tool_response`），建議後續實作探索此方向。
 
 ## References
 

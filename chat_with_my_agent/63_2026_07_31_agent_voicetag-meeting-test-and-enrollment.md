@@ -10,7 +10,7 @@ tags: [voicetag, long-audio, meeting-meeting, reference-audio, enrollment]
 
 ## What
 
-1. 將 `~/文件/AudioRecording/保修工程會議.m4a` 轉為 WAV 放入 `test-audio/`
+1. 將 `~/檔案/AudioRecording/保修工程會議.m4a` 轉為 WAV 放入 `test-audio/`
 2. 裁剪 4 位 speaker 參考片段（21~37 秒區間）
 3. Enroll 4 位說話人 → 跑完整會議 → 產出 JSON
 
@@ -73,7 +73,7 @@ result = identify(
 
 ### 4. 結果
 
-| 項目 | 數值 |
+| 專案 | 數值 |
 |------|------|
 | 音訊長度 | 2404.9s（40.1 min） |
 | 處理時間 | 120.5s（~2 min） |

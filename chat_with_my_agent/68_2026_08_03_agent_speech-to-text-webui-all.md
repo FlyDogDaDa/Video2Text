@@ -27,7 +27,7 @@ tags:
 
 建立 Gradio WebUI（`webuis/speech-to-text.py`），提供瀏覽器介面的 Speech-to-Text 功能：
 
-- **轉錄 Tab**：上傳音訊 → 設定參數 → 執行 pipeline → 即時顯示歷程 → 下載 JSON
+- **轉錄 Tab**：上傳音訊 → 設定引數 → 執行 pipeline → 即時顯示歷程 → 下載 JSON
 - **Speaker 管理 Tab**：上傳、改名、刪除 speaker 參考音訊檔案（`test-audio/speaker-ref/`）
 
 Server 跑在 `0.0.0.0:7861`。
@@ -47,17 +47,17 @@ Server 跑在 `0.0.0.0:7861`。
 - `list_speakers()`：掃描目錄，回傳 DataFrame（名稱、檔名、大小、路徑）
 - `upload_speaker()`：支援多檔案上傳，自動避同名衝突
 - `delete_speaker()`：依 speaker 名稱刪除所有同名音訊檔
-- `rename_speaker()`：批量改名（保留副檔名）
+- `rename_speaker()`：批次改名（保留副檔名）
 
 ### Gradio 6.0 API 調整
 
-- `theme` 從 `Blocks()` 移到 `launch()` 參數
+- `theme` 從 `Blocks()` 移到 `launch()` 引數
 - `Textbox.show_copy_button` 已移除（6.0 不支援）
 - `Dataframe.wrap_table` 已移除（6.0 不支援）
 
 ## 二、完整修復（2026-08-03）
 
-修復兩個阻斷性問題，使完整 pipeline（Enroll → Diarization → STT）成功運行。
+修復兩個阻斷性問題，使完整 pipeline（Enroll → Diarization → STT）成功執行。
 
 ### 1. 修復 Numba `__main__.has no attribute 'capture'` crash
 
@@ -106,10 +106,10 @@ Python module 路徑不支援連字號（hyphen），使用 `importlib.util.spec
 
 ### JSON 下載按鈕疑點
 
-用戶回報下載按鈕內容為空，檢查後確認：
+使用者回報下載按鈕內容為空，檢查後確認：
 - 輸出檔案確實存在且內容正確（`output/2026_07_21_test_stt.json`, 6827 bytes）
 - 程式邏輯正確
-- **問題原因**：SSH 前端預覽器無法在本機預覽遠端 JSON 文件
+- **問題原因**：SSH 前端預覽器無法在本機預覽遠端 JSON 檔案
 - **結論**：沒有程式 bug，是檢視器限制
 
 ## Follow-up

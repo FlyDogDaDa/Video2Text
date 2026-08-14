@@ -38,7 +38,7 @@ main.py → slice_video → AsyncOpenAI → vllm serve (:8746)
 
 關鍵差異：
 - 離線模式：`main.py` 負責所有事（載入、template、推理、parse）
-- Server 模式：`main.py` 只做切片 + HTTP 發送 + 結果收集，所有多模態處理由 vLLM server 內部完成
+- Server 模式：`main.py` 只做切片 + HTTP 傳送 + 結果收集，所有多模態處理由 vLLM server 內部完成
 
 ---
 
@@ -72,7 +72,7 @@ Server API 驗證時發現：
 
 ### 關鍵洞察
 
-**Function Calling 是模型原生能力，thinking + tool use 是原生兼容的**（Gemma-4 設計思考模式的真正用途就是配合 Function Calling）。
+**Function Calling 是模型原生能力，thinking + tool use 是原生相容的**（Gemma-4 設計思考模式的真正用途就是配合 Function Calling）。
 
 ```
 <|channel|>thought...

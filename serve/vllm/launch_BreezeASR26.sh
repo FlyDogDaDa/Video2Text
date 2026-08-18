@@ -15,7 +15,7 @@ export VLLM_ALLOW_LONG_MAX_MODEL_LEN=1
 # Default values
 PORT="${PORT:-8750}"
 TP_SIZE="${TP_SIZE:-1}"
-GPU_MEM_UTIL="${GPU_MEM_UTIL:-0.035}"
+GPU_MEM_UTIL="${GPU_MEM_UTIL:-0.036}"
 
 echo "=== Breeze-ASR-26 vLLM Launch ==="
 echo "Port: $PORT"
@@ -32,5 +32,5 @@ uv run vllm serve "MediaTek-Research/Breeze-ASR-26" \
   --port "$PORT" \
   --trust-remote-code \
   --async-scheduling \
-  --max-num-seqs 8 \
+  --max-num-seqs 4 \
   --enforce-eager

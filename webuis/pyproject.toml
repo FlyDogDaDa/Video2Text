@@ -6,7 +6,9 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "gradio",
+    "httpx",
     "huggingface-hub>=1.0",
+    "opencc-python-reimplemented",
     "pyannote-audio>=4.0",
     "pyyaml>=6.0.3",
     "torch>=2.13",

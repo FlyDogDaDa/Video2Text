@@ -246,6 +246,9 @@ temp.wav
 # Test audio directory
 test-audio/
 
+# Experiment scratch directory (intermediate outputs)
+scratch/
+
 # Audio transcriptions
 
 _transcriptions.zip

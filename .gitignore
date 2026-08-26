@@ -231,6 +231,9 @@ serve/quark-audio/checkpoints/
 runs/
 output/
 
+# Experiment directories (video/audio, transcripts, isolated venv)
+exp/
+
 # Executables
 runtime/
 

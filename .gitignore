@@ -231,6 +231,9 @@ serve/quark-audio/checkpoints/
 runs/
 output/
 
+# Experiment directories (video/audio, transcripts, isolated venv)
+exp/
+
 # Executables
 runtime/
 
@@ -245,6 +248,9 @@ temp.wav
 
 # Test audio directory
 test-audio/
+
+# Experiment scratch directory (intermediate outputs)
+scratch/
 
 # Audio transcriptions
 

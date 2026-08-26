@@ -18,3 +18,8 @@ dependencies = [
 
 [tool.uv.sources]
 imagebind = { git = "https://github.com/facebookresearch/ImageBind.git" }
+
+[tool.uv.workspace]
+members = [
+    "webuis",
+]

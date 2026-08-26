@@ -6140,9 +6140,6 @@ requires-dist = [
     { name = "vllm", extras = ["audio"], specifier = ">=0.26.0" },
 ]
 
-[package.metadata.requires-dev]
-dev = []
-
 [[package]]
 name = "watchfiles"
 version = "1.2.0"

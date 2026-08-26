@@ -5,6 +5,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}")" && pwd )"
 
 # enter virtual environment
 source "$SCRIPT_DIR/.venv/bin/activate"
+export VIRTUAL_ENV=$SCRIPT_DIR/.venv
 
 # load .env for HF_TOKEN, etc.
 set -a; source "$SCRIPT_DIR/.env"; set +a
@@ -14,7 +15,7 @@ export VLLM_ALLOW_LONG_MAX_MODEL_LEN=1
 # Default values
 PORT="${PORT:-8750}"
 TP_SIZE="${TP_SIZE:-1}"
-GPU_MEM_UTIL="${GPU_MEM_UTIL:-0.035}"
+GPU_MEM_UTIL="${GPU_MEM_UTIL:-0.036}"
 
 echo "=== Breeze-ASR-26 vLLM Launch ==="
 echo "Port: $PORT"
@@ -22,7 +23,7 @@ echo "TP_SIZE: $TP_SIZE"
 echo "GPU_MEM_UTIL: $GPU_MEM_UTIL"
 echo "================================"
 
-vllm serve "MediaTek-Research/Breeze-ASR-26" \
+uv run vllm serve "MediaTek-Research/Breeze-ASR-26" \
   --max-model-len 448 \
   --max-num-batched-tokens 1500 \
   --tensor-parallel-size "$TP_SIZE" \
@@ -31,5 +32,5 @@ vllm serve "MediaTek-Research/Breeze-ASR-26" \
   --port "$PORT" \
   --trust-remote-code \
   --async-scheduling \
-  --max-num-seqs 8 \
+  --max-num-seqs 4 \
   --enforce-eager

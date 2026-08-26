@@ -20,6 +20,10 @@ import sys
 import threading
 from pathlib import Path
 
+from dotenv import load_dotenv
+
+load_dotenv(Path(__file__).parent / ".env")
+
 import gradio as gr
 
 # ── Path 設定：讓 import workflows.speech_to_text 能找到 ──

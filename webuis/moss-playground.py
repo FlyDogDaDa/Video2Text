@@ -187,6 +187,7 @@ def make_ui() -> gr.Blocks:
             label="💾 下載 JSON",
             value=None,
             interactive=False,
+            variant="primary",
         )
 
         def _audio_path(audio) -> str | None:
@@ -218,9 +219,8 @@ def make_ui() -> gr.Blocks:
             try:
                 r = process(path, hotwords or "")
                 status = r["meta"] + (f"\n{r['warning']}" if r["warning"] else "")
-                # 寫出 JSON 到 tempdir，供 DownloadButton 下載
-                filename = f"moss_{time.strftime('%Y%m%d_%H%M%S')}.json"
-                json_path = DOWNLOAD_DIR / filename
+                # 檔名＝上傳音訊名稱＋「_transcript.json」（如 meeting.mp3 → meeting_transcript.json）
+                json_path = DOWNLOAD_DIR / (Path(path).stem + "_transcript.json")
                 json_path.write_text(r["json_text"], encoding="utf-8")
                 yield (
                     r["raw_text"],

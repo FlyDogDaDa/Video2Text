@@ -1,0 +1,72 @@
+{
+  "server": "http://10.46.219.5:8755",
+  "model": "Qwen/Qwen3-ForcedAligner-0.6B",
+  "audio_path": "output/是我用AI跑出來的.opus",
+  "text": "是我用AI跑出来的。",
+  "audio_duration_s": 1.531646,
+  "prompt": "<|audio_start|><|audio_pad|><|audio_end|>是<timestamp><timestamp>我<timestamp><timestamp>用<timestamp><timestamp>AI<timestamp><timestamp>跑<timestamp><timestamp>出<timestamp><timestamp>来<timestamp><timestamp>的<timestamp><timestamp>",
+  "token_count": 46,
+  "prediction_count": 46,
+  "audio_pad_index": 1,
+  "audio_token_shift": 0,
+  "usage_prompt_tokens": 46,
+  "latency_s": 0.118,
+  "alignments": [
+    {
+      "unit": "是",
+      "start_ms": 0,
+      "end_ms": 160,
+      "start_s": 0.0,
+      "end_s": 0.16
+    },
+    {
+      "unit": "我",
+      "start_ms": 160,
+      "end_ms": 320,
+      "start_s": 0.16,
+      "end_s": 0.32
+    },
+    {
+      "unit": "用",
+      "start_ms": 320,
+      "end_ms": 480,
+      "start_s": 0.32,
+      "end_s": 0.48
+    },
+    {
+      "unit": "AI",
+      "start_ms": 480,
+      "end_ms": 800,
+      "start_s": 0.48,
+      "end_s": 0.8
+    },
+    {
+      "unit": "跑",
+      "start_ms": 800,
+      "end_ms": 880,
+      "start_s": 0.8,
+      "end_s": 0.88
+    },
+    {
+      "unit": "出",
+      "start_ms": 960,
+      "end_ms": 1120,
+      "start_s": 0.96,
+      "end_s": 1.12
+    },
+    {
+      "unit": "来",
+      "start_ms": 1120,
+      "end_ms": 1280,
+      "start_s": 1.12,
+      "end_s": 1.28
+    },
+    {
+      "unit": "的",
+      "start_ms": 1360,
+      "end_ms": 1440,
+      "start_s": 1.36,
+      "end_s": 1.44
+    }
+  ]
+}

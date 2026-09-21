@@ -1,0 +1,44 @@
+[Script Info]
+Title: FA alignment preview p0_s173
+ScriptType: v4.00+
+PlayResX: 1920
+PlayResY: 1080
+WrapStyle: 0
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Noto Sans CJK TC,80,&H00FFFFFF,&H000000FF,&H00000000,&H80000000,0,0,0,0,100,100,0,0,1,2,1,2,60,60,100,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.00,0:00:09.48,Default,,0,0,0,,對我的意思是說就是就是VTuber就是印象裡面它會是一個比較以遊戲直播\N{\fs40}{\c&H00C0C0C0&}FA 對齊預覽 p0_s173｜ASR 990.76–999.04s｜chunk 990.56+8.68s
+Dialogue: 0,0:00:00.88,0:00:00.96,Default,,0,0,0,,{\c&H00FFFF00&}對我的{\c&H00FFFFFF&}意思是說就是就是VTuber就是印象裡面它會是一個比較以遊戲直播\N{\fs40}{\c&H00C0C0C0&}FA: {'unit': '對', 'start_s': 991.04, 'end_s': 990.96} 991.040→990.960s（span 反轉）
+Dialogue: 0,0:00:01.44,0:00:01.52,Default,,0,0,0,,對我的{\c&H00FFFF00&}意思是{\c&H00FFFFFF&}說就是就是VTuber就是印象裡面它會是一個比較以遊戲直播\N{\fs40}{\c&H00C0C0C0&}FA: {'unit': '我', 'start_s': 991.6, 'end_s': 991.68} 991.600→991.680s
+Dialogue: 0,0:00:01.52,0:00:01.60,Default,,0,0,0,,對我的意思是{\c&H00FFFF00&}說就是{\c&H00FFFFFF&}就是VTuber就是印象裡面它會是一個比較以遊戲直播\N{\fs40}{\c&H00C0C0C0&}FA: {'unit': '的', 'start_s': 991.68, 'end_s': 991.76} 991.680→991.760s
+Dialogue: 0,0:00:01.60,0:00:01.68,Default,,0,0,0,,對我的意思是說就是{\c&H00FFFF00&}就是V{\c&H00FFFFFF&}Tuber就是印象裡面它會是一個比較以遊戲直播\N{\fs40}{\c&H00C0C0C0&}FA: {'unit': '意', 'start_s': 991.76, 'end_s': 991.84} 991.760→991.840s
+Dialogue: 0,0:00:01.68,0:00:01.92,Default,,0,0,0,,對我的意思是說就是就是V{\c&H00FFFF00&}Tub{\c&H00FFFFFF&}er就是印象裡面它會是一個比較以遊戲直播\N{\fs40}{\c&H00C0C0C0&}FA: {'unit': '思', 'start_s': 991.84, 'end_s': 992.08} 991.840→992.080s
+Dialogue: 0,0:00:02.32,0:00:02.40,Default,,0,0,0,,對我的意思是說就是就是VTub{\c&H00FFFF00&}er就{\c&H00FFFFFF&}是印象裡面它會是一個比較以遊戲直播\N{\fs40}{\c&H00C0C0C0&}FA: {'unit': '是', 'start_s': 992.48, 'end_s': 992.08} 992.480→992.080s（span 反轉）
+Dialogue: 0,0:00:01.92,0:00:03.28,Default,,0,0,0,,對我的意思是說就是就是VTuber就{\c&H00FFFF00&}是印象{\c&H00FFFFFF&}裡面它會是一個比較以遊戲直播\N{\fs40}{\c&H00C0C0C0&}FA: {'unit': '說', 'start_s': 992.08, 'end_s': 993.44} 992.080→993.440s
+Dialogue: 0,0:00:04.08,0:00:04.16,Default,,0,0,0,,對我的意思是說就是就是VTuber就是印象{\c&H00FFFF00&}裡面它{\c&H00FFFFFF&}會是一個比較以遊戲直播\N{\fs40}{\c&H00C0C0C0&}FA: {'unit': '就', 'start_s': 994.24, 'end_s': 992.48} 994.240→992.480s（span 反轉）
+Dialogue: 0,0:00:02.32,0:00:03.28,Default,,0,0,0,,對我的意思是說就是就是VTuber就是印象裡面它{\c&H00FFFF00&}會是一{\c&H00FFFFFF&}個比較以遊戲直播\N{\fs40}{\c&H00C0C0C0&}FA: {'unit': '是', 'start_s': 992.48, 'end_s': 993.44} 992.480→993.440s
+Dialogue: 0,0:00:04.08,0:00:04.16,Default,,0,0,0,,對我的意思是說就是就是VTuber就是印象裡面它會是一{\c&H00FFFF00&}個比較{\c&H00FFFFFF&}以遊戲直播\N{\fs40}{\c&H00C0C0C0&}FA: {'unit': '就', 'start_s': 994.24, 'end_s': 993.12} 994.240→993.120s（span 反轉）
+Dialogue: 0,0:00:02.88,0:00:03.28,Default,,0,0,0,,對我的意思是說就是就是VTuber就是印象裡面它會是一個比較{\c&H00FFFF00&}以遊戲{\c&H00FFFFFF&}直播\N{\fs40}{\c&H00C0C0C0&}FA: {'unit': '是', 'start_s': 993.04, 'end_s': 993.44} 993.040→993.440s
+Dialogue: 0,0:00:03.52,0:00:04.00,Default,,0,0,0,,對我的意思是說就是就是VTuber就是印象裡面它會是一個比較以遊戲{\c&H00FFFF00&}直播{\c&H00FFFFFF&}\N{\fs40}{\c&H00C0C0C0&}FA: {'unit': 'VTuber', 'start_s': 993.68, 'end_s': 994.16} 993.680→994.160s
+Dialogue: 0,0:00:04.08,0:00:04.24,Default,,0,0,0,,對我的意思是說就是就是VTuber就是印象裡面它會是一個比較以遊戲直播{\c&H00FFFF00&}{\c&H00FFFFFF&}\N{\fs40}{\c&H00C0C0C0&}FA: {'unit': '就', 'start_s': 994.24, 'end_s': 994.4} 994.240→994.400s
+Dialogue: 0,0:00:04.24,0:00:04.48,Default,,0,0,0,,對我的意思是說就是就是VTuber就是印象裡面它會是一個比較以遊戲直播{\c&H00FFFF00&}{\c&H00FFFFFF&}\N{\fs40}{\c&H00C0C0C0&}FA: {'unit': '是', 'start_s': 994.4, 'end_s': 994.64} 994.400→994.640s
+Dialogue: 0,0:00:04.80,0:00:04.88,Default,,0,0,0,,對我的意思是說就是就是VTuber就是印象裡面它會是一個比較以遊戲直播{\c&H00FFFF00&}{\c&H00FFFFFF&}\N{\fs40}{\c&H00C0C0C0&}FA: {'unit': '印', 'start_s': 994.96, 'end_s': 995.04} 994.960→995.040s
+Dialogue: 0,0:00:04.88,0:00:05.04,Default,,0,0,0,,對我的意思是說就是就是VTuber就是印象裡面它會是一個比較以遊戲直播{\c&H00FFFF00&}{\c&H00FFFFFF&}\N{\fs40}{\c&H00C0C0C0&}FA: {'unit': '象', 'start_s': 995.04, 'end_s': 995.2} 995.040→995.200s
+Dialogue: 0,0:00:05.12,0:00:05.28,Default,,0,0,0,,對我的意思是說就是就是VTuber就是印象裡面它會是一個比較以遊戲直播{\c&H00FFFF00&}{\c&H00FFFFFF&}\N{\fs40}{\c&H00C0C0C0&}FA: {'unit': '裡', 'start_s': 995.28, 'end_s': 995.44} 995.280→995.440s
+Dialogue: 0,0:00:05.12,0:00:05.28,Default,,0,0,0,,對我的意思是說就是就是VTuber就是印象裡面它會是一個比較以遊戲直播{\c&H00FFFF00&}{\c&H00FFFFFF&}\N{\fs40}{\c&H00C0C0C0&}FA: {'unit': '面', 'start_s': 995.28, 'end_s': 995.44} 995.280→995.440s
+Dialogue: 0,0:00:05.28,0:00:05.44,Default,,0,0,0,,對我的意思是說就是就是VTuber就是印象裡面它會是一個比較以遊戲直播{\c&H00FFFF00&}{\c&H00FFFFFF&}\N{\fs40}{\c&H00C0C0C0&}FA: {'unit': '它', 'start_s': 995.44, 'end_s': 995.6} 995.440→995.600s
+Dialogue: 0,0:00:05.44,0:00:05.60,Default,,0,0,0,,對我的意思是說就是就是VTuber就是印象裡面它會是一個比較以遊戲直播{\c&H00FFFF00&}{\c&H00FFFFFF&}\N{\fs40}{\c&H00C0C0C0&}FA: {'unit': '會', 'start_s': 995.6, 'end_s': 995.76} 995.600→995.760s
+Dialogue: 0,0:00:05.60,0:00:05.84,Default,,0,0,0,,對我的意思是說就是就是VTuber就是印象裡面它會是一個比較以遊戲直播{\c&H00FFFF00&}{\c&H00FFFFFF&}\N{\fs40}{\c&H00C0C0C0&}FA: {'unit': '是', 'start_s': 995.76, 'end_s': 996.0} 995.760→996.000s
+Dialogue: 0,0:00:05.84,0:00:05.92,Default,,0,0,0,,對我的意思是說就是就是VTuber就是印象裡面它會是一個比較以遊戲直播{\c&H00FFFF00&}{\c&H00FFFFFF&}\N{\fs40}{\c&H00C0C0C0&}FA: {'unit': '一', 'start_s': 996.0, 'end_s': 996.08} 996.000→996.080s
+Dialogue: 0,0:00:06.00,0:00:06.24,Default,,0,0,0,,對我的意思是說就是就是VTuber就是印象裡面它會是一個比較以遊戲直播{\c&H00FFFF00&}{\c&H00FFFFFF&}\N{\fs40}{\c&H00C0C0C0&}FA: {'unit': '個', 'start_s': 996.16, 'end_s': 996.4} 996.160→996.400s
+Dialogue: 0,0:00:06.32,0:00:06.48,Default,,0,0,0,,對我的意思是說就是就是VTuber就是印象裡面它會是一個比較以遊戲直播{\c&H00FFFF00&}{\c&H00FFFFFF&}\N{\fs40}{\c&H00C0C0C0&}FA: {'unit': '比', 'start_s': 996.48, 'end_s': 996.64} 996.480→996.640s
+Dialogue: 0,0:00:06.48,0:00:06.88,Default,,0,0,0,,對我的意思是說就是就是VTuber就是印象裡面它會是一個比較以遊戲直播{\c&H00FFFF00&}{\c&H00FFFFFF&}\N{\fs40}{\c&H00C0C0C0&}FA: {'unit': '較', 'start_s': 996.64, 'end_s': 997.04} 996.640→997.040s
+Dialogue: 0,0:00:07.52,0:00:07.92,Default,,0,0,0,,對我的意思是說就是就是VTuber就是印象裡面它會是一個比較以遊戲直播{\c&H00FFFF00&}{\c&H00FFFFFF&}\N{\fs40}{\c&H00C0C0C0&}FA: {'unit': '以', 'start_s': 997.68, 'end_s': 998.08} 997.680→998.080s
+Dialogue: 0,0:00:07.92,0:00:08.08,Default,,0,0,0,,對我的意思是說就是就是VTuber就是印象裡面它會是一個比較以遊戲直播{\c&H00FFFF00&}{\c&H00FFFFFF&}\N{\fs40}{\c&H00C0C0C0&}FA: {'unit': '遊', 'start_s': 998.08, 'end_s': 998.24} 998.080→998.240s
+Dialogue: 0,0:00:08.08,0:00:08.24,Default,,0,0,0,,對我的意思是說就是就是VTuber就是印象裡面它會是一個比較以遊戲直播{\c&H00FFFF00&}{\c&H00FFFFFF&}\N{\fs40}{\c&H00C0C0C0&}FA: {'unit': '戲', 'start_s': 998.24, 'end_s': 998.4} 998.240→998.400s
+Dialogue: 0,0:00:08.24,0:00:08.48,Default,,0,0,0,,對我的意思是說就是就是VTuber就是印象裡面它會是一個比較以遊戲直播{\c&H00FFFF00&}{\c&H00FFFFFF&}\N{\fs40}{\c&H00C0C0C0&}FA: {'unit': '直', 'start_s': 998.4, 'end_s': 998.64} 998.400→998.640s
+Dialogue: 0,0:00:08.48,0:00:08.88,Default,,0,0,0,,對我的意思是說就是就是VTuber就是印象裡面它會是一個比較以遊戲直播{\c&H00FFFF00&}{\c&H00FFFFFF&}\N{\fs40}{\c&H00C0C0C0&}FA: {'unit': '播', 'start_s': 998.64, 'end_s': 999.04} 998.640→999.040s

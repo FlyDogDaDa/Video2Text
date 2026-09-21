@@ -1,0 +1,33 @@
+{
+  "generated": "2026-08-27",
+  "source_pre": "exp/N9boWvU-KkA/tmp/filtered_aligned_pre_fix.json",
+  "source_post": "exp/N9boWvU-KkA/filtered_aligned.json",
+  "pre_fix": {
+    "segments": 334,
+    "units": 7681,
+    "reversed_units": 73,
+    "zero_units": 295,
+    "issues_total": 565,
+    "reversed_words": 11,
+    "zero_words": 17,
+    "fixed_units": 0,
+    "fixed_words": 0
+  },
+  "post_fix": {
+    "segments": 334,
+    "units": 7681,
+    "reversed_units": 0,
+    "zero_units": 654,
+    "issues_total": 45,
+    "reversed_words": 0,
+    "zero_words": 43,
+    "fixed_units": 606,
+    "fixed_words": 42
+  },
+  "meta_fix": {
+    "method": "Qwen3-ForcedAligner 官方 fix_timestamp（LIS 非遞增＋異常段補整）",
+    "source": "QwenLM/Qwen3-ASR qwen_asr/inference/qwen3_forced_aligner.py",
+    "applied_at": "2026-08-27T15:51:33",
+    "note": "start_s/end_s 為修補值；模型原始值在 start_s_raw/end_s_raw；fixed=true 表示該值經插值/最近值重建，非模型直接測量"
+  }
+}

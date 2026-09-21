@@ -249,6 +249,14 @@ temp.wav
 # Test audio directory
 test-audio/
 
+# Scratch temp directory
+tmp/
+
+# Screen recording outputs
+output.mkv
+output.webm
+output.mp4
+
 # Experiment scratch directory (intermediate outputs)
 scratch/
 

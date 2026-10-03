@@ -227,42 +227,24 @@ __marimo__/
 # Model checkpoints
 serve/quark-audio/checkpoints/
 
-# Output directories
-runs/
-output/
+# STT API job workspace (transient uploads, deleted after completion)
+serve/stt-api/jobs/
 
-# Experiment directories (video/audio, transcripts, isolated venv)
+# Experiment directories (video/audio, transcripts, isolated venv) — 13G local data
 exp/
 
-# Executables
+# Agent chat logs (local reference only)
+chat_with_my_agent/31_2026_06_11_human_strategy-vllm-server-api-pattern/references/
+
+# Legacy artifact dirs — still in use (rmdir failed: not empty); pending migration into data/
+output/
+scratch/
+test-audio/
+tmp/
 runtime/
 
-# Temporary / untracked files
-main copy.py
-*copy.py
+# Local data tree (media, pipeline outputs, temp files)
+data/
 
-# Test media
-2026_03_17-20_27_48.mkv
-short_test.mp4
-temp.wav
-
-# Test audio directory
-test-audio/
-
-# Scratch temp directory
-tmp/
-
-# Screen recording outputs
-output.mkv
-output.webm
-output.mp4
-
-# Experiment scratch directory (intermediate outputs)
-scratch/
-
-# Audio transcriptions
-
-_transcriptions.zip
-
-# Agent references directory (may contain sensitive data)
-chat_with_my_agent/31_2026_06_11_human_strategy-vllm-server-api-pattern/references/
+# Downloaded speaker-embedding model weights
+serve/stt-api/models/

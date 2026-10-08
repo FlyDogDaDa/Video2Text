@@ -1,0 +1,18 @@
+{
+  "generated": "2026-08-27",
+  "file": "exp/N9boWvU-KkA/tmp/test_clip_copy.mkv",
+  "request": "ffmpeg -ss 675.63 -i N9boWvU-KkA_composite.mkv -t 0.24 -c copy（零長 對 @675.87 的 raw 窗口 675.63→675.87）",
+  "container_duration_s": 3.9,
+  "video": {
+    "frames": 117,
+    "first_pts_s": 0.0,
+    "last_pts_s": 3.867
+  },
+  "audio": {
+    "frames": 194,
+    "first_pts_s": 0.008,
+    "last_pts_s": 3.861
+  },
+  "keyframe_gop_s": 6.0,
+  "interpretation": "起點拉回 keyframe 672.0（lead-in 3.63s），終點為請求的 675.87；音畫互相同步，目標字在最後 0.24s"
+}

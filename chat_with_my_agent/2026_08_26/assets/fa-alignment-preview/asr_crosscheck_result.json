@@ -1,0 +1,13 @@
+{
+  "audio": "output/是我用AI跑出來的.opus",
+  "raw": "[0.00][S01]是我用AI跑出来的。[1.50]",
+  "segments": [
+    {
+      "start": 0.0,
+      "speaker": "S01",
+      "text": "是我用AI跑出来的。",
+      "end": 1.5
+    }
+  ],
+  "latency_s": 0.28
+}

@@ -1,0 +1,61 @@
+{
+  "job_id": "47bc8796f3f1",
+  "status": "done",
+  "source_name": "gaokao-listening.wav",
+  "audio_duration_s": 21.0,
+  "n_segments": 4,
+  "n_speakers": 2,
+  "speakers": [
+    "G01",
+    "G02"
+  ],
+  "tau_used": 0.4,
+  "tau_auto": 0.4,
+  "traditional_applied": false,
+  "warnings": [],
+  "processing": {
+    "submitted_at": "2026-10-02T09:34:08+08:00",
+    "started_at": "2026-10-02T09:34:08+08:00",
+    "finished_at": "2026-10-02T09:34:10+08:00",
+    "transcribe_s": 1.0,
+    "tau_sweep_s": 0.5,
+    "speaker_unify_s": 0.5,
+    "total_s": 2.1
+  },
+  "pipeline": {
+    "asr_url": "http://127.0.0.1:8750/v1/audio/transcriptions",
+    "speaker_backend": "campplus",
+    "embedding_model": "speech_campplus_sv_zh_en_16k-common_advanced.onnx",
+    "version": "pipeline 2026-09-16/20（transcribe_iterative + tau_sweep + speaker_unify_v3.1）"
+  },
+  "segments": [
+    {
+      "start": 0.0,
+      "end": 4.67,
+      "duration": 4.67,
+      "speaker": "G01",
+      "text": "Hi David. I missed the biology class today because I caught a cold."
+    },
+    {
+      "start": 4.83,
+      "end": 8.84,
+      "duration": 4.01,
+      "speaker": "G01",
+      "text": "Ahem, sorry. Could you tell me what the teacher covered?"
+    },
+    {
+      "start": 9.68,
+      "end": 16.62,
+      "duration": 6.94,
+      "speaker": "G02",
+      "text": "Sure, no problem. We learned how plants make food through photosynthesis, and there will be a quiz this Friday."
+    },
+    {
+      "start": 17.36,
+      "end": 20.84,
+      "duration": 3.48,
+      "speaker": "G01",
+      "text": "Oh, that is really helpful. Thank you."
+    }
+  ]
+}

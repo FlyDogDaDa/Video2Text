@@ -1,0 +1,6928 @@
+{
+  "video_id": "N9boWvU-KkA",
+  "source": "download/N9boWvU-KkA_composite.mkv",
+  "created_at": "2026-08-27T12:20:57.974887+00:00",
+  "encoder": {
+    "video": "libx264 crf18 preset=fast",
+    "audio": "aac 192k"
+  },
+  "policy": {
+    "merge_gap_s": 0.05,
+    "min_clip_dur_s": 0.3,
+    "max_raw_span_s": 0.6,
+    "t_pad_s": 0.2
+  },
+  "clip_count": 423,
+  "clips": [
+    {
+      "index": 1,
+      "file": "clips/clip_0001.mkv",
+      "start_s": 412.87,
+      "end_s": 413.19,
+      "duration_s": 0.32,
+      "timecode": "00:06:52.870",
+      "seg_id": "p0_s21",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 2,
+      "file": "clips/clip_0002.mkv",
+      "start_s": 418.64,
+      "end_s": 418.96,
+      "duration_s": 0.32,
+      "timecode": "00:06:58.640",
+      "seg_id": "p0_s22",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 3,
+      "file": "clips/clip_0003.mkv",
+      "start_s": 428.36,
+      "end_s": 428.66,
+      "duration_s": 0.3,
+      "timecode": "00:07:08.360",
+      "seg_id": "p0_s25",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 4,
+      "file": "clips/clip_0004.mkv",
+      "start_s": 440.39,
+      "end_s": 440.69,
+      "duration_s": 0.3,
+      "timecode": "00:07:20.390",
+      "seg_id": "p0_s27",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 5,
+      "file": "clips/clip_0005.mkv",
+      "start_s": 474.28,
+      "end_s": 474.58,
+      "duration_s": 0.3,
+      "timecode": "00:07:54.280",
+      "seg_id": "p0_s35",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 6,
+      "file": "clips/clip_0006.mkv",
+      "start_s": 477.71,
+      "end_s": 478.01,
+      "duration_s": 0.3,
+      "timecode": "00:07:57.710",
+      "seg_id": "p0_s37",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 7,
+      "file": "clips/clip_0007.mkv",
+      "start_s": 490.11,
+      "end_s": 490.41,
+      "duration_s": 0.3,
+      "timecode": "00:08:10.110",
+      "seg_id": "p0_s40",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 8,
+      "file": "clips/clip_0008.mkv",
+      "start_s": 494.16,
+      "end_s": 494.46,
+      "duration_s": 0.3,
+      "timecode": "00:08:14.160",
+      "seg_id": "p0_s41",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 9,
+      "file": "clips/clip_0009.mkv",
+      "start_s": 560.84,
+      "end_s": 561.14,
+      "duration_s": 0.3,
+      "timecode": "00:09:20.840",
+      "seg_id": "p0_s60",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 10,
+      "file": "clips/clip_0010.mkv",
+      "start_s": 571.56,
+      "end_s": 571.86,
+      "duration_s": 0.3,
+      "timecode": "00:09:31.560",
+      "seg_id": "p0_s63",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 11,
+      "file": "clips/clip_0011.mkv",
+      "start_s": 583.87,
+      "end_s": 584.19,
+      "duration_s": 0.32,
+      "timecode": "00:09:43.870",
+      "seg_id": "p0_s66",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 12,
+      "file": "clips/clip_0012.mkv",
+      "start_s": 620.03,
+      "end_s": 620.33,
+      "duration_s": 0.3,
+      "timecode": "00:10:20.030",
+      "seg_id": "p0_s76",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 13,
+      "file": "clips/clip_0013.mkv",
+      "start_s": 630.24,
+      "end_s": 630.54,
+      "duration_s": 0.3,
+      "timecode": "00:10:30.240",
+      "seg_id": "p0_s78",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 14,
+      "file": "clips/clip_0014.mkv",
+      "start_s": 670.44,
+      "end_s": 670.74,
+      "duration_s": 0.3,
+      "timecode": "00:11:10.440",
+      "seg_id": "p0_s88",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 15,
+      "file": "clips/clip_0015.mkv",
+      "start_s": 675.63,
+      "end_s": 675.93,
+      "duration_s": 0.3,
+      "timecode": "00:11:15.630",
+      "seg_id": "p0_s89",
+      "part": 0,
+      "words": [
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "raw_window"
+      ]
+    },
+    {
+      "index": 16,
+      "file": "clips/clip_0016.mkv",
+      "start_s": 680.31,
+      "end_s": 680.61,
+      "duration_s": 0.3,
+      "timecode": "00:11:20.310",
+      "seg_id": "p0_s90",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 17,
+      "file": "clips/clip_0017.mkv",
+      "start_s": 682.11,
+      "end_s": 682.41,
+      "duration_s": 0.3,
+      "timecode": "00:11:22.110",
+      "seg_id": "p0_s91",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 18,
+      "file": "clips/clip_0018.mkv",
+      "start_s": 686.76,
+      "end_s": 687.08,
+      "duration_s": 0.32,
+      "timecode": "00:11:26.760",
+      "seg_id": "p0_s92",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 19,
+      "file": "clips/clip_0019.mkv",
+      "start_s": 691.35,
+      "end_s": 691.67,
+      "duration_s": 0.32,
+      "timecode": "00:11:31.350",
+      "seg_id": "p0_s94",
+      "part": 0,
+      "words": [
+        "沒錯"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 20,
+      "file": "clips/clip_0020.mkv",
+      "start_s": 696.68,
+      "end_s": 697.32,
+      "duration_s": 0.64,
+      "timecode": "00:11:36.680",
+      "seg_id": "p0_s95",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 21,
+      "file": "clips/clip_0021.mkv",
+      "start_s": 702.6,
+      "end_s": 702.9,
+      "duration_s": 0.3,
+      "timecode": "00:11:42.600",
+      "seg_id": "p0_s96",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 22,
+      "file": "clips/clip_0022.mkv",
+      "start_s": 707.88,
+      "end_s": 708.2,
+      "duration_s": 0.32,
+      "timecode": "00:11:47.880",
+      "seg_id": "p0_s97",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 23,
+      "file": "clips/clip_0023.mkv",
+      "start_s": 710.67,
+      "end_s": 711.15,
+      "duration_s": 0.48,
+      "timecode": "00:11:50.670",
+      "seg_id": "p0_s99",
+      "part": 0,
+      "words": [
+        "對",
+        "沒錯"
+      ],
+      "window_sources": [
+        "fixed",
+        "fixed"
+      ]
+    },
+    {
+      "index": 24,
+      "file": "clips/clip_0024.mkv",
+      "start_s": 712.72,
+      "end_s": 713.02,
+      "duration_s": 0.3,
+      "timecode": "00:11:52.720",
+      "seg_id": "p0_s100",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 25,
+      "file": "clips/clip_0025.mkv",
+      "start_s": 733.32,
+      "end_s": 733.62,
+      "duration_s": 0.3,
+      "timecode": "00:12:13.320",
+      "seg_id": "p0_s103",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 26,
+      "file": "clips/clip_0026.mkv",
+      "start_s": 739.36,
+      "end_s": 739.66,
+      "duration_s": 0.3,
+      "timecode": "00:12:19.360",
+      "seg_id": "p0_s105",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 27,
+      "file": "clips/clip_0027.mkv",
+      "start_s": 751.03,
+      "end_s": 751.33,
+      "duration_s": 0.3,
+      "timecode": "00:12:31.030",
+      "seg_id": "p0_s109",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 28,
+      "file": "clips/clip_0028.mkv",
+      "start_s": 754.76,
+      "end_s": 755.06,
+      "duration_s": 0.3,
+      "timecode": "00:12:34.760",
+      "seg_id": "p0_s110",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 29,
+      "file": "clips/clip_0029.mkv",
+      "start_s": 760.64,
+      "end_s": 760.94,
+      "duration_s": 0.3,
+      "timecode": "00:12:40.640",
+      "seg_id": "p0_s111",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 30,
+      "file": "clips/clip_0030.mkv",
+      "start_s": 766.0,
+      "end_s": 766.3,
+      "duration_s": 0.3,
+      "timecode": "00:12:46.000",
+      "seg_id": "p0_s113",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 31,
+      "file": "clips/clip_0031.mkv",
+      "start_s": 772.08,
+      "end_s": 772.38,
+      "duration_s": 0.3,
+      "timecode": "00:12:52.080",
+      "seg_id": "p0_s116",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 32,
+      "file": "clips/clip_0032.mkv",
+      "start_s": 775.76,
+      "end_s": 776.06,
+      "duration_s": 0.3,
+      "timecode": "00:12:55.760",
+      "seg_id": "p0_s118",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 33,
+      "file": "clips/clip_0033.mkv",
+      "start_s": 782.23,
+      "end_s": 782.53,
+      "duration_s": 0.3,
+      "timecode": "00:13:02.230",
+      "seg_id": "p0_s124",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 34,
+      "file": "clips/clip_0034.mkv",
+      "start_s": 787.51,
+      "end_s": 787.81,
+      "duration_s": 0.3,
+      "timecode": "00:13:07.510",
+      "seg_id": "p0_s125",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 35,
+      "file": "clips/clip_0035.mkv",
+      "start_s": 802.12,
+      "end_s": 802.42,
+      "duration_s": 0.3,
+      "timecode": "00:13:22.120",
+      "seg_id": "p0_s127",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 36,
+      "file": "clips/clip_0036.mkv",
+      "start_s": 831.35,
+      "end_s": 831.65,
+      "duration_s": 0.3,
+      "timecode": "00:13:51.350",
+      "seg_id": "p0_s136",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 37,
+      "file": "clips/clip_0037.mkv",
+      "start_s": 833.76,
+      "end_s": 834.06,
+      "duration_s": 0.3,
+      "timecode": "00:13:53.760",
+      "seg_id": "p0_s137",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 38,
+      "file": "clips/clip_0038.mkv",
+      "start_s": 849.67,
+      "end_s": 849.97,
+      "duration_s": 0.3,
+      "timecode": "00:14:09.670",
+      "seg_id": "p0_s141",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 39,
+      "file": "clips/clip_0039.mkv",
+      "start_s": 868.19,
+      "end_s": 868.49,
+      "duration_s": 0.3,
+      "timecode": "00:14:28.190",
+      "seg_id": "p0_s144",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 40,
+      "file": "clips/clip_0040.mkv",
+      "start_s": 870.11,
+      "end_s": 870.41,
+      "duration_s": 0.3,
+      "timecode": "00:14:30.110",
+      "seg_id": "p0_s144",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 41,
+      "file": "clips/clip_0041.mkv",
+      "start_s": 876.67,
+      "end_s": 876.97,
+      "duration_s": 0.3,
+      "timecode": "00:14:36.670",
+      "seg_id": "p0_s145",
+      "part": 0,
+      "words": [
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "fixed"
+      ]
+    },
+    {
+      "index": 42,
+      "file": "clips/clip_0042.mkv",
+      "start_s": 889.36,
+      "end_s": 889.68,
+      "duration_s": 0.32,
+      "timecode": "00:14:49.360",
+      "seg_id": "p0_s149",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 43,
+      "file": "clips/clip_0043.mkv",
+      "start_s": 890.0,
+      "end_s": 890.48,
+      "duration_s": 0.48,
+      "timecode": "00:14:50.000",
+      "seg_id": "p0_s149",
+      "part": 0,
+      "words": [
+        "沒錯"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 44,
+      "file": "clips/clip_0044.mkv",
+      "start_s": 891.92,
+      "end_s": 892.22,
+      "duration_s": 0.3,
+      "timecode": "00:14:51.920",
+      "seg_id": "p0_s150",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 45,
+      "file": "clips/clip_0045.mkv",
+      "start_s": 894.16,
+      "end_s": 894.46,
+      "duration_s": 0.3,
+      "timecode": "00:14:54.160",
+      "seg_id": "p0_s151",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 46,
+      "file": "clips/clip_0046.mkv",
+      "start_s": 901.12,
+      "end_s": 901.42,
+      "duration_s": 0.3,
+      "timecode": "00:15:01.120",
+      "seg_id": "p0_s152",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 47,
+      "file": "clips/clip_0047.mkv",
+      "start_s": 902.24,
+      "end_s": 902.54,
+      "duration_s": 0.3,
+      "timecode": "00:15:02.240",
+      "seg_id": "p0_s152",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 48,
+      "file": "clips/clip_0048.mkv",
+      "start_s": 919.79,
+      "end_s": 920.09,
+      "duration_s": 0.3,
+      "timecode": "00:15:19.790",
+      "seg_id": "p0_s156",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 49,
+      "file": "clips/clip_0049.mkv",
+      "start_s": 951.59,
+      "end_s": 951.89,
+      "duration_s": 0.3,
+      "timecode": "00:15:51.590",
+      "seg_id": "p0_s165",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 50,
+      "file": "clips/clip_0050.mkv",
+      "start_s": 972.79,
+      "end_s": 973.09,
+      "duration_s": 0.3,
+      "timecode": "00:16:12.790",
+      "seg_id": "p0_s169",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 51,
+      "file": "clips/clip_0051.mkv",
+      "start_s": 973.83,
+      "end_s": 974.13,
+      "duration_s": 0.3,
+      "timecode": "00:16:13.830",
+      "seg_id": "p0_s169",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 52,
+      "file": "clips/clip_0052.mkv",
+      "start_s": 986.68,
+      "end_s": 987.16,
+      "duration_s": 0.48,
+      "timecode": "00:16:26.680",
+      "seg_id": "p0_s172",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 53,
+      "file": "clips/clip_0053.mkv",
+      "start_s": 990.84,
+      "end_s": 991.24,
+      "duration_s": 0.4,
+      "timecode": "00:16:30.840",
+      "seg_id": "p0_s173",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "t_pad"
+      ]
+    },
+    {
+      "index": 54,
+      "file": "clips/clip_0054.mkv",
+      "start_s": 1010.12,
+      "end_s": 1010.42,
+      "duration_s": 0.3,
+      "timecode": "00:16:50.120",
+      "seg_id": "p0_s176",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 55,
+      "file": "clips/clip_0055.mkv",
+      "start_s": 1017.48,
+      "end_s": 1017.78,
+      "duration_s": 0.3,
+      "timecode": "00:16:57.480",
+      "seg_id": "p0_s177",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 56,
+      "file": "clips/clip_0056.mkv",
+      "start_s": 1026.88,
+      "end_s": 1027.18,
+      "duration_s": 0.3,
+      "timecode": "00:17:06.880",
+      "seg_id": "p0_s179",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 57,
+      "file": "clips/clip_0057.mkv",
+      "start_s": 1036.95,
+      "end_s": 1037.27,
+      "duration_s": 0.32,
+      "timecode": "00:17:16.950",
+      "seg_id": "p0_s181",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 58,
+      "file": "clips/clip_0058.mkv",
+      "start_s": 1072.8,
+      "end_s": 1073.12,
+      "duration_s": 0.32,
+      "timecode": "00:17:52.800",
+      "seg_id": "p0_s188",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 59,
+      "file": "clips/clip_0059.mkv",
+      "start_s": 1074.56,
+      "end_s": 1075.04,
+      "duration_s": 0.48,
+      "timecode": "00:17:54.560",
+      "seg_id": "p0_s188",
+      "part": 0,
+      "words": [
+        "沒錯"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 60,
+      "file": "clips/clip_0060.mkv",
+      "start_s": 1079.6,
+      "end_s": 1079.92,
+      "duration_s": 0.32,
+      "timecode": "00:17:59.600",
+      "seg_id": "p0_s190",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 61,
+      "file": "clips/clip_0061.mkv",
+      "start_s": 1097.07,
+      "end_s": 1097.37,
+      "duration_s": 0.3,
+      "timecode": "00:18:17.070",
+      "seg_id": "p0_s193",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 62,
+      "file": "clips/clip_0062.mkv",
+      "start_s": 1103.56,
+      "end_s": 1103.86,
+      "duration_s": 0.3,
+      "timecode": "00:18:23.560",
+      "seg_id": "p0_s194",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 63,
+      "file": "clips/clip_0063.mkv",
+      "start_s": 1122.56,
+      "end_s": 1122.88,
+      "duration_s": 0.32,
+      "timecode": "00:18:42.560",
+      "seg_id": "p0_s198",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 64,
+      "file": "clips/clip_0064.mkv",
+      "start_s": 1130.48,
+      "end_s": 1130.78,
+      "duration_s": 0.3,
+      "timecode": "00:18:50.480",
+      "seg_id": "p0_s198",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 65,
+      "file": "clips/clip_0065.mkv",
+      "start_s": 1160.63,
+      "end_s": 1161.19,
+      "duration_s": 0.56,
+      "timecode": "00:19:20.630",
+      "seg_id": "p0_s204",
+      "part": 0,
+      "words": [
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "fixed"
+      ]
+    },
+    {
+      "index": 66,
+      "file": "clips/clip_0066.mkv",
+      "start_s": 1161.99,
+      "end_s": 1162.31,
+      "duration_s": 0.32,
+      "timecode": "00:19:21.990",
+      "seg_id": "p0_s204",
+      "part": 0,
+      "words": [
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "raw_window"
+      ]
+    },
+    {
+      "index": 67,
+      "file": "clips/clip_0067.mkv",
+      "start_s": 1164.47,
+      "end_s": 1164.77,
+      "duration_s": 0.3,
+      "timecode": "00:19:24.470",
+      "seg_id": "p0_s205",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 68,
+      "file": "clips/clip_0068.mkv",
+      "start_s": 1169.67,
+      "end_s": 1169.97,
+      "duration_s": 0.3,
+      "timecode": "00:19:29.670",
+      "seg_id": "p0_s205",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 69,
+      "file": "clips/clip_0069.mkv",
+      "start_s": 1171.76,
+      "end_s": 1172.06,
+      "duration_s": 0.3,
+      "timecode": "00:19:31.760",
+      "seg_id": "p0_s206",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 70,
+      "file": "clips/clip_0070.mkv",
+      "start_s": 1175.44,
+      "end_s": 1175.76,
+      "duration_s": 0.32,
+      "timecode": "00:19:35.440",
+      "seg_id": "p0_s206",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 71,
+      "file": "clips/clip_0071.mkv",
+      "start_s": 1185.8,
+      "end_s": 1186.1,
+      "duration_s": 0.3,
+      "timecode": "00:19:45.800",
+      "seg_id": "p0_s208",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 72,
+      "file": "clips/clip_0072.mkv",
+      "start_s": 1203.12,
+      "end_s": 1203.84,
+      "duration_s": 0.72,
+      "timecode": "00:20:03.120",
+      "seg_id": "p0_s212",
+      "part": 0,
+      "words": [
+        "沒錯"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 73,
+      "file": "clips/clip_0073.mkv",
+      "start_s": 1214.63,
+      "end_s": 1214.93,
+      "duration_s": 0.3,
+      "timecode": "00:20:14.630",
+      "seg_id": "p0_s213",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "raw_window"
+      ]
+    },
+    {
+      "index": 74,
+      "file": "clips/clip_0074.mkv",
+      "start_s": 1215.67,
+      "end_s": 1215.97,
+      "duration_s": 0.3,
+      "timecode": "00:20:15.670",
+      "seg_id": "p0_s213",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 75,
+      "file": "clips/clip_0075.mkv",
+      "start_s": 1217.88,
+      "end_s": 1218.2,
+      "duration_s": 0.32,
+      "timecode": "00:20:17.880",
+      "seg_id": "p0_s215",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 76,
+      "file": "clips/clip_0076.mkv",
+      "start_s": 1233.08,
+      "end_s": 1233.56,
+      "duration_s": 0.48,
+      "timecode": "00:20:33.080",
+      "seg_id": "p0_s218",
+      "part": 0,
+      "words": [
+        "對",
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "fixed",
+        "fixed"
+      ]
+    },
+    {
+      "index": 77,
+      "file": "clips/clip_0077.mkv",
+      "start_s": 1240.36,
+      "end_s": 1240.66,
+      "duration_s": 0.3,
+      "timecode": "00:20:40.360",
+      "seg_id": "p0_s218",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 78,
+      "file": "clips/clip_0078.mkv",
+      "start_s": 1272.64,
+      "end_s": 1272.94,
+      "duration_s": 0.3,
+      "timecode": "00:21:12.640",
+      "seg_id": "p0_s225",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 79,
+      "file": "clips/clip_0079.mkv",
+      "start_s": 1308.76,
+      "end_s": 1309.06,
+      "duration_s": 0.3,
+      "timecode": "00:21:48.760",
+      "seg_id": "p0_s230",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 80,
+      "file": "clips/clip_0080.mkv",
+      "start_s": 1309.08,
+      "end_s": 1309.38,
+      "duration_s": 0.3,
+      "timecode": "00:21:49.080",
+      "seg_id": "p0_s230",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 81,
+      "file": "clips/clip_0081.mkv",
+      "start_s": 1315.12,
+      "end_s": 1315.42,
+      "duration_s": 0.3,
+      "timecode": "00:21:55.120",
+      "seg_id": "p0_s232",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 82,
+      "file": "clips/clip_0082.mkv",
+      "start_s": 1324.28,
+      "end_s": 1324.6,
+      "duration_s": 0.32,
+      "timecode": "00:22:04.280",
+      "seg_id": "p0_s233",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 83,
+      "file": "clips/clip_0083.mkv",
+      "start_s": 1325.16,
+      "end_s": 1325.46,
+      "duration_s": 0.3,
+      "timecode": "00:22:05.160",
+      "seg_id": "p0_s233",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 84,
+      "file": "clips/clip_0084.mkv",
+      "start_s": 1347.44,
+      "end_s": 1347.74,
+      "duration_s": 0.3,
+      "timecode": "00:22:27.440",
+      "seg_id": "p0_s236",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 85,
+      "file": "clips/clip_0085.mkv",
+      "start_s": 1398.52,
+      "end_s": 1398.82,
+      "duration_s": 0.3,
+      "timecode": "00:23:18.520",
+      "seg_id": "p0_s243",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 86,
+      "file": "clips/clip_0086.mkv",
+      "start_s": 1401.27,
+      "end_s": 1401.75,
+      "duration_s": 0.48,
+      "timecode": "00:23:21.270",
+      "seg_id": "p0_s244",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 87,
+      "file": "clips/clip_0087.mkv",
+      "start_s": 1411.8,
+      "end_s": 1412.1,
+      "duration_s": 0.3,
+      "timecode": "00:23:31.800",
+      "seg_id": "p0_s245",
+      "part": 0,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 88,
+      "file": "clips/clip_0088.mkv",
+      "start_s": 1431.694,
+      "end_s": 1431.994,
+      "duration_s": 0.3,
+      "timecode": "00:23:51.694",
+      "seg_id": "p1_s251",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 89,
+      "file": "clips/clip_0089.mkv",
+      "start_s": 1443.274,
+      "end_s": 1443.674,
+      "duration_s": 0.4,
+      "timecode": "00:24:03.274",
+      "seg_id": "p1_s253",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 90,
+      "file": "clips/clip_0090.mkv",
+      "start_s": 1445.594,
+      "end_s": 1445.894,
+      "duration_s": 0.3,
+      "timecode": "00:24:05.594",
+      "seg_id": "p1_s253",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 91,
+      "file": "clips/clip_0091.mkv",
+      "start_s": 1460.834,
+      "end_s": 1461.154,
+      "duration_s": 0.32,
+      "timecode": "00:24:20.834",
+      "seg_id": "p1_s256",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 92,
+      "file": "clips/clip_0092.mkv",
+      "start_s": 1461.394,
+      "end_s": 1461.694,
+      "duration_s": 0.3,
+      "timecode": "00:24:21.394",
+      "seg_id": "p1_s257",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 93,
+      "file": "clips/clip_0093.mkv",
+      "start_s": 1490.114,
+      "end_s": 1490.414,
+      "duration_s": 0.3,
+      "timecode": "00:24:50.114",
+      "seg_id": "p1_s262",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 94,
+      "file": "clips/clip_0094.mkv",
+      "start_s": 1497.754,
+      "end_s": 1498.154,
+      "duration_s": 0.4,
+      "timecode": "00:24:57.754",
+      "seg_id": "p1_s262",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "t_pad"
+      ]
+    },
+    {
+      "index": 95,
+      "file": "clips/clip_0095.mkv",
+      "start_s": 1521.694,
+      "end_s": 1521.994,
+      "duration_s": 0.3,
+      "timecode": "00:25:21.694",
+      "seg_id": "p1_s264",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "raw_window"
+      ]
+    },
+    {
+      "index": 96,
+      "file": "clips/clip_0096.mkv",
+      "start_s": 1525.214,
+      "end_s": 1525.694,
+      "duration_s": 0.48,
+      "timecode": "00:25:25.214",
+      "seg_id": "p1_s266",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 97,
+      "file": "clips/clip_0097.mkv",
+      "start_s": 1531.574,
+      "end_s": 1531.894,
+      "duration_s": 0.32,
+      "timecode": "00:25:31.574",
+      "seg_id": "p1_s268",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 98,
+      "file": "clips/clip_0098.mkv",
+      "start_s": 1532.614,
+      "end_s": 1532.934,
+      "duration_s": 0.32,
+      "timecode": "00:25:32.614",
+      "seg_id": "p1_s268",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 99,
+      "file": "clips/clip_0099.mkv",
+      "start_s": 1535.014,
+      "end_s": 1535.494,
+      "duration_s": 0.48,
+      "timecode": "00:25:35.014",
+      "seg_id": "p1_s268",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 100,
+      "file": "clips/clip_0100.mkv",
+      "start_s": 1542.854,
+      "end_s": 1543.154,
+      "duration_s": 0.3,
+      "timecode": "00:25:42.854",
+      "seg_id": "p1_s269",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 101,
+      "file": "clips/clip_0101.mkv",
+      "start_s": 1552.644,
+      "end_s": 1552.944,
+      "duration_s": 0.3,
+      "timecode": "00:25:52.644",
+      "seg_id": "p1_s271",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 102,
+      "file": "clips/clip_0102.mkv",
+      "start_s": 1555.034,
+      "end_s": 1555.334,
+      "duration_s": 0.3,
+      "timecode": "00:25:55.034",
+      "seg_id": "p1_s272",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 103,
+      "file": "clips/clip_0103.mkv",
+      "start_s": 1568.134,
+      "end_s": 1568.454,
+      "duration_s": 0.32,
+      "timecode": "00:26:08.134",
+      "seg_id": "p1_s273",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 104,
+      "file": "clips/clip_0104.mkv",
+      "start_s": 1569.634,
+      "end_s": 1570.114,
+      "duration_s": 0.48,
+      "timecode": "00:26:09.634",
+      "seg_id": "p1_s275",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 105,
+      "file": "clips/clip_0105.mkv",
+      "start_s": 1584.314,
+      "end_s": 1584.614,
+      "duration_s": 0.3,
+      "timecode": "00:26:24.314",
+      "seg_id": "p1_s277",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 106,
+      "file": "clips/clip_0106.mkv",
+      "start_s": 1618.814,
+      "end_s": 1619.134,
+      "duration_s": 0.32,
+      "timecode": "00:26:58.814",
+      "seg_id": "p1_s284",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 107,
+      "file": "clips/clip_0107.mkv",
+      "start_s": 1628.334,
+      "end_s": 1628.634,
+      "duration_s": 0.3,
+      "timecode": "00:27:08.334",
+      "seg_id": "p1_s286",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 108,
+      "file": "clips/clip_0108.mkv",
+      "start_s": 1629.614,
+      "end_s": 1630.014,
+      "duration_s": 0.4,
+      "timecode": "00:27:09.614",
+      "seg_id": "p1_s286",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 109,
+      "file": "clips/clip_0109.mkv",
+      "start_s": 1632.654,
+      "end_s": 1632.954,
+      "duration_s": 0.3,
+      "timecode": "00:27:12.654",
+      "seg_id": "p1_s286",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 110,
+      "file": "clips/clip_0110.mkv",
+      "start_s": 1640.574,
+      "end_s": 1641.134,
+      "duration_s": 0.56,
+      "timecode": "00:27:20.574",
+      "seg_id": "p1_s286",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 111,
+      "file": "clips/clip_0111.mkv",
+      "start_s": 1642.104,
+      "end_s": 1642.404,
+      "duration_s": 0.3,
+      "timecode": "00:27:22.104",
+      "seg_id": "p1_s288",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 112,
+      "file": "clips/clip_0112.mkv",
+      "start_s": 1657.904,
+      "end_s": 1658.204,
+      "duration_s": 0.3,
+      "timecode": "00:27:37.904",
+      "seg_id": "p1_s292",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 113,
+      "file": "clips/clip_0113.mkv",
+      "start_s": 1660.034,
+      "end_s": 1660.334,
+      "duration_s": 0.3,
+      "timecode": "00:27:40.034",
+      "seg_id": "p1_s294",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 114,
+      "file": "clips/clip_0114.mkv",
+      "start_s": 1662.514,
+      "end_s": 1662.834,
+      "duration_s": 0.32,
+      "timecode": "00:27:42.514",
+      "seg_id": "p1_s294",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 115,
+      "file": "clips/clip_0115.mkv",
+      "start_s": 1695.674,
+      "end_s": 1695.974,
+      "duration_s": 0.3,
+      "timecode": "00:28:15.674",
+      "seg_id": "p1_s297",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 116,
+      "file": "clips/clip_0116.mkv",
+      "start_s": 1714.464,
+      "end_s": 1714.764,
+      "duration_s": 0.3,
+      "timecode": "00:28:34.464",
+      "seg_id": "p1_s298",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 117,
+      "file": "clips/clip_0117.mkv",
+      "start_s": 1752.764,
+      "end_s": 1753.064,
+      "duration_s": 0.3,
+      "timecode": "00:29:12.764",
+      "seg_id": "p1_s300",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 118,
+      "file": "clips/clip_0118.mkv",
+      "start_s": 1763.754,
+      "end_s": 1764.054,
+      "duration_s": 0.3,
+      "timecode": "00:29:23.754",
+      "seg_id": "p1_s304",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 119,
+      "file": "clips/clip_0119.mkv",
+      "start_s": 1770.314,
+      "end_s": 1770.614,
+      "duration_s": 0.3,
+      "timecode": "00:29:30.314",
+      "seg_id": "p1_s304",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 120,
+      "file": "clips/clip_0120.mkv",
+      "start_s": 1778.394,
+      "end_s": 1778.694,
+      "duration_s": 0.3,
+      "timecode": "00:29:38.394",
+      "seg_id": "p1_s304",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 121,
+      "file": "clips/clip_0121.mkv",
+      "start_s": 1787.504,
+      "end_s": 1787.984,
+      "duration_s": 0.48,
+      "timecode": "00:29:47.504",
+      "seg_id": "p1_s306",
+      "part": 1,
+      "words": [
+        "對",
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "fixed",
+        "fixed"
+      ]
+    },
+    {
+      "index": 122,
+      "file": "clips/clip_0122.mkv",
+      "start_s": 1788.464,
+      "end_s": 1788.764,
+      "duration_s": 0.3,
+      "timecode": "00:29:48.464",
+      "seg_id": "p1_s306",
+      "part": 1,
+      "words": [
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "raw_window"
+      ]
+    },
+    {
+      "index": 123,
+      "file": "clips/clip_0123.mkv",
+      "start_s": 1837.634,
+      "end_s": 1837.934,
+      "duration_s": 0.3,
+      "timecode": "00:30:37.634",
+      "seg_id": "p1_s313",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 124,
+      "file": "clips/clip_0124.mkv",
+      "start_s": 1838.354,
+      "end_s": 1838.654,
+      "duration_s": 0.3,
+      "timecode": "00:30:38.354",
+      "seg_id": "p1_s313",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 125,
+      "file": "clips/clip_0125.mkv",
+      "start_s": 1854.174,
+      "end_s": 1854.474,
+      "duration_s": 0.3,
+      "timecode": "00:30:54.174",
+      "seg_id": "p1_s319",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "raw_window"
+      ]
+    },
+    {
+      "index": 126,
+      "file": "clips/clip_0126.mkv",
+      "start_s": 1854.734,
+      "end_s": 1855.494,
+      "duration_s": 0.76,
+      "timecode": "00:30:54.734",
+      "seg_id": "p1_s319",
+      "part": 1,
+      "words": [
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "t_pad"
+      ]
+    },
+    {
+      "index": 127,
+      "file": "clips/clip_0127.mkv",
+      "start_s": 1867.634,
+      "end_s": 1868.034,
+      "duration_s": 0.4,
+      "timecode": "00:31:07.634",
+      "seg_id": "p1_s320",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 128,
+      "file": "clips/clip_0128.mkv",
+      "start_s": 1868.754,
+      "end_s": 1869.054,
+      "duration_s": 0.3,
+      "timecode": "00:31:08.754",
+      "seg_id": "p1_s320",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 129,
+      "file": "clips/clip_0129.mkv",
+      "start_s": 1904.114,
+      "end_s": 1904.414,
+      "duration_s": 0.3,
+      "timecode": "00:31:44.114",
+      "seg_id": "p1_s324",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 130,
+      "file": "clips/clip_0130.mkv",
+      "start_s": 1918.254,
+      "end_s": 1918.734,
+      "duration_s": 0.48,
+      "timecode": "00:31:58.254",
+      "seg_id": "p1_s328",
+      "part": 1,
+      "words": [
+        "對",
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "fixed",
+        "fixed"
+      ]
+    },
+    {
+      "index": 131,
+      "file": "clips/clip_0131.mkv",
+      "start_s": 1925.694,
+      "end_s": 1925.994,
+      "duration_s": 0.3,
+      "timecode": "00:32:05.694",
+      "seg_id": "p1_s328",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 132,
+      "file": "clips/clip_0132.mkv",
+      "start_s": 1944.454,
+      "end_s": 1944.754,
+      "duration_s": 0.3,
+      "timecode": "00:32:24.454",
+      "seg_id": "p1_s330",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 133,
+      "file": "clips/clip_0133.mkv",
+      "start_s": 1947.634,
+      "end_s": 1948.034,
+      "duration_s": 0.4,
+      "timecode": "00:32:27.634",
+      "seg_id": "p1_s331",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 134,
+      "file": "clips/clip_0134.mkv",
+      "start_s": 1949.394,
+      "end_s": 1949.694,
+      "duration_s": 0.3,
+      "timecode": "00:32:29.394",
+      "seg_id": "p1_s331",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 135,
+      "file": "clips/clip_0135.mkv",
+      "start_s": 1957.684,
+      "end_s": 1957.984,
+      "duration_s": 0.3,
+      "timecode": "00:32:37.684",
+      "seg_id": "p1_s332",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 136,
+      "file": "clips/clip_0136.mkv",
+      "start_s": 1971.034,
+      "end_s": 1971.334,
+      "duration_s": 0.3,
+      "timecode": "00:32:51.034",
+      "seg_id": "p1_s334",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 137,
+      "file": "clips/clip_0137.mkv",
+      "start_s": 2009.334,
+      "end_s": 2009.634,
+      "duration_s": 0.3,
+      "timecode": "00:33:29.334",
+      "seg_id": "p1_s340",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 138,
+      "file": "clips/clip_0138.mkv",
+      "start_s": 2038.454,
+      "end_s": 2038.754,
+      "duration_s": 0.3,
+      "timecode": "00:33:58.454",
+      "seg_id": "p1_s344",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 139,
+      "file": "clips/clip_0139.mkv",
+      "start_s": 2050.434,
+      "end_s": 2050.734,
+      "duration_s": 0.3,
+      "timecode": "00:34:10.434",
+      "seg_id": "p1_s348",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 140,
+      "file": "clips/clip_0140.mkv",
+      "start_s": 2059.314,
+      "end_s": 2060.034,
+      "duration_s": 0.72,
+      "timecode": "00:34:19.314",
+      "seg_id": "p1_s352",
+      "part": 1,
+      "words": [
+        "沒錯"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 141,
+      "file": "clips/clip_0141.mkv",
+      "start_s": 2097.814,
+      "end_s": 2098.114,
+      "duration_s": 0.3,
+      "timecode": "00:34:57.814",
+      "seg_id": "p1_s357",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 142,
+      "file": "clips/clip_0142.mkv",
+      "start_s": 2098.434,
+      "end_s": 2098.754,
+      "duration_s": 0.32,
+      "timecode": "00:34:58.434",
+      "seg_id": "p1_s358",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 143,
+      "file": "clips/clip_0143.mkv",
+      "start_s": 2100.234,
+      "end_s": 2100.794,
+      "duration_s": 0.56,
+      "timecode": "00:35:00.234",
+      "seg_id": "p1_s359",
+      "part": 1,
+      "words": [
+        "對",
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "fixed",
+        "fixed"
+      ]
+    },
+    {
+      "index": 144,
+      "file": "clips/clip_0144.mkv",
+      "start_s": 2108.394,
+      "end_s": 2108.694,
+      "duration_s": 0.3,
+      "timecode": "00:35:08.394",
+      "seg_id": "p1_s359",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 145,
+      "file": "clips/clip_0145.mkv",
+      "start_s": 2109.914,
+      "end_s": 2110.214,
+      "duration_s": 0.3,
+      "timecode": "00:35:09.914",
+      "seg_id": "p1_s359",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 146,
+      "file": "clips/clip_0146.mkv",
+      "start_s": 2155.214,
+      "end_s": 2155.514,
+      "duration_s": 0.3,
+      "timecode": "00:35:55.214",
+      "seg_id": "p1_s367",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 147,
+      "file": "clips/clip_0147.mkv",
+      "start_s": 2161.214,
+      "end_s": 2161.514,
+      "duration_s": 0.3,
+      "timecode": "00:36:01.214",
+      "seg_id": "p1_s367",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 148,
+      "file": "clips/clip_0148.mkv",
+      "start_s": 2195.874,
+      "end_s": 2196.174,
+      "duration_s": 0.3,
+      "timecode": "00:36:35.874",
+      "seg_id": "p1_s369",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 149,
+      "file": "clips/clip_0149.mkv",
+      "start_s": 2203.374,
+      "end_s": 2203.674,
+      "duration_s": 0.3,
+      "timecode": "00:36:43.374",
+      "seg_id": "p1_s371",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 150,
+      "file": "clips/clip_0150.mkv",
+      "start_s": 2257.734,
+      "end_s": 2258.214,
+      "duration_s": 0.48,
+      "timecode": "00:37:37.734",
+      "seg_id": "p1_s375",
+      "part": 1,
+      "words": [
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "fixed"
+      ]
+    },
+    {
+      "index": 151,
+      "file": "clips/clip_0151.mkv",
+      "start_s": 2384.794,
+      "end_s": 2385.094,
+      "duration_s": 0.3,
+      "timecode": "00:39:44.794",
+      "seg_id": "p1_s385",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 152,
+      "file": "clips/clip_0152.mkv",
+      "start_s": 2431.634,
+      "end_s": 2431.934,
+      "duration_s": 0.3,
+      "timecode": "00:40:31.634",
+      "seg_id": "p1_s387",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 153,
+      "file": "clips/clip_0153.mkv",
+      "start_s": 2477.094,
+      "end_s": 2477.574,
+      "duration_s": 0.48,
+      "timecode": "00:41:17.094",
+      "seg_id": "p1_s390",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 154,
+      "file": "clips/clip_0154.mkv",
+      "start_s": 2480.534,
+      "end_s": 2480.834,
+      "duration_s": 0.3,
+      "timecode": "00:41:20.534",
+      "seg_id": "p1_s390",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 155,
+      "file": "clips/clip_0155.mkv",
+      "start_s": 2483.374,
+      "end_s": 2483.674,
+      "duration_s": 0.3,
+      "timecode": "00:41:23.374",
+      "seg_id": "p1_s392",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 156,
+      "file": "clips/clip_0156.mkv",
+      "start_s": 2496.714,
+      "end_s": 2497.114,
+      "duration_s": 0.4,
+      "timecode": "00:41:36.714",
+      "seg_id": "p1_s396",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "t_pad"
+      ]
+    },
+    {
+      "index": 157,
+      "file": "clips/clip_0157.mkv",
+      "start_s": 2512.054,
+      "end_s": 2512.354,
+      "duration_s": 0.3,
+      "timecode": "00:41:52.054",
+      "seg_id": "p1_s400",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 158,
+      "file": "clips/clip_0158.mkv",
+      "start_s": 2513.814,
+      "end_s": 2514.654,
+      "duration_s": 0.84,
+      "timecode": "00:41:53.814",
+      "seg_id": "p1_s400",
+      "part": 1,
+      "words": [
+        "對",
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "t_pad",
+        "t_pad"
+      ]
+    },
+    {
+      "index": 159,
+      "file": "clips/clip_0159.mkv",
+      "start_s": 2516.104,
+      "end_s": 2516.404,
+      "duration_s": 0.3,
+      "timecode": "00:41:56.104",
+      "seg_id": "p1_s401",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 160,
+      "file": "clips/clip_0160.mkv",
+      "start_s": 2517.204,
+      "end_s": 2517.434,
+      "duration_s": 0.23,
+      "timecode": "00:41:57.204",
+      "seg_id": "p1_s402",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 161,
+      "file": "clips/clip_0161.mkv",
+      "start_s": 2517.444,
+      "end_s": 2517.744,
+      "duration_s": 0.3,
+      "timecode": "00:41:57.444",
+      "seg_id": "p1_s402",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 162,
+      "file": "clips/clip_0162.mkv",
+      "start_s": 2527.454,
+      "end_s": 2527.754,
+      "duration_s": 0.3,
+      "timecode": "00:42:07.454",
+      "seg_id": "p1_s404",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 163,
+      "file": "clips/clip_0163.mkv",
+      "start_s": 2529.574,
+      "end_s": 2529.874,
+      "duration_s": 0.3,
+      "timecode": "00:42:09.574",
+      "seg_id": "p1_s405",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 164,
+      "file": "clips/clip_0164.mkv",
+      "start_s": 2537.354,
+      "end_s": 2537.654,
+      "duration_s": 0.3,
+      "timecode": "00:42:17.354",
+      "seg_id": "p1_s406",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 165,
+      "file": "clips/clip_0165.mkv",
+      "start_s": 2577.694,
+      "end_s": 2577.994,
+      "duration_s": 0.3,
+      "timecode": "00:42:57.694",
+      "seg_id": "p1_s411",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 166,
+      "file": "clips/clip_0166.mkv",
+      "start_s": 2596.134,
+      "end_s": 2596.534,
+      "duration_s": 0.4,
+      "timecode": "00:43:16.134",
+      "seg_id": "p1_s415",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "t_pad"
+      ]
+    },
+    {
+      "index": 167,
+      "file": "clips/clip_0167.mkv",
+      "start_s": 2621.954,
+      "end_s": 2622.254,
+      "duration_s": 0.3,
+      "timecode": "00:43:41.954",
+      "seg_id": "p1_s417",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 168,
+      "file": "clips/clip_0168.mkv",
+      "start_s": 2623.774,
+      "end_s": 2624.074,
+      "duration_s": 0.3,
+      "timecode": "00:43:43.774",
+      "seg_id": "p1_s417",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 169,
+      "file": "clips/clip_0169.mkv",
+      "start_s": 2634.434,
+      "end_s": 2634.734,
+      "duration_s": 0.3,
+      "timecode": "00:43:54.434",
+      "seg_id": "p1_s417",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 170,
+      "file": "clips/clip_0170.mkv",
+      "start_s": 2657.014,
+      "end_s": 2657.414,
+      "duration_s": 0.4,
+      "timecode": "00:44:17.014",
+      "seg_id": "p1_s420",
+      "part": 1,
+      "words": [
+        "對",
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "raw_window",
+        "raw_window"
+      ]
+    },
+    {
+      "index": 171,
+      "file": "clips/clip_0171.mkv",
+      "start_s": 2683.574,
+      "end_s": 2683.874,
+      "duration_s": 0.3,
+      "timecode": "00:44:43.574",
+      "seg_id": "p1_s423",
+      "part": 1,
+      "words": [
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "fixed"
+      ]
+    },
+    {
+      "index": 172,
+      "file": "clips/clip_0172.mkv",
+      "start_s": 2683.894,
+      "end_s": 2684.194,
+      "duration_s": 0.3,
+      "timecode": "00:44:43.894",
+      "seg_id": "p1_s423",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 173,
+      "file": "clips/clip_0173.mkv",
+      "start_s": 2695.874,
+      "end_s": 2696.194,
+      "duration_s": 0.32,
+      "timecode": "00:44:55.874",
+      "seg_id": "p1_s426",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 174,
+      "file": "clips/clip_0174.mkv",
+      "start_s": 2705.794,
+      "end_s": 2706.114,
+      "duration_s": 0.32,
+      "timecode": "00:45:05.794",
+      "seg_id": "p1_s426",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 175,
+      "file": "clips/clip_0175.mkv",
+      "start_s": 2726.814,
+      "end_s": 2727.114,
+      "duration_s": 0.3,
+      "timecode": "00:45:26.814",
+      "seg_id": "p1_s427",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "raw_window"
+      ]
+    },
+    {
+      "index": 176,
+      "file": "clips/clip_0176.mkv",
+      "start_s": 2749.934,
+      "end_s": 2750.234,
+      "duration_s": 0.3,
+      "timecode": "00:45:49.934",
+      "seg_id": "p1_s430",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 177,
+      "file": "clips/clip_0177.mkv",
+      "start_s": 2750.814,
+      "end_s": 2751.114,
+      "duration_s": 0.3,
+      "timecode": "00:45:50.814",
+      "seg_id": "p1_s430",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 178,
+      "file": "clips/clip_0178.mkv",
+      "start_s": 2763.904,
+      "end_s": 2764.204,
+      "duration_s": 0.3,
+      "timecode": "00:46:03.904",
+      "seg_id": "p1_s432",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 179,
+      "file": "clips/clip_0179.mkv",
+      "start_s": 2764.304,
+      "end_s": 2764.604,
+      "duration_s": 0.3,
+      "timecode": "00:46:04.304",
+      "seg_id": "p1_s432",
+      "part": 1,
+      "words": [
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "raw_window"
+      ]
+    },
+    {
+      "index": 180,
+      "file": "clips/clip_0180.mkv",
+      "start_s": 2764.804,
+      "end_s": 2765.104,
+      "duration_s": 0.3,
+      "timecode": "00:46:04.804",
+      "seg_id": "p1_s433",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 181,
+      "file": "clips/clip_0181.mkv",
+      "start_s": 2788.364,
+      "end_s": 2788.664,
+      "duration_s": 0.3,
+      "timecode": "00:46:28.364",
+      "seg_id": "p1_s437",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 182,
+      "file": "clips/clip_0182.mkv",
+      "start_s": 2792.434,
+      "end_s": 2792.734,
+      "duration_s": 0.3,
+      "timecode": "00:46:32.434",
+      "seg_id": "p1_s438",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 183,
+      "file": "clips/clip_0183.mkv",
+      "start_s": 2794.474,
+      "end_s": 2794.774,
+      "duration_s": 0.3,
+      "timecode": "00:46:34.474",
+      "seg_id": "p1_s439",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 184,
+      "file": "clips/clip_0184.mkv",
+      "start_s": 2812.984,
+      "end_s": 2813.544,
+      "duration_s": 0.56,
+      "timecode": "00:46:52.984",
+      "seg_id": "p1_s442",
+      "part": 1,
+      "words": [
+        "對",
+        "沒錯"
+      ],
+      "window_sources": [
+        "fixed",
+        "fixed"
+      ]
+    },
+    {
+      "index": 185,
+      "file": "clips/clip_0185.mkv",
+      "start_s": 2822.024,
+      "end_s": 2822.504,
+      "duration_s": 0.48,
+      "timecode": "00:47:02.024",
+      "seg_id": "p1_s442",
+      "part": 1,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 186,
+      "file": "clips/clip_0186.mkv",
+      "start_s": 2860.768,
+      "end_s": 2861.068,
+      "duration_s": 0.3,
+      "timecode": "00:47:40.768",
+      "seg_id": "p2_s446",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 187,
+      "file": "clips/clip_0187.mkv",
+      "start_s": 2872.428,
+      "end_s": 2872.728,
+      "duration_s": 0.3,
+      "timecode": "00:47:52.428",
+      "seg_id": "p2_s449",
+      "part": 2,
+      "words": [
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "fixed"
+      ]
+    },
+    {
+      "index": 188,
+      "file": "clips/clip_0188.mkv",
+      "start_s": 2916.208,
+      "end_s": 2916.508,
+      "duration_s": 0.3,
+      "timecode": "00:48:36.208",
+      "seg_id": "p2_s455",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 189,
+      "file": "clips/clip_0189.mkv",
+      "start_s": 2917.158,
+      "end_s": 2917.458,
+      "duration_s": 0.3,
+      "timecode": "00:48:37.158",
+      "seg_id": "p2_s456",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 190,
+      "file": "clips/clip_0190.mkv",
+      "start_s": 2941.848,
+      "end_s": 2942.168,
+      "duration_s": 0.32,
+      "timecode": "00:49:01.848",
+      "seg_id": "p2_s457",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 191,
+      "file": "clips/clip_0191.mkv",
+      "start_s": 2951.448,
+      "end_s": 2951.748,
+      "duration_s": 0.3,
+      "timecode": "00:49:11.448",
+      "seg_id": "p2_s459",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 192,
+      "file": "clips/clip_0192.mkv",
+      "start_s": 2954.468,
+      "end_s": 2955.028,
+      "duration_s": 0.56,
+      "timecode": "00:49:14.468",
+      "seg_id": "p2_s460",
+      "part": 2,
+      "words": [
+        "沒錯"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 193,
+      "file": "clips/clip_0193.mkv",
+      "start_s": 2998.988,
+      "end_s": 2999.308,
+      "duration_s": 0.32,
+      "timecode": "00:49:58.988",
+      "seg_id": "p2_s468",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 194,
+      "file": "clips/clip_0194.mkv",
+      "start_s": 3010.108,
+      "end_s": 3010.408,
+      "duration_s": 0.3,
+      "timecode": "00:50:10.108",
+      "seg_id": "p2_s468",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 195,
+      "file": "clips/clip_0195.mkv",
+      "start_s": 3021.668,
+      "end_s": 3021.968,
+      "duration_s": 0.3,
+      "timecode": "00:50:21.668",
+      "seg_id": "p2_s471",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 196,
+      "file": "clips/clip_0196.mkv",
+      "start_s": 3035.588,
+      "end_s": 3035.888,
+      "duration_s": 0.3,
+      "timecode": "00:50:35.588",
+      "seg_id": "p2_s472",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 197,
+      "file": "clips/clip_0197.mkv",
+      "start_s": 3058.128,
+      "end_s": 3058.528,
+      "duration_s": 0.4,
+      "timecode": "00:50:58.128",
+      "seg_id": "p2_s476",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 198,
+      "file": "clips/clip_0198.mkv",
+      "start_s": 3058.908,
+      "end_s": 3059.208,
+      "duration_s": 0.3,
+      "timecode": "00:50:58.908",
+      "seg_id": "p2_s477",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 199,
+      "file": "clips/clip_0199.mkv",
+      "start_s": 3063.988,
+      "end_s": 3064.288,
+      "duration_s": 0.3,
+      "timecode": "00:51:03.988",
+      "seg_id": "p2_s479",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 200,
+      "file": "clips/clip_0200.mkv",
+      "start_s": 3085.558,
+      "end_s": 3085.858,
+      "duration_s": 0.3,
+      "timecode": "00:51:25.558",
+      "seg_id": "p2_s480",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 201,
+      "file": "clips/clip_0201.mkv",
+      "start_s": 3113.508,
+      "end_s": 3113.808,
+      "duration_s": 0.3,
+      "timecode": "00:51:53.508",
+      "seg_id": "p2_s483",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 202,
+      "file": "clips/clip_0202.mkv",
+      "start_s": 3122.648,
+      "end_s": 3123.048,
+      "duration_s": 0.4,
+      "timecode": "00:52:02.648",
+      "seg_id": "p2_s485",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 203,
+      "file": "clips/clip_0203.mkv",
+      "start_s": 3135.638,
+      "end_s": 3136.198,
+      "duration_s": 0.56,
+      "timecode": "00:52:15.638",
+      "seg_id": "p2_s487",
+      "part": 2,
+      "words": [
+        "對",
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "t_pad",
+        "fixed"
+      ]
+    },
+    {
+      "index": 204,
+      "file": "clips/clip_0204.mkv",
+      "start_s": 3146.078,
+      "end_s": 3146.378,
+      "duration_s": 0.3,
+      "timecode": "00:52:26.078",
+      "seg_id": "p2_s488",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 205,
+      "file": "clips/clip_0205.mkv",
+      "start_s": 3163.728,
+      "end_s": 3164.208,
+      "duration_s": 0.48,
+      "timecode": "00:52:43.728",
+      "seg_id": "p2_s491",
+      "part": 2,
+      "words": [
+        "對",
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "fixed",
+        "fixed"
+      ]
+    },
+    {
+      "index": 206,
+      "file": "clips/clip_0206.mkv",
+      "start_s": 3168.528,
+      "end_s": 3168.848,
+      "duration_s": 0.32,
+      "timecode": "00:52:48.528",
+      "seg_id": "p2_s491",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 207,
+      "file": "clips/clip_0207.mkv",
+      "start_s": 3170.548,
+      "end_s": 3170.848,
+      "duration_s": 0.3,
+      "timecode": "00:52:50.548",
+      "seg_id": "p2_s492",
+      "part": 2,
+      "words": [
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "fixed"
+      ]
+    },
+    {
+      "index": 208,
+      "file": "clips/clip_0208.mkv",
+      "start_s": 3181.038,
+      "end_s": 3181.358,
+      "duration_s": 0.32,
+      "timecode": "00:53:01.038",
+      "seg_id": "p2_s496",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 209,
+      "file": "clips/clip_0209.mkv",
+      "start_s": 3184.638,
+      "end_s": 3184.938,
+      "duration_s": 0.3,
+      "timecode": "00:53:04.638",
+      "seg_id": "p2_s496",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 210,
+      "file": "clips/clip_0210.mkv",
+      "start_s": 3194.088,
+      "end_s": 3194.388,
+      "duration_s": 0.3,
+      "timecode": "00:53:14.088",
+      "seg_id": "p2_s497",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 211,
+      "file": "clips/clip_0211.mkv",
+      "start_s": 3201.188,
+      "end_s": 3201.488,
+      "duration_s": 0.3,
+      "timecode": "00:53:21.188",
+      "seg_id": "p2_s499",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 212,
+      "file": "clips/clip_0212.mkv",
+      "start_s": 3202.468,
+      "end_s": 3203.508,
+      "duration_s": 1.04,
+      "timecode": "00:53:22.468",
+      "seg_id": "p2_s499",
+      "part": 2,
+      "words": [
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "fixed"
+      ]
+    },
+    {
+      "index": 213,
+      "file": "clips/clip_0213.mkv",
+      "start_s": 3224.228,
+      "end_s": 3224.528,
+      "duration_s": 0.3,
+      "timecode": "00:53:44.228",
+      "seg_id": "p2_s503",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 214,
+      "file": "clips/clip_0214.mkv",
+      "start_s": 3224.708,
+      "end_s": 3225.108,
+      "duration_s": 0.4,
+      "timecode": "00:53:44.708",
+      "seg_id": "p2_s504",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 215,
+      "file": "clips/clip_0215.mkv",
+      "start_s": 3252.588,
+      "end_s": 3252.908,
+      "duration_s": 0.32,
+      "timecode": "00:54:12.588",
+      "seg_id": "p2_s510",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 216,
+      "file": "clips/clip_0216.mkv",
+      "start_s": 3260.028,
+      "end_s": 3260.328,
+      "duration_s": 0.3,
+      "timecode": "00:54:20.028",
+      "seg_id": "p2_s510",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 217,
+      "file": "clips/clip_0217.mkv",
+      "start_s": 3262.348,
+      "end_s": 3262.648,
+      "duration_s": 0.3,
+      "timecode": "00:54:22.348",
+      "seg_id": "p2_s510",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 218,
+      "file": "clips/clip_0218.mkv",
+      "start_s": 3276.148,
+      "end_s": 3276.948,
+      "duration_s": 0.8,
+      "timecode": "00:54:36.148",
+      "seg_id": "p2_s512",
+      "part": 2,
+      "words": [
+        "對",
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "fixed",
+        "fixed"
+      ]
+    },
+    {
+      "index": 219,
+      "file": "clips/clip_0219.mkv",
+      "start_s": 3286.668,
+      "end_s": 3287.128,
+      "duration_s": 0.46,
+      "timecode": "00:54:46.668",
+      "seg_id": "p2_s514",
+      "part": 2,
+      "words": [
+        "對",
+        "對",
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "raw_window",
+        "raw_window",
+        "fixed"
+      ]
+    },
+    {
+      "index": 220,
+      "file": "clips/clip_0220.mkv",
+      "start_s": 3288.628,
+      "end_s": 3288.928,
+      "duration_s": 0.3,
+      "timecode": "00:54:48.628",
+      "seg_id": "p2_s516",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 221,
+      "file": "clips/clip_0221.mkv",
+      "start_s": 3300.708,
+      "end_s": 3301.028,
+      "duration_s": 0.32,
+      "timecode": "00:55:00.708",
+      "seg_id": "p2_s519",
+      "part": 2,
+      "words": [
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "fixed"
+      ]
+    },
+    {
+      "index": 222,
+      "file": "clips/clip_0222.mkv",
+      "start_s": 3301.108,
+      "end_s": 3301.408,
+      "duration_s": 0.3,
+      "timecode": "00:55:01.108",
+      "seg_id": "p2_s519",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 223,
+      "file": "clips/clip_0223.mkv",
+      "start_s": 3342.428,
+      "end_s": 3342.728,
+      "duration_s": 0.3,
+      "timecode": "00:55:42.428",
+      "seg_id": "p2_s524",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 224,
+      "file": "clips/clip_0224.mkv",
+      "start_s": 3348.228,
+      "end_s": 3348.528,
+      "duration_s": 0.3,
+      "timecode": "00:55:48.228",
+      "seg_id": "p2_s525",
+      "part": 2,
+      "words": [
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "fixed"
+      ]
+    },
+    {
+      "index": 225,
+      "file": "clips/clip_0225.mkv",
+      "start_s": 3348.548,
+      "end_s": 3348.848,
+      "duration_s": 0.3,
+      "timecode": "00:55:48.548",
+      "seg_id": "p2_s525",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 226,
+      "file": "clips/clip_0226.mkv",
+      "start_s": 3349.788,
+      "end_s": 3350.088,
+      "duration_s": 0.3,
+      "timecode": "00:55:49.788",
+      "seg_id": "p2_s524",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 227,
+      "file": "clips/clip_0227.mkv",
+      "start_s": 3353.738,
+      "end_s": 3354.138,
+      "duration_s": 0.4,
+      "timecode": "00:55:53.738",
+      "seg_id": "p2_s526",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "t_pad"
+      ]
+    },
+    {
+      "index": 228,
+      "file": "clips/clip_0228.mkv",
+      "start_s": 3372.928,
+      "end_s": 3373.228,
+      "duration_s": 0.3,
+      "timecode": "00:56:12.928",
+      "seg_id": "p2_s530",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 229,
+      "file": "clips/clip_0229.mkv",
+      "start_s": 3390.688,
+      "end_s": 3391.088,
+      "duration_s": 0.4,
+      "timecode": "00:56:30.688",
+      "seg_id": "p2_s534",
+      "part": 2,
+      "words": [
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "t_pad",
+        "fixed"
+      ]
+    },
+    {
+      "index": 230,
+      "file": "clips/clip_0230.mkv",
+      "start_s": 3403.568,
+      "end_s": 3403.868,
+      "duration_s": 0.3,
+      "timecode": "00:56:43.568",
+      "seg_id": "p2_s535",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 231,
+      "file": "clips/clip_0231.mkv",
+      "start_s": 3412.458,
+      "end_s": 3412.858,
+      "duration_s": 0.4,
+      "timecode": "00:56:52.458",
+      "seg_id": "p2_s540",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 232,
+      "file": "clips/clip_0232.mkv",
+      "start_s": 3416.708,
+      "end_s": 3417.028,
+      "duration_s": 0.32,
+      "timecode": "00:56:56.708",
+      "seg_id": "p2_s542",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 233,
+      "file": "clips/clip_0233.mkv",
+      "start_s": 3433.528,
+      "end_s": 3433.928,
+      "duration_s": 0.4,
+      "timecode": "00:57:13.528",
+      "seg_id": "p2_s544",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "raw_window"
+      ]
+    },
+    {
+      "index": 234,
+      "file": "clips/clip_0234.mkv",
+      "start_s": 3437.728,
+      "end_s": 3438.048,
+      "duration_s": 0.32,
+      "timecode": "00:57:17.728",
+      "seg_id": "p2_s545",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 235,
+      "file": "clips/clip_0235.mkv",
+      "start_s": 3443.168,
+      "end_s": 3443.468,
+      "duration_s": 0.3,
+      "timecode": "00:57:23.168",
+      "seg_id": "p2_s545",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 236,
+      "file": "clips/clip_0236.mkv",
+      "start_s": 3448.848,
+      "end_s": 3449.148,
+      "duration_s": 0.3,
+      "timecode": "00:57:28.848",
+      "seg_id": "p2_s545",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 237,
+      "file": "clips/clip_0237.mkv",
+      "start_s": 3464.358,
+      "end_s": 3464.678,
+      "duration_s": 0.32,
+      "timecode": "00:57:44.358",
+      "seg_id": "p2_s548",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 238,
+      "file": "clips/clip_0238.mkv",
+      "start_s": 3465.338,
+      "end_s": 3465.658,
+      "duration_s": 0.32,
+      "timecode": "00:57:45.338",
+      "seg_id": "p2_s549",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 239,
+      "file": "clips/clip_0239.mkv",
+      "start_s": 3493.158,
+      "end_s": 3493.478,
+      "duration_s": 0.32,
+      "timecode": "00:58:13.158",
+      "seg_id": "p2_s551",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 240,
+      "file": "clips/clip_0240.mkv",
+      "start_s": 3496.928,
+      "end_s": 3497.228,
+      "duration_s": 0.3,
+      "timecode": "00:58:16.928",
+      "seg_id": "p2_s553",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 241,
+      "file": "clips/clip_0241.mkv",
+      "start_s": 3501.728,
+      "end_s": 3502.028,
+      "duration_s": 0.3,
+      "timecode": "00:58:21.728",
+      "seg_id": "p2_s553",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 242,
+      "file": "clips/clip_0242.mkv",
+      "start_s": 3508.288,
+      "end_s": 3508.588,
+      "duration_s": 0.3,
+      "timecode": "00:58:28.288",
+      "seg_id": "p2_s553",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 243,
+      "file": "clips/clip_0243.mkv",
+      "start_s": 3533.428,
+      "end_s": 3533.908,
+      "duration_s": 0.48,
+      "timecode": "00:58:53.428",
+      "seg_id": "p2_s557",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 244,
+      "file": "clips/clip_0244.mkv",
+      "start_s": 3550.098,
+      "end_s": 3550.398,
+      "duration_s": 0.3,
+      "timecode": "00:59:10.098",
+      "seg_id": "p2_s558",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 245,
+      "file": "clips/clip_0245.mkv",
+      "start_s": 3566.118,
+      "end_s": 3566.418,
+      "duration_s": 0.3,
+      "timecode": "00:59:26.118",
+      "seg_id": "p2_s559",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 246,
+      "file": "clips/clip_0246.mkv",
+      "start_s": 3579.908,
+      "end_s": 3580.228,
+      "duration_s": 0.32,
+      "timecode": "00:59:39.908",
+      "seg_id": "p2_s560",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 247,
+      "file": "clips/clip_0247.mkv",
+      "start_s": 3581.588,
+      "end_s": 3581.888,
+      "duration_s": 0.3,
+      "timecode": "00:59:41.588",
+      "seg_id": "p2_s562",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 248,
+      "file": "clips/clip_0248.mkv",
+      "start_s": 3583.588,
+      "end_s": 3583.888,
+      "duration_s": 0.3,
+      "timecode": "00:59:43.588",
+      "seg_id": "p2_s562",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "raw_window"
+      ]
+    },
+    {
+      "index": 249,
+      "file": "clips/clip_0249.mkv",
+      "start_s": 3586.638,
+      "end_s": 3586.938,
+      "duration_s": 0.3,
+      "timecode": "00:59:46.638",
+      "seg_id": "p2_s563",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 250,
+      "file": "clips/clip_0250.mkv",
+      "start_s": 3589.908,
+      "end_s": 3590.308,
+      "duration_s": 0.4,
+      "timecode": "00:59:49.908",
+      "seg_id": "p2_s564",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "t_pad"
+      ]
+    },
+    {
+      "index": 251,
+      "file": "clips/clip_0251.mkv",
+      "start_s": 3625.738,
+      "end_s": 3626.298,
+      "duration_s": 0.56,
+      "timecode": "01:00:25.738",
+      "seg_id": "p2_s571",
+      "part": 2,
+      "words": [
+        "確實"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 252,
+      "file": "clips/clip_0252.mkv",
+      "start_s": 3641.728,
+      "end_s": 3642.028,
+      "duration_s": 0.3,
+      "timecode": "01:00:41.728",
+      "seg_id": "p2_s573",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 253,
+      "file": "clips/clip_0253.mkv",
+      "start_s": 3658.918,
+      "end_s": 3659.238,
+      "duration_s": 0.32,
+      "timecode": "01:00:58.918",
+      "seg_id": "p2_s576",
+      "part": 2,
+      "words": [
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "fixed"
+      ]
+    },
+    {
+      "index": 254,
+      "file": "clips/clip_0254.mkv",
+      "start_s": 3670.718,
+      "end_s": 3671.038,
+      "duration_s": 0.32,
+      "timecode": "01:01:10.718",
+      "seg_id": "p2_s578",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 255,
+      "file": "clips/clip_0255.mkv",
+      "start_s": 3671.438,
+      "end_s": 3671.998,
+      "duration_s": 0.56,
+      "timecode": "01:01:11.438",
+      "seg_id": "p2_s578",
+      "part": 2,
+      "words": [
+        "對",
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "raw_window",
+        "raw_window"
+      ]
+    },
+    {
+      "index": 256,
+      "file": "clips/clip_0256.mkv",
+      "start_s": 3675.598,
+      "end_s": 3675.898,
+      "duration_s": 0.3,
+      "timecode": "01:01:15.598",
+      "seg_id": "p2_s578",
+      "part": 2,
+      "words": [
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "raw_window"
+      ]
+    },
+    {
+      "index": 257,
+      "file": "clips/clip_0257.mkv",
+      "start_s": 3697.458,
+      "end_s": 3697.758,
+      "duration_s": 0.3,
+      "timecode": "01:01:37.458",
+      "seg_id": "p2_s579",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 258,
+      "file": "clips/clip_0258.mkv",
+      "start_s": 3703.448,
+      "end_s": 3704.248,
+      "duration_s": 0.8,
+      "timecode": "01:01:43.448",
+      "seg_id": "p2_s581",
+      "part": 2,
+      "words": [
+        "確實"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 259,
+      "file": "clips/clip_0259.mkv",
+      "start_s": 3715.328,
+      "end_s": 3715.728,
+      "duration_s": 0.4,
+      "timecode": "01:01:55.328",
+      "seg_id": "p2_s583",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 260,
+      "file": "clips/clip_0260.mkv",
+      "start_s": 3717.158,
+      "end_s": 3717.478,
+      "duration_s": 0.32,
+      "timecode": "01:01:57.158",
+      "seg_id": "p2_s584",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 261,
+      "file": "clips/clip_0261.mkv",
+      "start_s": 3719.328,
+      "end_s": 3720.048,
+      "duration_s": 0.72,
+      "timecode": "01:01:59.328",
+      "seg_id": "p2_s585",
+      "part": 2,
+      "words": [
+        "確實"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 262,
+      "file": "clips/clip_0262.mkv",
+      "start_s": 3720.638,
+      "end_s": 3720.958,
+      "duration_s": 0.32,
+      "timecode": "01:02:00.638",
+      "seg_id": "p2_s586",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 263,
+      "file": "clips/clip_0263.mkv",
+      "start_s": 3734.238,
+      "end_s": 3734.538,
+      "duration_s": 0.3,
+      "timecode": "01:02:14.238",
+      "seg_id": "p2_s586",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 264,
+      "file": "clips/clip_0264.mkv",
+      "start_s": 3736.438,
+      "end_s": 3736.738,
+      "duration_s": 0.3,
+      "timecode": "01:02:16.438",
+      "seg_id": "p2_s587",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 265,
+      "file": "clips/clip_0265.mkv",
+      "start_s": 3736.918,
+      "end_s": 3737.218,
+      "duration_s": 0.3,
+      "timecode": "01:02:16.918",
+      "seg_id": "p2_s587",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 266,
+      "file": "clips/clip_0266.mkv",
+      "start_s": 3737.238,
+      "end_s": 3737.538,
+      "duration_s": 0.3,
+      "timecode": "01:02:17.238",
+      "seg_id": "p2_s587",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 267,
+      "file": "clips/clip_0267.mkv",
+      "start_s": 3756.958,
+      "end_s": 3757.278,
+      "duration_s": 0.32,
+      "timecode": "01:02:36.958",
+      "seg_id": "p2_s590",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 268,
+      "file": "clips/clip_0268.mkv",
+      "start_s": 3773.538,
+      "end_s": 3773.838,
+      "duration_s": 0.3,
+      "timecode": "01:02:53.538",
+      "seg_id": "p2_s591",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 269,
+      "file": "clips/clip_0269.mkv",
+      "start_s": 3780.178,
+      "end_s": 3780.478,
+      "duration_s": 0.3,
+      "timecode": "01:03:00.178",
+      "seg_id": "p2_s591",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "raw_window"
+      ]
+    },
+    {
+      "index": 270,
+      "file": "clips/clip_0270.mkv",
+      "start_s": 3792.548,
+      "end_s": 3793.428,
+      "duration_s": 0.88,
+      "timecode": "01:03:12.548",
+      "seg_id": "p2_s592",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 271,
+      "file": "clips/clip_0271.mkv",
+      "start_s": 3797.908,
+      "end_s": 3798.208,
+      "duration_s": 0.3,
+      "timecode": "01:03:17.908",
+      "seg_id": "p2_s592",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 272,
+      "file": "clips/clip_0272.mkv",
+      "start_s": 3807.628,
+      "end_s": 3807.928,
+      "duration_s": 0.3,
+      "timecode": "01:03:27.628",
+      "seg_id": "p2_s596",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 273,
+      "file": "clips/clip_0273.mkv",
+      "start_s": 3835.318,
+      "end_s": 3835.618,
+      "duration_s": 0.3,
+      "timecode": "01:03:55.318",
+      "seg_id": "p2_s605",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "raw_window"
+      ]
+    },
+    {
+      "index": 274,
+      "file": "clips/clip_0274.mkv",
+      "start_s": 3843.798,
+      "end_s": 3844.098,
+      "duration_s": 0.3,
+      "timecode": "01:04:03.798",
+      "seg_id": "p2_s605",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 275,
+      "file": "clips/clip_0275.mkv",
+      "start_s": 3850.758,
+      "end_s": 3851.058,
+      "duration_s": 0.3,
+      "timecode": "01:04:10.758",
+      "seg_id": "p2_s607",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 276,
+      "file": "clips/clip_0276.mkv",
+      "start_s": 3859.478,
+      "end_s": 3859.778,
+      "duration_s": 0.3,
+      "timecode": "01:04:19.478",
+      "seg_id": "p2_s607",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 277,
+      "file": "clips/clip_0277.mkv",
+      "start_s": 3883.058,
+      "end_s": 3883.458,
+      "duration_s": 0.4,
+      "timecode": "01:04:43.058",
+      "seg_id": "p2_s612",
+      "part": 2,
+      "words": [
+        "對",
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "fixed",
+        "fixed"
+      ]
+    },
+    {
+      "index": 278,
+      "file": "clips/clip_0278.mkv",
+      "start_s": 3892.898,
+      "end_s": 3893.198,
+      "duration_s": 0.3,
+      "timecode": "01:04:52.898",
+      "seg_id": "p2_s612",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 279,
+      "file": "clips/clip_0279.mkv",
+      "start_s": 3899.958,
+      "end_s": 3900.748,
+      "duration_s": 0.79,
+      "timecode": "01:04:59.958",
+      "seg_id": "p2_s616",
+      "part": 2,
+      "words": [
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "fixed"
+      ]
+    },
+    {
+      "index": 280,
+      "file": "clips/clip_0280.mkv",
+      "start_s": 3901.158,
+      "end_s": 3901.458,
+      "duration_s": 0.3,
+      "timecode": "01:05:01.158",
+      "seg_id": "p2_s618",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 281,
+      "file": "clips/clip_0281.mkv",
+      "start_s": 3903.728,
+      "end_s": 3904.028,
+      "duration_s": 0.3,
+      "timecode": "01:05:03.728",
+      "seg_id": "p2_s619",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 282,
+      "file": "clips/clip_0282.mkv",
+      "start_s": 3906.778,
+      "end_s": 3907.078,
+      "duration_s": 0.3,
+      "timecode": "01:05:06.778",
+      "seg_id": "p2_s620",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 283,
+      "file": "clips/clip_0283.mkv",
+      "start_s": 3938.428,
+      "end_s": 3938.748,
+      "duration_s": 0.32,
+      "timecode": "01:05:38.428",
+      "seg_id": "p2_s625",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 284,
+      "file": "clips/clip_0284.mkv",
+      "start_s": 3958.608,
+      "end_s": 3958.908,
+      "duration_s": 0.3,
+      "timecode": "01:05:58.608",
+      "seg_id": "p2_s630",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 285,
+      "file": "clips/clip_0285.mkv",
+      "start_s": 3959.568,
+      "end_s": 3959.868,
+      "duration_s": 0.3,
+      "timecode": "01:05:59.568",
+      "seg_id": "p2_s630",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 286,
+      "file": "clips/clip_0286.mkv",
+      "start_s": 3962.048,
+      "end_s": 3962.408,
+      "duration_s": 0.36,
+      "timecode": "01:06:02.048",
+      "seg_id": "p2_s631",
+      "part": 2,
+      "words": [
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "fixed"
+      ]
+    },
+    {
+      "index": 287,
+      "file": "clips/clip_0287.mkv",
+      "start_s": 4006.138,
+      "end_s": 4006.438,
+      "duration_s": 0.3,
+      "timecode": "01:06:46.138",
+      "seg_id": "p2_s638",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 288,
+      "file": "clips/clip_0288.mkv",
+      "start_s": 4015.708,
+      "end_s": 4016.028,
+      "duration_s": 0.32,
+      "timecode": "01:06:55.708",
+      "seg_id": "p2_s639",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 289,
+      "file": "clips/clip_0289.mkv",
+      "start_s": 4025.438,
+      "end_s": 4025.738,
+      "duration_s": 0.3,
+      "timecode": "01:07:05.438",
+      "seg_id": "p2_s642",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 290,
+      "file": "clips/clip_0290.mkv",
+      "start_s": 4032.258,
+      "end_s": 4032.658,
+      "duration_s": 0.4,
+      "timecode": "01:07:12.258",
+      "seg_id": "p2_s645",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 291,
+      "file": "clips/clip_0291.mkv",
+      "start_s": 4033.418,
+      "end_s": 4033.858,
+      "duration_s": 0.44,
+      "timecode": "01:07:13.418",
+      "seg_id": "p2_s645",
+      "part": 2,
+      "words": [
+        "對",
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "t_pad",
+        "fixed",
+        "raw_window"
+      ]
+    },
+    {
+      "index": 292,
+      "file": "clips/clip_0292.mkv",
+      "start_s": 4041.858,
+      "end_s": 4042.158,
+      "duration_s": 0.3,
+      "timecode": "01:07:21.858",
+      "seg_id": "p2_s645",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 293,
+      "file": "clips/clip_0293.mkv",
+      "start_s": 4050.418,
+      "end_s": 4050.718,
+      "duration_s": 0.3,
+      "timecode": "01:07:30.418",
+      "seg_id": "p2_s646",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 294,
+      "file": "clips/clip_0294.mkv",
+      "start_s": 4124.368,
+      "end_s": 4124.768,
+      "duration_s": 0.4,
+      "timecode": "01:08:44.368",
+      "seg_id": "p2_s654",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 295,
+      "file": "clips/clip_0295.mkv",
+      "start_s": 4137.328,
+      "end_s": 4137.648,
+      "duration_s": 0.32,
+      "timecode": "01:08:57.328",
+      "seg_id": "p2_s655",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 296,
+      "file": "clips/clip_0296.mkv",
+      "start_s": 4144.288,
+      "end_s": 4144.768,
+      "duration_s": 0.48,
+      "timecode": "01:09:04.288",
+      "seg_id": "p2_s655",
+      "part": 2,
+      "words": [
+        "對",
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "raw_window",
+        "fixed"
+      ]
+    },
+    {
+      "index": 297,
+      "file": "clips/clip_0297.mkv",
+      "start_s": 4147.038,
+      "end_s": 4147.338,
+      "duration_s": 0.3,
+      "timecode": "01:09:07.038",
+      "seg_id": "p2_s657",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 298,
+      "file": "clips/clip_0298.mkv",
+      "start_s": 4153.118,
+      "end_s": 4153.418,
+      "duration_s": 0.3,
+      "timecode": "01:09:13.118",
+      "seg_id": "p2_s657",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 299,
+      "file": "clips/clip_0299.mkv",
+      "start_s": 4173.218,
+      "end_s": 4173.858,
+      "duration_s": 0.64,
+      "timecode": "01:09:33.218",
+      "seg_id": "p2_s661",
+      "part": 2,
+      "words": [
+        "對",
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "raw_window",
+        "fixed"
+      ]
+    },
+    {
+      "index": 300,
+      "file": "clips/clip_0300.mkv",
+      "start_s": 4176.158,
+      "end_s": 4176.798,
+      "duration_s": 0.64,
+      "timecode": "01:09:36.158",
+      "seg_id": "p2_s662",
+      "part": 2,
+      "words": [
+        "沒錯"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 301,
+      "file": "clips/clip_0301.mkv",
+      "start_s": 4177.278,
+      "end_s": 4177.578,
+      "duration_s": 0.3,
+      "timecode": "01:09:37.278",
+      "seg_id": "p2_s662",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 302,
+      "file": "clips/clip_0302.mkv",
+      "start_s": 4183.138,
+      "end_s": 4183.538,
+      "duration_s": 0.4,
+      "timecode": "01:09:43.138",
+      "seg_id": "p2_s663",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "t_pad"
+      ]
+    },
+    {
+      "index": 303,
+      "file": "clips/clip_0303.mkv",
+      "start_s": 4203.328,
+      "end_s": 4203.648,
+      "duration_s": 0.32,
+      "timecode": "01:10:03.328",
+      "seg_id": "p2_s666",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 304,
+      "file": "clips/clip_0304.mkv",
+      "start_s": 4213.818,
+      "end_s": 4214.138,
+      "duration_s": 0.32,
+      "timecode": "01:10:13.818",
+      "seg_id": "p2_s668",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 305,
+      "file": "clips/clip_0305.mkv",
+      "start_s": 4240.658,
+      "end_s": 4240.958,
+      "duration_s": 0.3,
+      "timecode": "01:10:40.658",
+      "seg_id": "p2_s671",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 306,
+      "file": "clips/clip_0306.mkv",
+      "start_s": 4244.028,
+      "end_s": 4244.328,
+      "duration_s": 0.3,
+      "timecode": "01:10:44.028",
+      "seg_id": "p2_s674",
+      "part": 2,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 307,
+      "file": "clips/clip_0307.mkv",
+      "start_s": 4257.532,
+      "end_s": 4257.852,
+      "duration_s": 0.32,
+      "timecode": "01:10:57.532",
+      "seg_id": "p3_s678",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 308,
+      "file": "clips/clip_0308.mkv",
+      "start_s": 4258.232,
+      "end_s": 4258.532,
+      "duration_s": 0.3,
+      "timecode": "01:10:58.232",
+      "seg_id": "p3_s679",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 309,
+      "file": "clips/clip_0309.mkv",
+      "start_s": 4276.342,
+      "end_s": 4276.642,
+      "duration_s": 0.3,
+      "timecode": "01:11:16.342",
+      "seg_id": "p3_s684",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 310,
+      "file": "clips/clip_0310.mkv",
+      "start_s": 4281.072,
+      "end_s": 4281.372,
+      "duration_s": 0.3,
+      "timecode": "01:11:21.072",
+      "seg_id": "p3_s685",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 311,
+      "file": "clips/clip_0311.mkv",
+      "start_s": 4283.512,
+      "end_s": 4283.812,
+      "duration_s": 0.3,
+      "timecode": "01:11:23.512",
+      "seg_id": "p3_s686",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 312,
+      "file": "clips/clip_0312.mkv",
+      "start_s": 4290.882,
+      "end_s": 4291.182,
+      "duration_s": 0.3,
+      "timecode": "01:11:30.882",
+      "seg_id": "p3_s688",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 313,
+      "file": "clips/clip_0313.mkv",
+      "start_s": 4291.762,
+      "end_s": 4292.062,
+      "duration_s": 0.3,
+      "timecode": "01:11:31.762",
+      "seg_id": "p3_s688",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "raw_window"
+      ]
+    },
+    {
+      "index": 314,
+      "file": "clips/clip_0314.mkv",
+      "start_s": 4293.282,
+      "end_s": 4293.582,
+      "duration_s": 0.3,
+      "timecode": "01:11:33.282",
+      "seg_id": "p3_s688",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 315,
+      "file": "clips/clip_0315.mkv",
+      "start_s": 4297.232,
+      "end_s": 4297.532,
+      "duration_s": 0.3,
+      "timecode": "01:11:37.232",
+      "seg_id": "p3_s690",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 316,
+      "file": "clips/clip_0316.mkv",
+      "start_s": 4304.642,
+      "end_s": 4304.962,
+      "duration_s": 0.32,
+      "timecode": "01:11:44.642",
+      "seg_id": "p3_s691",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 317,
+      "file": "clips/clip_0317.mkv",
+      "start_s": 4306.322,
+      "end_s": 4306.642,
+      "duration_s": 0.32,
+      "timecode": "01:11:46.322",
+      "seg_id": "p3_s691",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 318,
+      "file": "clips/clip_0318.mkv",
+      "start_s": 4309.522,
+      "end_s": 4309.822,
+      "duration_s": 0.3,
+      "timecode": "01:11:49.522",
+      "seg_id": "p3_s691",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 319,
+      "file": "clips/clip_0319.mkv",
+      "start_s": 4338.622,
+      "end_s": 4338.922,
+      "duration_s": 0.3,
+      "timecode": "01:12:18.622",
+      "seg_id": "p3_s696",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 320,
+      "file": "clips/clip_0320.mkv",
+      "start_s": 4366.942,
+      "end_s": 4367.262,
+      "duration_s": 0.32,
+      "timecode": "01:12:46.942",
+      "seg_id": "p3_s701",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 321,
+      "file": "clips/clip_0321.mkv",
+      "start_s": 4367.902,
+      "end_s": 4368.202,
+      "duration_s": 0.3,
+      "timecode": "01:12:47.902",
+      "seg_id": "p3_s701",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 322,
+      "file": "clips/clip_0322.mkv",
+      "start_s": 4369.742,
+      "end_s": 4370.042,
+      "duration_s": 0.3,
+      "timecode": "01:12:49.742",
+      "seg_id": "p3_s701",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 323,
+      "file": "clips/clip_0323.mkv",
+      "start_s": 4371.742,
+      "end_s": 4372.062,
+      "duration_s": 0.32,
+      "timecode": "01:12:51.742",
+      "seg_id": "p3_s701",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 324,
+      "file": "clips/clip_0324.mkv",
+      "start_s": 4379.222,
+      "end_s": 4379.702,
+      "duration_s": 0.48,
+      "timecode": "01:12:59.222",
+      "seg_id": "p3_s702",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 325,
+      "file": "clips/clip_0325.mkv",
+      "start_s": 4385.462,
+      "end_s": 4385.762,
+      "duration_s": 0.3,
+      "timecode": "01:13:05.462",
+      "seg_id": "p3_s702",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 326,
+      "file": "clips/clip_0326.mkv",
+      "start_s": 4387.332,
+      "end_s": 4387.632,
+      "duration_s": 0.3,
+      "timecode": "01:13:07.332",
+      "seg_id": "p3_s703",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 327,
+      "file": "clips/clip_0327.mkv",
+      "start_s": 4407.472,
+      "end_s": 4407.872,
+      "duration_s": 0.4,
+      "timecode": "01:13:27.472",
+      "seg_id": "p3_s706",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 328,
+      "file": "clips/clip_0328.mkv",
+      "start_s": 4418.522,
+      "end_s": 4418.822,
+      "duration_s": 0.3,
+      "timecode": "01:13:38.522",
+      "seg_id": "p3_s709",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 329,
+      "file": "clips/clip_0329.mkv",
+      "start_s": 4435.282,
+      "end_s": 4435.582,
+      "duration_s": 0.3,
+      "timecode": "01:13:55.282",
+      "seg_id": "p3_s712",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 330,
+      "file": "clips/clip_0330.mkv",
+      "start_s": 4447.232,
+      "end_s": 4447.632,
+      "duration_s": 0.4,
+      "timecode": "01:14:07.232",
+      "seg_id": "p3_s715",
+      "part": 3,
+      "words": [
+        "沒錯"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 331,
+      "file": "clips/clip_0331.mkv",
+      "start_s": 4489.562,
+      "end_s": 4489.862,
+      "duration_s": 0.3,
+      "timecode": "01:14:49.562",
+      "seg_id": "p3_s728",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 332,
+      "file": "clips/clip_0332.mkv",
+      "start_s": 4500.652,
+      "end_s": 4501.252,
+      "duration_s": 0.6,
+      "timecode": "01:15:00.652",
+      "seg_id": "p3_s731",
+      "part": 3,
+      "words": [
+        "對",
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "fixed",
+        "t_pad"
+      ]
+    },
+    {
+      "index": 333,
+      "file": "clips/clip_0333.mkv",
+      "start_s": 4502.012,
+      "end_s": 4502.312,
+      "duration_s": 0.3,
+      "timecode": "01:15:02.012",
+      "seg_id": "p3_s731",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 334,
+      "file": "clips/clip_0334.mkv",
+      "start_s": 4512.762,
+      "end_s": 4513.082,
+      "duration_s": 0.32,
+      "timecode": "01:15:12.762",
+      "seg_id": "p3_s734",
+      "part": 3,
+      "words": [
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "fixed"
+      ]
+    },
+    {
+      "index": 335,
+      "file": "clips/clip_0335.mkv",
+      "start_s": 4532.022,
+      "end_s": 4532.342,
+      "duration_s": 0.32,
+      "timecode": "01:15:32.022",
+      "seg_id": "p3_s739",
+      "part": 3,
+      "words": [
+        "對",
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "t_pad",
+        "fixed"
+      ]
+    },
+    {
+      "index": 336,
+      "file": "clips/clip_0336.mkv",
+      "start_s": 4532.422,
+      "end_s": 4532.722,
+      "duration_s": 0.3,
+      "timecode": "01:15:32.422",
+      "seg_id": "p3_s739",
+      "part": 3,
+      "words": [
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "raw_window"
+      ]
+    },
+    {
+      "index": 337,
+      "file": "clips/clip_0337.mkv",
+      "start_s": 4537.842,
+      "end_s": 4538.162,
+      "duration_s": 0.32,
+      "timecode": "01:15:37.842",
+      "seg_id": "p3_s740",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 338,
+      "file": "clips/clip_0338.mkv",
+      "start_s": 4546.082,
+      "end_s": 4546.382,
+      "duration_s": 0.3,
+      "timecode": "01:15:46.082",
+      "seg_id": "p3_s740",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 339,
+      "file": "clips/clip_0339.mkv",
+      "start_s": 4550.182,
+      "end_s": 4550.482,
+      "duration_s": 0.3,
+      "timecode": "01:15:50.182",
+      "seg_id": "p3_s741",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 340,
+      "file": "clips/clip_0340.mkv",
+      "start_s": 4556.672,
+      "end_s": 4556.972,
+      "duration_s": 0.3,
+      "timecode": "01:15:56.672",
+      "seg_id": "p3_s742",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 341,
+      "file": "clips/clip_0341.mkv",
+      "start_s": 4567.902,
+      "end_s": 4568.622,
+      "duration_s": 0.72,
+      "timecode": "01:16:07.902",
+      "seg_id": "p3_s744",
+      "part": 3,
+      "words": [
+        "確實"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 342,
+      "file": "clips/clip_0342.mkv",
+      "start_s": 4587.642,
+      "end_s": 4587.942,
+      "duration_s": 0.3,
+      "timecode": "01:16:27.642",
+      "seg_id": "p3_s750",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 343,
+      "file": "clips/clip_0343.mkv",
+      "start_s": 4588.002,
+      "end_s": 4588.402,
+      "duration_s": 0.4,
+      "timecode": "01:16:28.002",
+      "seg_id": "p3_s750",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "t_pad"
+      ]
+    },
+    {
+      "index": 344,
+      "file": "clips/clip_0344.mkv",
+      "start_s": 4590.382,
+      "end_s": 4590.682,
+      "duration_s": 0.3,
+      "timecode": "01:16:30.382",
+      "seg_id": "p3_s752",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 345,
+      "file": "clips/clip_0345.mkv",
+      "start_s": 4593.042,
+      "end_s": 4593.342,
+      "duration_s": 0.3,
+      "timecode": "01:16:33.042",
+      "seg_id": "p3_s754",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 346,
+      "file": "clips/clip_0346.mkv",
+      "start_s": 4602.612,
+      "end_s": 4603.332,
+      "duration_s": 0.72,
+      "timecode": "01:16:42.612",
+      "seg_id": "p3_s757",
+      "part": 3,
+      "words": [
+        "對",
+        "對",
+        "對",
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "fixed",
+        "fixed",
+        "fixed",
+        "raw_window"
+      ]
+    },
+    {
+      "index": 347,
+      "file": "clips/clip_0347.mkv",
+      "start_s": 4611.742,
+      "end_s": 4612.042,
+      "duration_s": 0.3,
+      "timecode": "01:16:51.742",
+      "seg_id": "p3_s759",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 348,
+      "file": "clips/clip_0348.mkv",
+      "start_s": 4613.022,
+      "end_s": 4613.322,
+      "duration_s": 0.3,
+      "timecode": "01:16:53.022",
+      "seg_id": "p3_s759",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 349,
+      "file": "clips/clip_0349.mkv",
+      "start_s": 4625.082,
+      "end_s": 4625.382,
+      "duration_s": 0.3,
+      "timecode": "01:17:05.082",
+      "seg_id": "p3_s761",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 350,
+      "file": "clips/clip_0350.mkv",
+      "start_s": 4636.472,
+      "end_s": 4636.772,
+      "duration_s": 0.3,
+      "timecode": "01:17:16.472",
+      "seg_id": "p3_s762",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 351,
+      "file": "clips/clip_0351.mkv",
+      "start_s": 4713.082,
+      "end_s": 4713.642,
+      "duration_s": 0.56,
+      "timecode": "01:18:33.082",
+      "seg_id": "p3_s776",
+      "part": 3,
+      "words": [
+        "對",
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "fixed",
+        "fixed"
+      ]
+    },
+    {
+      "index": 352,
+      "file": "clips/clip_0352.mkv",
+      "start_s": 4714.202,
+      "end_s": 4714.502,
+      "duration_s": 0.3,
+      "timecode": "01:18:34.202",
+      "seg_id": "p3_s777",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 353,
+      "file": "clips/clip_0353.mkv",
+      "start_s": 4735.202,
+      "end_s": 4735.922,
+      "duration_s": 0.72,
+      "timecode": "01:18:55.202",
+      "seg_id": "p3_s780",
+      "part": 3,
+      "words": [
+        "確實"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 354,
+      "file": "clips/clip_0354.mkv",
+      "start_s": 4736.442,
+      "end_s": 4736.742,
+      "duration_s": 0.3,
+      "timecode": "01:18:56.442",
+      "seg_id": "p3_s781",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 355,
+      "file": "clips/clip_0355.mkv",
+      "start_s": 4786.482,
+      "end_s": 4786.782,
+      "duration_s": 0.3,
+      "timecode": "01:19:46.482",
+      "seg_id": "p3_s794",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 356,
+      "file": "clips/clip_0356.mkv",
+      "start_s": 4805.842,
+      "end_s": 4806.142,
+      "duration_s": 0.3,
+      "timecode": "01:20:05.842",
+      "seg_id": "p3_s797",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 357,
+      "file": "clips/clip_0357.mkv",
+      "start_s": 4821.162,
+      "end_s": 4821.462,
+      "duration_s": 0.3,
+      "timecode": "01:20:21.162",
+      "seg_id": "p3_s798",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 358,
+      "file": "clips/clip_0358.mkv",
+      "start_s": 4826.242,
+      "end_s": 4826.542,
+      "duration_s": 0.3,
+      "timecode": "01:20:26.242",
+      "seg_id": "p3_s800",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 359,
+      "file": "clips/clip_0359.mkv",
+      "start_s": 4853.282,
+      "end_s": 4853.582,
+      "duration_s": 0.3,
+      "timecode": "01:20:53.282",
+      "seg_id": "p3_s803",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 360,
+      "file": "clips/clip_0360.mkv",
+      "start_s": 4864.312,
+      "end_s": 4864.632,
+      "duration_s": 0.32,
+      "timecode": "01:21:04.312",
+      "seg_id": "p3_s805",
+      "part": 3,
+      "words": [
+        "沒錯"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 361,
+      "file": "clips/clip_0361.mkv",
+      "start_s": 4864.872,
+      "end_s": 4865.352,
+      "duration_s": 0.48,
+      "timecode": "01:21:04.872",
+      "seg_id": "p3_s805",
+      "part": 3,
+      "words": [
+        "沒錯"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 362,
+      "file": "clips/clip_0362.mkv",
+      "start_s": 4866.542,
+      "end_s": 4866.842,
+      "duration_s": 0.3,
+      "timecode": "01:21:06.542",
+      "seg_id": "p3_s807",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 363,
+      "file": "clips/clip_0363.mkv",
+      "start_s": 4872.442,
+      "end_s": 4872.742,
+      "duration_s": 0.3,
+      "timecode": "01:21:12.442",
+      "seg_id": "p3_s808",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 364,
+      "file": "clips/clip_0364.mkv",
+      "start_s": 4879.962,
+      "end_s": 4880.262,
+      "duration_s": 0.3,
+      "timecode": "01:21:19.962",
+      "seg_id": "p3_s808",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 365,
+      "file": "clips/clip_0365.mkv",
+      "start_s": 4882.242,
+      "end_s": 4882.542,
+      "duration_s": 0.3,
+      "timecode": "01:21:22.242",
+      "seg_id": "p3_s809",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 366,
+      "file": "clips/clip_0366.mkv",
+      "start_s": 4884.142,
+      "end_s": 4884.542,
+      "duration_s": 0.4,
+      "timecode": "01:21:24.142",
+      "seg_id": "p3_s810",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 367,
+      "file": "clips/clip_0367.mkv",
+      "start_s": 4884.712,
+      "end_s": 4885.012,
+      "duration_s": 0.3,
+      "timecode": "01:21:24.712",
+      "seg_id": "p3_s811",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 368,
+      "file": "clips/clip_0368.mkv",
+      "start_s": 4903.122,
+      "end_s": 4903.422,
+      "duration_s": 0.3,
+      "timecode": "01:21:43.122",
+      "seg_id": "p3_s812",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 369,
+      "file": "clips/clip_0369.mkv",
+      "start_s": 4932.482,
+      "end_s": 4932.782,
+      "duration_s": 0.3,
+      "timecode": "01:22:12.482",
+      "seg_id": "p3_s818",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 370,
+      "file": "clips/clip_0370.mkv",
+      "start_s": 4934.162,
+      "end_s": 4934.462,
+      "duration_s": 0.3,
+      "timecode": "01:22:14.162",
+      "seg_id": "p3_s818",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 371,
+      "file": "clips/clip_0371.mkv",
+      "start_s": 4968.282,
+      "end_s": 4968.582,
+      "duration_s": 0.3,
+      "timecode": "01:22:48.282",
+      "seg_id": "p3_s822",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 372,
+      "file": "clips/clip_0372.mkv",
+      "start_s": 5005.182,
+      "end_s": 5005.482,
+      "duration_s": 0.3,
+      "timecode": "01:23:25.182",
+      "seg_id": "p3_s829",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 373,
+      "file": "clips/clip_0373.mkv",
+      "start_s": 5010.942,
+      "end_s": 5011.242,
+      "duration_s": 0.3,
+      "timecode": "01:23:30.942",
+      "seg_id": "p3_s833",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 374,
+      "file": "clips/clip_0374.mkv",
+      "start_s": 5019.412,
+      "end_s": 5019.732,
+      "duration_s": 0.32,
+      "timecode": "01:23:39.412",
+      "seg_id": "p3_s835",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 375,
+      "file": "clips/clip_0375.mkv",
+      "start_s": 5050.902,
+      "end_s": 5051.202,
+      "duration_s": 0.3,
+      "timecode": "01:24:10.902",
+      "seg_id": "p3_s842",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 376,
+      "file": "clips/clip_0376.mkv",
+      "start_s": 5065.842,
+      "end_s": 5066.142,
+      "duration_s": 0.3,
+      "timecode": "01:24:25.842",
+      "seg_id": "p3_s845",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 377,
+      "file": "clips/clip_0377.mkv",
+      "start_s": 5067.142,
+      "end_s": 5067.442,
+      "duration_s": 0.3,
+      "timecode": "01:24:27.142",
+      "seg_id": "p3_s846",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 378,
+      "file": "clips/clip_0378.mkv",
+      "start_s": 5068.502,
+      "end_s": 5068.802,
+      "duration_s": 0.3,
+      "timecode": "01:24:28.502",
+      "seg_id": "p3_s846",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 379,
+      "file": "clips/clip_0379.mkv",
+      "start_s": 5074.102,
+      "end_s": 5074.502,
+      "duration_s": 0.4,
+      "timecode": "01:24:34.102",
+      "seg_id": "p3_s846",
+      "part": 3,
+      "words": [
+        "沒錯"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 380,
+      "file": "clips/clip_0380.mkv",
+      "start_s": 5074.582,
+      "end_s": 5075.302,
+      "duration_s": 0.72,
+      "timecode": "01:24:34.582",
+      "seg_id": "p3_s847",
+      "part": 3,
+      "words": [
+        "沒錯"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 381,
+      "file": "clips/clip_0381.mkv",
+      "start_s": 5075.922,
+      "end_s": 5076.642,
+      "duration_s": 0.72,
+      "timecode": "01:24:35.922",
+      "seg_id": "p3_s849",
+      "part": 3,
+      "words": [
+        "沒錯"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 382,
+      "file": "clips/clip_0382.mkv",
+      "start_s": 5077.202,
+      "end_s": 5077.762,
+      "duration_s": 0.56,
+      "timecode": "01:24:37.202",
+      "seg_id": "p3_s849",
+      "part": 3,
+      "words": [
+        "沒錯",
+        "沒錯"
+      ],
+      "window_sources": [
+        "fixed",
+        "fixed"
+      ]
+    },
+    {
+      "index": 383,
+      "file": "clips/clip_0383.mkv",
+      "start_s": 5086.332,
+      "end_s": 5086.632,
+      "duration_s": 0.3,
+      "timecode": "01:24:46.332",
+      "seg_id": "p3_s853",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 384,
+      "file": "clips/clip_0384.mkv",
+      "start_s": 5111.142,
+      "end_s": 5111.442,
+      "duration_s": 0.3,
+      "timecode": "01:25:11.142",
+      "seg_id": "p3_s857",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 385,
+      "file": "clips/clip_0385.mkv",
+      "start_s": 5114.742,
+      "end_s": 5115.042,
+      "duration_s": 0.3,
+      "timecode": "01:25:14.742",
+      "seg_id": "p3_s857",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 386,
+      "file": "clips/clip_0386.mkv",
+      "start_s": 5158.242,
+      "end_s": 5158.542,
+      "duration_s": 0.3,
+      "timecode": "01:25:58.242",
+      "seg_id": "p3_s862",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 387,
+      "file": "clips/clip_0387.mkv",
+      "start_s": 5207.602,
+      "end_s": 5207.902,
+      "duration_s": 0.3,
+      "timecode": "01:26:47.602",
+      "seg_id": "p3_s867",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 388,
+      "file": "clips/clip_0388.mkv",
+      "start_s": 5211.122,
+      "end_s": 5211.422,
+      "duration_s": 0.3,
+      "timecode": "01:26:51.122",
+      "seg_id": "p3_s867",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 389,
+      "file": "clips/clip_0389.mkv",
+      "start_s": 5215.122,
+      "end_s": 5215.422,
+      "duration_s": 0.3,
+      "timecode": "01:26:55.122",
+      "seg_id": "p3_s867",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 390,
+      "file": "clips/clip_0390.mkv",
+      "start_s": 5221.562,
+      "end_s": 5221.862,
+      "duration_s": 0.3,
+      "timecode": "01:27:01.562",
+      "seg_id": "p3_s868",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 391,
+      "file": "clips/clip_0391.mkv",
+      "start_s": 5223.002,
+      "end_s": 5223.302,
+      "duration_s": 0.3,
+      "timecode": "01:27:03.002",
+      "seg_id": "p3_s868",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 392,
+      "file": "clips/clip_0392.mkv",
+      "start_s": 5228.412,
+      "end_s": 5228.712,
+      "duration_s": 0.3,
+      "timecode": "01:27:08.412",
+      "seg_id": "p3_s870",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 393,
+      "file": "clips/clip_0393.mkv",
+      "start_s": 5240.582,
+      "end_s": 5240.882,
+      "duration_s": 0.3,
+      "timecode": "01:27:20.582",
+      "seg_id": "p3_s874",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 394,
+      "file": "clips/clip_0394.mkv",
+      "start_s": 5241.542,
+      "end_s": 5241.842,
+      "duration_s": 0.3,
+      "timecode": "01:27:21.542",
+      "seg_id": "p3_s874",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 395,
+      "file": "clips/clip_0395.mkv",
+      "start_s": 5252.342,
+      "end_s": 5252.642,
+      "duration_s": 0.3,
+      "timecode": "01:27:32.342",
+      "seg_id": "p3_s878",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 396,
+      "file": "clips/clip_0396.mkv",
+      "start_s": 5285.282,
+      "end_s": 5285.582,
+      "duration_s": 0.3,
+      "timecode": "01:28:05.282",
+      "seg_id": "p3_s889",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 397,
+      "file": "clips/clip_0397.mkv",
+      "start_s": 5296.902,
+      "end_s": 5297.202,
+      "duration_s": 0.3,
+      "timecode": "01:28:16.902",
+      "seg_id": "p3_s890",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 398,
+      "file": "clips/clip_0398.mkv",
+      "start_s": 5319.942,
+      "end_s": 5320.242,
+      "duration_s": 0.3,
+      "timecode": "01:28:39.942",
+      "seg_id": "p3_s898",
+      "part": 3,
+      "words": [
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "fixed"
+      ]
+    },
+    {
+      "index": 399,
+      "file": "clips/clip_0399.mkv",
+      "start_s": 5322.262,
+      "end_s": 5322.562,
+      "duration_s": 0.3,
+      "timecode": "01:28:42.262",
+      "seg_id": "p3_s899",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 400,
+      "file": "clips/clip_0400.mkv",
+      "start_s": 5326.402,
+      "end_s": 5326.702,
+      "duration_s": 0.3,
+      "timecode": "01:28:46.402",
+      "seg_id": "p3_s901",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 401,
+      "file": "clips/clip_0401.mkv",
+      "start_s": 5327.842,
+      "end_s": 5328.142,
+      "duration_s": 0.3,
+      "timecode": "01:28:47.842",
+      "seg_id": "p3_s901",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 402,
+      "file": "clips/clip_0402.mkv",
+      "start_s": 5334.202,
+      "end_s": 5334.702,
+      "duration_s": 0.5,
+      "timecode": "01:28:54.202",
+      "seg_id": "p3_s903",
+      "part": 3,
+      "words": [
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "fixed"
+      ]
+    },
+    {
+      "index": 403,
+      "file": "clips/clip_0403.mkv",
+      "start_s": 5340.212,
+      "end_s": 5340.532,
+      "duration_s": 0.32,
+      "timecode": "01:29:00.212",
+      "seg_id": "p3_s904",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 404,
+      "file": "clips/clip_0404.mkv",
+      "start_s": 5359.682,
+      "end_s": 5359.982,
+      "duration_s": 0.3,
+      "timecode": "01:29:19.682",
+      "seg_id": "p3_s906",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 405,
+      "file": "clips/clip_0405.mkv",
+      "start_s": 5375.112,
+      "end_s": 5375.672,
+      "duration_s": 0.56,
+      "timecode": "01:29:35.112",
+      "seg_id": "p3_s908",
+      "part": 3,
+      "words": [
+        "沒錯"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 406,
+      "file": "clips/clip_0406.mkv",
+      "start_s": 5380.772,
+      "end_s": 5381.412,
+      "duration_s": 0.64,
+      "timecode": "01:29:40.772",
+      "seg_id": "p3_s911",
+      "part": 3,
+      "words": [
+        "沒錯"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 407,
+      "file": "clips/clip_0407.mkv",
+      "start_s": 5389.442,
+      "end_s": 5389.742,
+      "duration_s": 0.3,
+      "timecode": "01:29:49.442",
+      "seg_id": "p3_s913",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 408,
+      "file": "clips/clip_0408.mkv",
+      "start_s": 5389.922,
+      "end_s": 5390.222,
+      "duration_s": 0.3,
+      "timecode": "01:29:49.922",
+      "seg_id": "p3_s913",
+      "part": 3,
+      "words": [
+        "沒錯"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 409,
+      "file": "clips/clip_0409.mkv",
+      "start_s": 5399.222,
+      "end_s": 5399.622,
+      "duration_s": 0.4,
+      "timecode": "01:29:59.222",
+      "seg_id": "p3_s915",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 410,
+      "file": "clips/clip_0410.mkv",
+      "start_s": 5404.502,
+      "end_s": 5404.902,
+      "duration_s": 0.4,
+      "timecode": "01:30:04.502",
+      "seg_id": "p3_s919",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "t_pad"
+      ]
+    },
+    {
+      "index": 411,
+      "file": "clips/clip_0411.mkv",
+      "start_s": 5416.382,
+      "end_s": 5416.682,
+      "duration_s": 0.3,
+      "timecode": "01:30:16.382",
+      "seg_id": "p3_s922",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 412,
+      "file": "clips/clip_0412.mkv",
+      "start_s": 5419.282,
+      "end_s": 5419.602,
+      "duration_s": 0.32,
+      "timecode": "01:30:19.282",
+      "seg_id": "p3_s923",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 413,
+      "file": "clips/clip_0413.mkv",
+      "start_s": 5435.242,
+      "end_s": 5435.542,
+      "duration_s": 0.3,
+      "timecode": "01:30:35.242",
+      "seg_id": "p3_s926",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 414,
+      "file": "clips/clip_0414.mkv",
+      "start_s": 5494.112,
+      "end_s": 5494.412,
+      "duration_s": 0.3,
+      "timecode": "01:31:34.112",
+      "seg_id": "p3_s932",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 415,
+      "file": "clips/clip_0415.mkv",
+      "start_s": 5502.042,
+      "end_s": 5502.602,
+      "duration_s": 0.56,
+      "timecode": "01:31:42.042",
+      "seg_id": "p3_s933",
+      "part": 3,
+      "words": [
+        "對",
+        "對",
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "fixed",
+        "fixed",
+        "fixed"
+      ]
+    },
+    {
+      "index": 416,
+      "file": "clips/clip_0416.mkv",
+      "start_s": 5502.682,
+      "end_s": 5502.982,
+      "duration_s": 0.3,
+      "timecode": "01:31:42.682",
+      "seg_id": "p3_s933",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 417,
+      "file": "clips/clip_0417.mkv",
+      "start_s": 5506.102,
+      "end_s": 5506.402,
+      "duration_s": 0.3,
+      "timecode": "01:31:46.102",
+      "seg_id": "p3_s934",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 418,
+      "file": "clips/clip_0418.mkv",
+      "start_s": 5510.262,
+      "end_s": 5510.642,
+      "duration_s": 0.38,
+      "timecode": "01:31:50.262",
+      "seg_id": "p3_s936",
+      "part": 3,
+      "words": [
+        "對",
+        "對"
+      ],
+      "window_sources": [
+        "fixed",
+        "fixed"
+      ]
+    },
+    {
+      "index": 419,
+      "file": "clips/clip_0419.mkv",
+      "start_s": 5516.642,
+      "end_s": 5516.942,
+      "duration_s": 0.3,
+      "timecode": "01:31:56.642",
+      "seg_id": "p3_s938",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 420,
+      "file": "clips/clip_0420.mkv",
+      "start_s": 5526.302,
+      "end_s": 5526.602,
+      "duration_s": 0.3,
+      "timecode": "01:32:06.302",
+      "seg_id": "p3_s942",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 421,
+      "file": "clips/clip_0421.mkv",
+      "start_s": 5545.242,
+      "end_s": 5545.642,
+      "duration_s": 0.4,
+      "timecode": "01:32:25.242",
+      "seg_id": "p3_s945",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "t_pad"
+      ]
+    },
+    {
+      "index": 422,
+      "file": "clips/clip_0422.mkv",
+      "start_s": 5546.022,
+      "end_s": 5546.342,
+      "duration_s": 0.32,
+      "timecode": "01:32:26.022",
+      "seg_id": "p3_s946",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    },
+    {
+      "index": 423,
+      "file": "clips/clip_0423.mkv",
+      "start_s": 5617.182,
+      "end_s": 5617.482,
+      "duration_s": 0.3,
+      "timecode": "01:33:37.182",
+      "seg_id": "p3_s959",
+      "part": 3,
+      "words": [
+        "對"
+      ],
+      "window_sources": [
+        "fixed"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,294 @@
+{
+  "job_id": "8975dd8260b4",
+  "status": "done",
+  "source_name": "meeting_20260721.mp3",
+  "audio_duration_s": 120.002,
+  "n_segments": 37,
+  "n_speakers": 4,
+  "speakers": [
+    "G01",
+    "G02",
+    "G03",
+    "U_p0_S04"
+  ],
+  "tau_used": 0.4,
+  "tau_auto": 0.4,
+  "traditional_applied": true,
+  "warnings": [],
+  "processing": {
+    "submitted_at": "2026-10-02T08:25:47+08:00",
+    "started_at": "2026-10-02T08:25:47+08:00",
+    "finished_at": "2026-10-02T08:26:00+08:00",
+    "transcribe_s": 8.7,
+    "tau_sweep_s": 1.6,
+    "speaker_unify_s": 1.6,
+    "total_s": 12.3
+  },
+  "pipeline": {
+    "asr_url": "http://127.0.0.1:8750/v1/audio/transcriptions",
+    "speaker_backend": "campplus",
+    "embedding_model": "speech_campplus_sv_zh_en_16k-common_advanced.onnx",
+    "version": "pipeline 2026-09-16/20（transcribe_iterative + tau_sweep + speaker_unify_v3.1）"
+  },
+  "segments": [
+    {
+      "start": 0.81,
+      "end": 1.24,
+      "duration": 0.43,
+      "speaker": "G01",
+      "text": "來"
+    },
+    {
+      "start": 1.31,
+      "end": 3.14,
+      "duration": 1.83,
+      "speaker": "G01",
+      "text": "請吳副開頭"
+    },
+    {
+      "start": 3.62,
+      "end": 6.81,
+      "duration": 3.19,
+      "speaker": "G02",
+      "text": "因為我講這信任安全檢查，我強調是一個"
+    },
+    {
+      "start": 6.74,
+      "end": 10.69,
+      "duration": 3.95,
+      "speaker": "G01",
+      "text": "先講，想先講一開頭，為什麼我們談這個話題，好吧"
+    },
+    {
+      "start": 10.78,
+      "end": 14.24,
+      "duration": 3.46,
+      "speaker": "G02",
+      "text": "是保養跟阿誠這個問題衍生的保養的"
+    },
+    {
+      "start": 14.41,
+      "end": 17.89,
+      "duration": 3.48,
+      "speaker": "G02",
+      "text": "保養跟安全檢查，因為我更珍惜我們習慣出去"
+    },
+    {
+      "start": 17.41,
+      "end": 18.44,
+      "duration": 1.03,
+      "speaker": "G01",
+      "text": "來，聽一下"
+    },
+    {
+      "start": 19.28,
+      "end": 21.34,
+      "duration": 2.06,
+      "speaker": "G01",
+      "text": "那我們，他叫傑星"
+    },
+    {
+      "start": 21.42,
+      "end": 22.11,
+      "duration": 0.69,
+      "speaker": "G03",
+      "text": "傑星，對"
+    },
+    {
+      "start": 21.96,
+      "end": 25.34,
+      "duration": 3.38,
+      "speaker": "G01",
+      "text": "傑星，OK，記得，傑星，還有文富，你們都知道了嗎"
+    },
+    {
+      "start": 25.62,
+      "end": 26.84,
+      "duration": 1.22,
+      "speaker": "G01",
+      "text": "還不知道嗎"
+    },
+    {
+      "start": 26.62,
+      "end": 27.14,
+      "duration": 0.52,
+      "speaker": "G02",
+      "text": "對對對"
+    },
+    {
+      "start": 27.02,
+      "end": 28.04,
+      "duration": 1.02,
+      "speaker": "G01",
+      "text": "好，傑星"
+    },
+    {
+      "start": 28.74,
+      "end": 34.84,
+      "duration": 6.1,
+      "speaker": "G01",
+      "text": "傑星，讓傑星，你先前前提，要讓傑星知道，我們在討論什麼問題，今天早上發生了什麼事，好吧"
+    },
+    {
+      "start": 35.02,
+      "end": 36.64,
+      "duration": 1.62,
+      "speaker": "G01",
+      "text": "OK，不然他不知道幹嘛"
+    },
+    {
+      "start": 37.54,
+      "end": 41.44,
+      "duration": 3.9,
+      "speaker": "G02",
+      "text": "早上就是那個高雄的客戶，劉邦安這邊"
+    },
+    {
+      "start": 41.84,
+      "end": 46.74,
+      "duration": 4.9,
+      "speaker": "G02",
+      "text": "好，那為了阿誠這保養的事情，衍生出來的做保養的時候，我們要做清潔"
+    },
+    {
+      "start": 46.62,
+      "end": 48.64,
+      "duration": 2.02,
+      "speaker": "G01",
+      "text": "來，對不起，請暫停一下"
+    },
+    {
+      "start": 48.98,
+      "end": 50.44,
+      "duration": 1.46,
+      "speaker": "G01",
+      "text": "我不是要你做逐字稿"
+    },
+    {
+      "start": 50.98,
+      "end": 53.84,
+      "duration": 2.86,
+      "speaker": "G01",
+      "text": "我不是要自己做逐字稿，你不用每個字都抄下來"
+    },
+    {
+      "start": 53.94,
+      "end": 54.64,
+      "duration": 0.7,
+      "speaker": "U_p0_S04",
+      "text": "重要的"
+    },
+    {
+      "start": 54.54,
+      "end": 57.54,
+      "duration": 3.0,
+      "speaker": "G01",
+      "text": "先理解，聽懂，理解，寫重點"
+    },
+    {
+      "start": 57.82,
+      "end": 63.44,
+      "duration": 5.62,
+      "speaker": "G01",
+      "text": "啊，我不要只會寫字的人，OK，我要你理解之後寫下來，這才是有用的事情"
+    },
+    {
+      "start": 63.54,
+      "end": 66.04,
+      "duration": 2.5,
+      "speaker": "G01",
+      "text": "聽完了，你再寫重點就可以了，OK"
+    },
+    {
+      "start": 66.34,
+      "end": 66.94,
+      "duration": 0.6,
+      "speaker": "G01",
+      "text": "繼續"
+    },
+    {
+      "start": 67.44,
+      "end": 72.54,
+      "duration": 5.1,
+      "speaker": "G02",
+      "text": "那衍生的比如說保養，我不保養沒事，保養以後有問題"
+    },
+    {
+      "start": 72.64,
+      "end": 81.64,
+      "duration": 9.0,
+      "speaker": "G02",
+      "text": "好，那這個保養的品質，他可以，他說乾脆也就不用保養，如果保養好，我要去做一個clean的動作，清潔的動作，那不如我保養，我自己做就好了"
+    },
+    {
+      "start": 81.82,
+      "end": 83.94,
+      "duration": 2.12,
+      "speaker": "G02",
+      "text": "重點是在這裡，所以客人會覺得說"
+    },
+    {
+      "start": 84.02,
+      "end": 85.74,
+      "duration": 1.72,
+      "speaker": "G02",
+      "text": "你要保養，不要我給保養的"
+    },
+    {
+      "start": 85.62,
+      "end": 86.94,
+      "duration": 1.32,
+      "speaker": "G03",
+      "text": "他聽不懂臺語"
+    },
+    {
+      "start": 87.38,
+      "end": 90.44,
+      "duration": 3.06,
+      "speaker": "G02",
+      "text": "你不要保養，好，對對對，忘記了"
+    },
+    {
+      "start": 90.98,
+      "end": 95.54,
+      "duration": 4.56,
+      "speaker": "G02",
+      "text": "就不要保養了，以後就直接報修就好，改報修，裝置有故障，改報修"
+    },
+    {
+      "start": 96.38,
+      "end": 101.64,
+      "duration": 5.26,
+      "speaker": "G02",
+      "text": "那這個問題就變成是說，我們對客戶之間，就是說第一個保養"
+    },
+    {
+      "start": 101.82,
+      "end": 105.64,
+      "duration": 3.82,
+      "speaker": "G02",
+      "text": "保養跟裝置檢查，其實是我們，因為裝置賣給客戶端"
+    },
+    {
+      "start": 106.24,
+      "end": 106.84,
+      "duration": 0.6,
+      "speaker": "G02",
+      "text": "那"
+    },
+    {
+      "start": 107.38,
+      "end": 111.54,
+      "duration": 4.16,
+      "speaker": "G02",
+      "text": "我這個，我們是做的事叫做安全服務業"
+    },
+    {
+      "start": 112.88,
+      "end": 119.24,
+      "duration": 6.36,
+      "speaker": "G02",
+      "text": "不能講說，我只是一個裝置供應商，我是一個安全服務業，在服務你的那個家裡的"
+    }
+  ]
+}

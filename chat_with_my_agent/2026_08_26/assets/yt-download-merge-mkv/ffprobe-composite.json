@@ -1,0 +1,28 @@
+{
+    "programs": [
+
+    ],
+    "streams": [
+        {
+            "index": 0,
+            "codec_name": "av1",
+            "profile": "Main",
+            "codec_type": "video",
+            "width": 1920,
+            "height": 1080
+        },
+        {
+            "index": 1,
+            "codec_name": "opus",
+            "codec_type": "audio",
+            "sample_rate": "48000",
+            "channels": 2
+        }
+    ],
+    "format": {
+        "format_name": "matroska,webm",
+        "duration": "5667.048000",
+        "size": "1096374024",
+        "bit_rate": "1547717"
+    }
+}
